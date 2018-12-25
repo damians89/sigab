@@ -1,0 +1,30 @@
+.sectiondropdown{
+    background-color: #fff9;
+    margin-bottom: 0 !important;
+    padding: 10px;
+    outline: none;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    border-radius: 4px;
+}
+#accordion{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#accordion i{
+    float: right;
+    margin-right: 15px;
+}
+
+#accordion p{
+    padding: 10px;
+    margin: 0 !important;
+}
+
+#accordion div{
+    background-color: #fff;
+}
