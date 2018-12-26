@@ -1950,12 +1950,13 @@
               </div>
               <div class="panel-footer">
                 <div class="row">
-                    <div class="col-sm-pull-4 pull-left">
-                        {!! link_to_route('merito', 'Calcular merito', ['beca_id'=>$datos->beca_id,'datos_id' => $datos->id],['class'=>'btn btn-danger btn-sm']) !!}
+                    <div class="col-sm-pull-4 pull-left"  style=" margin-right: -1%; margin-left: 2%;">
+                        {!! link_to_route('merito', 'Calcular mérito', ['beca_id'=>$datos->beca_id,'datos_id' => $datos->id],['class'=>'btn btn-danger btn-sm','style'=>'font-size:13px']) !!}
                     </div>
-                    <div class="col-sm-pull-8 pull-right">
-                        {!! link_to_route('restablecer', 'Restablecer valores de inscripcion', ['beca_id'=>$datos->beca_id,'datos_id' => $datos->id],['class'=>'btn btn-warning btn-sm']) !!}
+                    <div class="col-sm-pull-8 pull-right" style="margin-right: 2%; margin-left: -1%;">
+                        {!! link_to_route('restablecer', 'Restablecer evaluación de inscripción', ['beca_id'=>$datos->beca_id,'datos_id' => $datos->id],['class'=>'btn btn-warning btn-sm','style'=>'font-size:13px']) !!}
                     </div>
+                    
                 </div>
                 
               
@@ -1978,7 +1979,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <th class="col-md-6">Puntaje por situacion Ingresos</th>
+                      <th class="col-md-6">Puntaje por situación Ingresos</th>
                       <td class="col-md-3">
                         <label class="pull-right">{{$inscrip->pto_ingresos}}</label>
                       </td>
