@@ -64,7 +64,7 @@
 
                             <div class="form-group">
                                 <label for="periodo_hasta">Ingrese el monto mensual de la beca</label>
-                                <input type="numer" class="form-control" id="monto" name="monto" placeholder="periodo_desde"
+                                <input type="numer" class="form-control" id="monto" name="monto" placeholder="monto mensual"
                                        value="@if(isset($dataTypeContent->monto)){{ $dataTypeContent->monto }}@endif">
                             </div>
 
@@ -76,19 +76,19 @@
 
     <br>
 
- <input type="radio" name="habilitada" onclick="verificar('{{ $dataTypeContent->id }}')" value="Si" @if(isset($dataTypeContent->habilitada)){{ ($dataTypeContent->habilitada=='Si' ? 'checked' : '')}} @endif/> <strong></strong> 
+ <input type="radio" name="habilitada" onclick="verificar('@if (isset($dataTypeContent->id))@endif')" value="Si" @if(isset($dataTypeContent->habilitada)){{ ($dataTypeContent->habilitada=='Si' ? 'checked' : '')}} @endif/> <strong></strong> 
 
     <label for="option-habilitada-si">Habilitar</label>
    <br> 
 
-<input type="radio" name="habilitada" onclick="verificar_no('{{ $dataTypeContent->id }}')" value="No" @if(isset($dataTypeContent->habilitada)) {{ ($dataTypeContent->habilitada=='No' ? 'checked' : '')}} @endif/> <strong></strong>  
+<input type="radio" name="habilitada" onclick="verificar_no('@if(isset($dataTypeContent->id ))@endif')" value="No" @if(isset($dataTypeContent->habilitada)) {{ ($dataTypeContent->habilitada=='No' ? 'checked' : '')}} @endif/> <strong></strong>  
     <label for="option-habilitada-no">No habilitada</label>
                                 </div>
 
 
                             <div class="form-group">
                                 <label for="periodo_hasta">Ingrese el año de la beca</label>
-                                <input type="number" class="form-control" id="anio" name="anio" placeholder="anio"
+                                <input type="number" class="form-control" id="anio" name="anio" placeholder="Año"
                                        value="@if(isset($dataTypeContent->anio)){{ $dataTypeContent->anio }}@endif">
                             </div>
 
@@ -116,8 +116,11 @@
     <script type="text/javascript">
          function verificar(estado)
               {
+                if(estado==0){
+                  var valor = '';
+                }else{
                 var valor = $("#"+estado).val();
-                
+                }
 
                 $.ajax({
                   type: "POST",
@@ -140,8 +143,12 @@
 
          function verificar_no(estado)
               {
+                if(estado==0){
+                  var valor = '';
+                }else{
                 var valor = $("#"+estado).val();
-                 document.getElementById('botonsito').disabled=false;                    
+                } 
+                document.getElementById('botonsito').disabled=false;                    
               }
 
 

@@ -997,13 +997,27 @@ public function update(Request $request){
 
 
         public function verificar(Request $request)
-        {   //estado = id de beca
+        {   //estado = id de beca - x=creacion sin id
+
+            if($request->estado==''){
+                $beca=DB::table('becas')->where('habilitada','Si')->count();    
+                if ($beca>=1){
+                return response (['message'=>"Ya se posee una beca habilitada",'valor'=>'0']);
+            }else{
+                return response (['message'=>"Estas por habilitar la beca",'valor'=>'1']);
+            }   
+            }
+            else{
+
+
+
             $beca=DB::table('becas')->where('id','<>',$request->estado)->where('habilitada','Si')->count();
-           // dd($beca);
+            dd($beca);
             if ($beca>=1){
                 return response (['message'=>"Ya se posee una beca habilitada",'valor'=>'0']);
             }else{
                 return response (['message'=>"Estas por habilitar la beca",'valor'=>'1']);
+            }
             }
         }
      
