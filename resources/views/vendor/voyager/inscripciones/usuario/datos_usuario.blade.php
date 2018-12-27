@@ -1901,21 +1901,16 @@
                <span class="label-danger" style="color: white">&nbsp; El postulante presenta inconsistencias.</span><br>
                 @endif
                </div>
-                <select name = 'accion'>
-                  <option value=""> Seleccione una opcion</option>
-                  <option value="acepta"> Aceptar</option>
-                  @if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') )
-                  <option value="borra"> Borrar datos de la <strong>inscripción</strong> del usuario</option>
+                  <button class="btn btn-primary" name="acepta" onclick="chequiar()">Aceptar</button>
+                 @if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') )
+                <button name="acepta" class="btn btn-danger">Borrar datos de inscripción</button>
                   @endif
-                </select>
-               
-                <button type="Submit" name="id" value="{{$datos->id}}" class="btn btn-primary btn-lg">
-                  Ir
-                </button>
+           
           </div>
       </div>       
     </div>
-  
+{!! Form::close() !!}  
+
 
   
   <?php
@@ -2009,23 +2004,76 @@
             </div>
         </div>        
     </div>
- 
-  
+
+
+
+
+
     
     <div class="col-md-12">
-      <h3 align="center"> <a href="#" onClick="history.back();return false;"><span class="label label-primary text-white" align="center" >Volver</span></a></h3>
+      <h3 align="center"> <a href="/administracion/inscripciones"><span class="label label-primary text-white" align="center" >Volver</span></a></h3>
     </div>
 
 </div>
-{!! Form::close() !!}
+
+
+<div class="modal fade modal-danger" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1"  role="dialog">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header">
+                    <input type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;
+        <h4 class="modal-title"><i class="voyager-warning"></i> {{ __('voyager::generic.are_you_sure') }} ?</h4>
+      </div>
+      <div class="modal-body">
+       <h4>Estás seguro que quieres borrar los datos de inscripcion?</h4>
+      </div>
+      <div class="modal-footer">      
+      <input type="button" class="btn btn-default" data-dismiss="modal">{{ __('voyager::generic.cancel') }}
+      <input type="button" class="btn btn-danger">{{ __('voyager::generic.delete_confirm') }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 <br><br><br><br><br>
 
 <br><br><br><br><br>
+
+
 
 
 @endsection
 
 
+
+
+@section('javascript')
+    <script>
+    function chequiar(){    
+  var select_accion = document.getElementById('select_accion');
+if(select_accion.selectedIndex<0){
+
+}
+else{
+    opcion=select_accion.options[select_accion.selectedIndex].value;
+    if(opcion=="borra"){
+      $('#exampleModal').modal('show');
+    }
+    else {
+      if(opcion=="acepta"){
+        
+      }
+      else{}
+    }
+}
+};
+    </script>
+
+@stop
 
 <script>
   $(document).ready(function() {

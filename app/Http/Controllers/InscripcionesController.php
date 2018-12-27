@@ -434,12 +434,14 @@ public function store(Request $request)
 
                 }else
                  if($request->accion=="borra"){
+                    //dd($request);
+                    /*
                     $datos = DatosPersona::where('user_id',$request->id)->first();
                     $fam = Familiar::where('user_id',$request->id)->get();
                     $con = Consideracione::where('user_id',$request->id)->get();
                     $datos->delete();
                     $fam->delete();
-                    $con->delete();
+                    $con->delete();*/
           
                     $ms = "Datos de inscripcion del usuario borrado con exito";
                 }else
