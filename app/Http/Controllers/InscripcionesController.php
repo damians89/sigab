@@ -636,6 +636,14 @@ public function update(Request $request){
 
     }   
 
+    public function dar_baja(Request $request){
+      
+      dd($request);
+    }   
+
+
+
+
 
     public function merito(Request $request, $datos_id,$beca_id){
        if( (Auth::user()->role_id == '3') or (Auth::user()->role_id == '1')){

@@ -1901,15 +1901,27 @@
                <span class="label-danger" style="color: white">&nbsp; El postulante presenta inconsistencias.</span><br>
                 @endif
                </div>
-                  <button class="btn btn-primary" name="acepta" onclick="chequiar()">Aceptar</button>
-                 @if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') )
-                <button name="acepta" class="btn btn-danger">Borrar datos de inscripción</button>
-                  @endif
-           
+
+               <div>
+               <input type="hidden" name="id" value="{{$datos->id}}">
+               <button class="btn btn-primary" type="submit" name="submit" >Aceptar</button>
+
+{!! Form::close() !!}  
+
+
+                @if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') )
+                <form action="{{route('dar_baja')}}" method="POST" autocomplete="off">
+               {{ method_field('DELETE')}} {{csrf_field()}}
+               <input type="hidden" name="id" value="{{$datos->user_id}}">
+               
+                <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Eliminar inscripción</button>
+                </form>
+                 @endif
+                </div>
+
           </div>
       </div>       
     </div>
-{!! Form::close() !!}  
 
 
   
@@ -2047,33 +2059,9 @@
 
 
 @endsection
-
-
-
-
-@section('javascript')
-    <script>
-    function chequiar(){    
-  var select_accion = document.getElementById('select_accion');
-if(select_accion.selectedIndex<0){
-
-}
-else{
-    opcion=select_accion.options[select_accion.selectedIndex].value;
-    if(opcion=="borra"){
-      $('#exampleModal').modal('show');
-    }
-    else {
-      if(opcion=="acepta"){
-        
-      }
-      else{}
-    }
-}
-};
-    </script>
-
-@stop
+<script type="text/javascript">
+$('#myModal').modal('show')
+</script>
 
 <script>
   $(document).ready(function() {

@@ -83,7 +83,13 @@ Route::post('administracion/inscripciones/usuarios/datos_usuario', 'DatosPersona
 Route::post('administracion/inscripciones/seleccion/carga', 'InscripcionesController@carga')->name('carga');
 
 
-// Baja postulante
+// Baja postulante desde el panel del inscripto
+Route::DELETE('/dar_baja','InscripcionesController@dar_baja')->name('dar_baja');
+
+
+
+
+// Baja postulante desde el panel de todos los inscriptos
 Route::get('/dar_baja_inscripcion/{beca}/{user_id}','InscripcionesController@dar_baja_inscripcion')->name('dar_baja_inscripcion');
 
 
