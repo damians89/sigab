@@ -186,19 +186,7 @@ No tienes permisos para otorgar becas</font></strong>
 </div>
 
 @endsection
-
-<script>
-function eliminarInscripcion(id) {
- $.ajax({
-    url: 'url' + id,
-    type: 'DELETE',
-    dataType:'json',
-    success: function(message) {
-        alert(message);
-
-    }
- })};
-</script>   
+  
 
 
 

@@ -3,7 +3,6 @@
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 @section('content')
 
 
@@ -19,7 +18,7 @@
 	<div class="" align="center" class="form-control">
 	<select name = 'beca' >
 		@foreach($becas as $beca)
-			<option value="{{$beca->id}}" style="background: red">Nombre: {{$beca->nombre}} - Año: {{$beca->anio}}</option>
+			<option value="{{$beca->id}}" >Nombre: {{$beca->nombre}} - Año: {{$beca->anio}}</option>
 		@endforeach
 	</select>
 	

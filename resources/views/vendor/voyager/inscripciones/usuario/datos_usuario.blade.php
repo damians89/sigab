@@ -2048,7 +2048,11 @@
 
     
     <div class="col-md-12">
-      <h3 align="center"> <a href="/administracion/inscripciones"><span class="label label-primary text-white" align="center" >Volver</span></a></h3>
+    <?php
+    Session::put('beca', $datos->beca_id);
+
+    ?>
+      <h3 align="center"> <a href="/administracion/inscripciones/seleccion"><span class="label label-primary text-white" align="center" >Volver</span></a></h3>
     </div>
 
 </div>
