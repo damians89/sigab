@@ -30,8 +30,8 @@
 
 
 <br><br>
-{!! Form::open(['route' => 'otorgar', 'method' => 'post' ]) !!}
 
+{!! Form::open(['route' => 'otorgar', 'method' => 'post' ]) !!}
 
 <div class="table-dark table-bordered table-hover table-responsive" id="lista">
 	<table class="" id="myTable" style="font-size:14px" width="100%" cellspacing="0" cellpadding="0">
@@ -47,7 +47,11 @@
 				<th class="col-md-2">Acciones</th>
 			</tr>
 		</thead>
+		@if(count($inscrip)==null)
+		<h3>No se posee inscriptos</h3>
+		@else
 		<tbody>
+	
 		@foreach($inscrip as $inscriptos)
 
 <?php if ($inscriptos->otorgamiento == "No"): ?>
@@ -98,12 +102,29 @@
 				<td>
 				<div class="btn-group-sm">
 				         {!! link_to_route('observacion', 'Modificar', ['user_id'=>$inscriptos->user_id], ['class'=>'btn btn-success btn-sm']) !!}
-					
 
 					                {!! link_to_route('datos_usuario', 'Ver', ['user_id' => $inscriptos->datos_id,'beca_id'=>$inscriptos->beca_id],['class'=>'btn btn-warning btn-sm']) !!}
-                    
+
+
                     			@if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') )
-	                            {!! link_to_route('dar_baja_inscripcion', 'Eliminar', ['user_id' => $inscriptos->user_id,'beca'=>$inscriptos->beca_id], ['class'=>'btn btn-danger btn-dange-sm'] ) !!}
+
+				         			<input type="button"  class="btn btn-danger" type="button" data-toggle="modal" data-target="#exampleModal" value=" Eliminar"> 	
+
+							<div class="modal fade modal-danger" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1"  role="dialog">
+								<div class="modal-dialog" >
+									<div class="modal-content">
+										<div class="modal-header">
+						                    <h4 class="modal-title"><i class="voyager-warning"></i> Estás seguro que quieres eliminar esta inscripcion?</h4>
+						                    </div>
+						                    <div class="modal-footer">
+						                    	<input  class="btn btn-default" data-dismiss="modal" value="{{ __('voyager::generic.cancel') }}">
+						                    	<a href="{{route('dar_baja_inscripcion', ['datos_id'=>$inscriptos->datos_id, 'beca'=>$inscriptos->beca_id])}}"  class="btn btn danger"><input  class="btn btn-danger" value="Si">
+						                    	</a>
+						                    </div>
+						            </div>
+						        </div>
+						    </div>
+                  
 	      						@endif              
                    
                 	</div>
@@ -120,12 +141,14 @@
 
 
 <br><br>
+	
+
 <div class="container-fluid" style="border: 1px solid #5D0232; padding: 3px; text-align: center;">
 @if(Auth::user()->role_id == '1' or Auth::user()->role_id == '3')
 
 <strong><font color="black">
 Ingrese la cantidad de becas a otorgar.</font></strong>
-<input type="number" name="cant_otor" placeholder="Ingrese la cantidad de becas a otorgar">
+<input type="number" name="cant_otor" placeholder="Ingrese la cantidad de becas a otorgar" required>
 
 <button type="submit" class="btn btn-primary btn-info" type="submit">Otorgar</button>
 @else
@@ -158,6 +181,7 @@ No tienes permisos para otorgar becas</font></strong>
 </li>
 </ul>
 
+@endif <!--If de queesta vacia-->
 </div>
 
 @endsection

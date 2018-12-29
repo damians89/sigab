@@ -40,36 +40,26 @@ class Inscriptos extends AbstractWidget
         ->join('becas', 'datos_personas.beca_id', '=', 'becas.id')
         ->where('datos_personas.revision','=','0')
         ->where('becas.habilitada','=','Si')->count();
-        
 
-
-
-
+$total_inscrip = DB::table('inscripciones')->join('becas', 'inscripciones.beca_id', '=', 'becas.id')->where('becas.habilitada','=','Si')->count();
 
 //dd($count,$count_sin_revisar);
 
 
-        /*$count_sin_revisar = DB::table('datos_personas')
-          ->count();//cuento la cantidad de inscriptos en la beca habilitada
-*/
-//        dd($count, $count_sin_revisar);
-        //dd($count_sin_revisar);
-
-
         $string = 'Postulado en la beca habilitada';
-      //  dd($count);
 
-        if ($count == 0) {
+        if ($count == 0) { // Si NO tiene beca habilitada
             $string = 'No se posee ninguna beca habilitada';
             $text_aux = "<font color=\"red\" size=\"3\"><strong>Recuerda, que debes tener 1 sola beca habilitada</strong></font>";
             $title_aux= "{$string}";
             $buton_text="Ver listado de becas";
         }else{
-            $string = "Postulado en la beca habilitada";
-            $text_aux = "Actualmente tienes {$count} {$string} Haga clic en el botón de abajo para verlos.<br><font size=\"3\" color=\"red\"><strong>  {$count_sin_revisar} Inscriptos por revisar</strong></font>";
-            $title_aux="{$count} {$string}";
-            $buton_text="Ver los postulados";
-        }
+                $string = "Postulado en la beca habilitada";
+                $text_aux = "Actualmente se posee {$count_sin_revisar} {$string} Haga clic en el botón de abajo para verlos.<br><font size=\"3\" color=\"red\"><strong>  {$count_sin_revisar} Inscriptos por revisar</strong></font>";
+                $title_aux="{$total_inscrip} {$string}";
+                $buton_text="Ver los postulados";
+
+            }
 
        
         return view('voyager::dimmer', array_merge($this->config, [

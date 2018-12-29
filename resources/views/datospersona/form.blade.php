@@ -158,6 +158,9 @@
                 <a href="#top">
                   <input type="Button"  class="btn btn-success" value="Acepto" id="oki">
                 </a>
+                <a href="/">
+                  <input type="Button"  class="btn btn-danger" value="Cancelar" id="oki">
+                </a>
               </div>
             </div>
           </div>

@@ -415,43 +415,22 @@ public function store(Request $request)
            
             if ($datos != null) {
             
-            if ($request->accion == "acepta") {
                 if ($request->revision==1) {
                     $ms="Se informara al usuario que sus datos estan incompletos o incosistentes";
                     $datos->revision = 1;
                     $datos->band =1;
                     $datos->save();
-                    } else{
+                    } 
+                    else{
                          $datos->revision = 2;
                          $datos->band = 1; 
                          $datos->save();
                          $ms = "Usuario postulado para la beca";
                      }
-                 } else
-
-                  if($request->accion == "modifica"){
-                    
-
-                }else
-                 if($request->accion=="borra"){
-                    //dd($request);
-                    /*
-                    $datos = DatosPersona::where('user_id',$request->id)->first();
-                    $fam = Familiar::where('user_id',$request->id)->get();
-                    $con = Consideracione::where('user_id',$request->id)->get();
-                    $datos->delete();
-                    $fam->delete();
-                    $con->delete();*/
-          
-                    $ms = "Datos de inscripcion del usuario borrado con exito";
-                }else
-                {echo $ms="Ninguna seleccion";}
-            }
-            
 
         //return redirect('/administracion/inscripciones')->with('message', $ms);//
         return redirect()->back()->with(['message'=>$ms, 'alert-type'=>'warning']);
-
+            }
         }
         catch (Exception $e) {
             return redirect('administracion/inscripciones')->with('message','Error en la accion con el usuario');
@@ -540,7 +519,7 @@ Que pueda otorgar solo si estan chequeados los datos y con merito
 
      $cantidad = $datos_beca->count();
 
-     if($request->cant_otor==null){ //Por si no ingresa cantidad de otorgamiento
+     if($request->cant_otor==null or $request->cant_otor==0 ){ //Por si no ingresa cantidad de otorgamiento
         return redirect()->back()->with(['message'=>"Falta indicar cuantas becas se otorgaran!", 'alert-type'=>'warning']);
      } 
 
@@ -616,11 +595,12 @@ public function update(Request $request){
 
     public function dar_baja_inscripcion(Request $request, $beca, $user_id){
        try{
-        $inscrip=DB::table('inscripciones')->where('user_id',$user_id)->delete();
-        $datos=DB::table('datos_personas')->where('user_id',$user_id)->delete();
-        $fam=DB::table('familiars')->where('user_id',$user_id)->delete();
-        $con=DB::table('consideraciones')->where('user_id',$user_id)->delete();
-      // dd($user_id,$inscrip,$datos,$fam,$con);
+        //user_id = id de datos persona
+        $inscrip=DB::table('inscripciones')->where('datos_id',$user_id)->where('beca_id',$beca)->delete();
+        $datos=DB::table('datos_personas')->where('id',$user_id)->where('beca_id',$beca)->delete();
+        $fam=DB::table('familiars')->where('datos_id',$user_id)->where('beca_id',$beca)->delete();
+        $con=DB::table('consideraciones')->where('datos_id',$user_id)->where('beca_id',$beca)->delete();
+     //dd($user_id,);
     //if($request->ajax()){
      //$inscrip->delete();
       //  return response()->json(['msg' =>'Borrado!', 'status'=>'success']); 
@@ -637,9 +617,19 @@ public function update(Request $request){
     }   
 
     public function dar_baja(Request $request){
-      
-      dd($request);
-    }   
+        //id de datos_persona
+        try{
+        $inscrip=DB::table('inscripciones')->where('datos_id',$request->id)->where('beca_id',$request->beca_id)->delete();
+        $datos=DB::table('datos_personas')->where('id',$request->id)->where('beca_id',$request->beca_id)->delete();
+        $fam=DB::table('familiars')->where('datos_id',$request->id)->where('beca_id',$request->beca_id)->delete();
+        $con=DB::table('consideraciones')->where('datos_id',$request->id)->where('beca_id',$request->beca_id)->delete();
+
+
+   return redirect('administracion/inscripciones')->with(['message'=>"Borrado con exito!", 'alert-type'=>'warning'])  ;
+    }catch (Exception $e) {
+            return redirect('administracion/inscripciones')->with('message','Error en la accion con el usuario');
+        }
+     }   
 
 
 

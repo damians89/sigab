@@ -1902,23 +1902,42 @@
                 @endif
                </div>
 
-               <div>
+               
+               <div class="col-md-3">
                <input type="hidden" name="id" value="{{$datos->id}}">
-               <button class="btn btn-primary" type="submit" name="submit" >Aceptar</button>
+               <button class="btn btn-primary" type="submit" name="submit">Aceptar</button>
 
 {!! Form::close() !!}  
-
-
+                </div>
+                <div class="col-md-3">
                 @if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') )
                 <form action="{{route('dar_baja')}}" method="POST" autocomplete="off">
                {{ method_field('DELETE')}} {{csrf_field()}}
-               <input type="hidden" name="id" value="{{$datos->user_id}}">
-               
-                <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Eliminar inscripción</button>
-                </form>
-                 @endif
+               <input type="hidden" name="beca_id" value="{{$datos->beca_id}}">
+               <input type="hidden" name="id" value="{{$datos->id}}">
+
+                <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#exampleModal">Eliminar inscripción</button>
+
+                <div class="modal fade modal-danger" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1"  role="dialog">
+                  <div class="modal-dialog" >
+                    <div class="modal-content">
+                      <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"><i class="voyager-warning"></i> Estás seguro que quieres eliminar esta inscripcion?</h4>
+                      </div>
+                      <div class="modal-footer">      
+                      <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('voyager::generic.cancel') }}</button>
+                      <button class="btn btn-danger">Si</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
+                </form>
+                 @endif
+                 </div>
+               
           </div>
       </div>       
     </div>
@@ -1944,6 +1963,11 @@
                   Valores auxiliares que se utilizaran para calcular el mérito
                 </label>
               </div>
+              @if($calculos==NULL)
+              <h4>No posee cálculos auxiliares para determinar el mérito</h4>
+              Porfavor, cree un cálculo auxiliar correspondiente al año de beca que se esta evaluando
+              @else
+
               <div class="panel-body">
                 <table id="tablaCalculoAuxiliar" class="table table-responsive table-hover">                 
                   <tr><th class="col-md-6">Mínimo vital y móvil</th>
@@ -1968,6 +1992,7 @@
                 
               
               </div>
+              @endif<!--end if de que si no tiene ningun calculo aux-->
           </div>         
     </div>
   
@@ -2029,24 +2054,6 @@
 </div>
 
 
-<div class="modal fade modal-danger" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1"  role="dialog">
-  <div class="modal-dialog" >
-    <div class="modal-content">
-      <div class="modal-header">
-                    <input type="button" class="close" data-dismiss="modal"
-                            aria-hidden="true">&times;
-        <h4 class="modal-title"><i class="voyager-warning"></i> {{ __('voyager::generic.are_you_sure') }} ?</h4>
-      </div>
-      <div class="modal-body">
-       <h4>Estás seguro que quieres borrar los datos de inscripcion?</h4>
-      </div>
-      <div class="modal-footer">      
-      <input type="button" class="btn btn-default" data-dismiss="modal">{{ __('voyager::generic.cancel') }}
-      <input type="button" class="btn btn-danger">{{ __('voyager::generic.delete_confirm') }}
-      </div>
-    </div>
-  </div>
-</div>
 
 
 
