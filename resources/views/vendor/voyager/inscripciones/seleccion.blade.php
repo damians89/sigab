@@ -69,6 +69,7 @@
 				<td>
 				{{$loop->index + 1}} - <input type="checkbox" hidden  name="id" value="{{$inscriptos->user_id}}">
 				<input type="hidden" name="user_id" value="{{$inscriptos->user_id}}">
+				<input type="hidden" name="datos_id" value="{{$inscriptos->datos_id}}">
 				<input type="hidden" name="beca_id" value="{{$inscriptos->beca_id}}">
 
 				</td>

@@ -508,12 +508,11 @@ Que pueda otorgar solo si estan chequeados los datos y con merito
 
  
     public function otorgar(Request $request){
-        //dd($request);
+       // dd($request->all());
         Session::put('beca', $request->beca_id);//para que permita relogear
 
         
-       // dd($datos_usuario);
-
+      
         $datos_beca = DB::table('inscripciones')
         ->where('beca_id', '=', $request->beca_id)->orderBy('inscripciones.merito','desc')->get();
 
@@ -561,8 +560,9 @@ Que pueda otorgar solo si estan chequeados los datos y con merito
             $alert="warning";
             }else{
 
-                $d2=DB::table('inscripciones')->where('user_id','=',$datos->user_id)
+                $d2=DB::table('inscripciones')->where('datos_id','=',$datos->datos_id)
                 ->update(['observacion'=>'Por Orden de Merito', 'otorgamiento'=>'Si']);
+                //dd($d2);
                 $ms="Becas otorgadas con exito";
                 $alert="success";
 
