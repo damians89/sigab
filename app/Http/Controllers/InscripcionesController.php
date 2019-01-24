@@ -55,14 +55,6 @@ class InscripcionesController extends Controller
 
         $becas = DB::table('becas')->orderBy('habilitada','desc')->get();
 
-
-       //dd($dato,$inscrip);
-   /*
-
-        $dato = DatosPersona::with(['user_name', 'user_id'])->get();
-        $user = Auth::user(); 
-        $carrera = DB::table('carreras')->get();
-  */   
         
         return view('vendor.voyager.inscripciones.listar', compact('inscrip','dato','becas'));
     }
@@ -192,16 +184,11 @@ public function store(Request $request)
         // Check permission
         //$this->authorize('read', $dataTypeContent);
 
-        //dd("asd");
-
         // Check if BREAD is Translatable
         $isModelTranslatable = is_bread_translatable($dataTypeContent);
 
         $view = 'voyager::bread.read';
 
-     //////////////////////////////////////
-        //No llega el request de beca
-        
         $request->beca=$aaa;
         $inscrip = DB::table('inscripciones')->join('users', function ($join)
         {
@@ -226,19 +213,11 @@ public function store(Request $request)
      */
 
     public function generarPdf(Request $request, $beca_id){
-     //dd($request,$beca_id);
-    if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){ 
+    if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') ){ 
 
      Carbon::SetLocale('es');
      $dt=Carbon::now();
      $dt="Oro Verde, Entre Rios ".$dt->format('d/m/Y - h:m:s');
-
-    //dd($dt->format('l jS \\of F Y h:i:s A'));
-    
-    //dd($dt);
-   
-
-       // dd($inscrip);
 
     if($request->pdf == "Si"){
         $inscrip = DB::table('inscripciones')->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 'Si')->get(); /*mismas becas*/
@@ -250,7 +229,6 @@ public function store(Request $request)
         }
         elseif ($request->pdf == "No") {
             $inscrip = DB::table('inscripciones')->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 'No')->get();
-        //dd($inscrip);
         
 
          $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt/*, 'user'=>$user*/]);
@@ -260,8 +238,6 @@ public function store(Request $request)
             
         }elseif($request->pdf == "Todos"){
             $inscrip = DB::table('inscripciones')->where('beca_id', '=', $beca_id)->get();
-        //dd($inscrip);
-        
 
          $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt/*, 'user'=>$user*/]);
    
@@ -269,9 +245,7 @@ public function store(Request $request)
 
         }elseif ($request->pdf == "Suspendida") {
             $inscrip = DB::table('inscripciones')->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 'Suspendida')->get();
-        //dd($inscrip);
         
-
          $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt/*, 'user'=>$user*/]);
    
         return $pdf->download('Reporte.pdf');
@@ -280,8 +254,6 @@ public function store(Request $request)
         }elseif($request->pdf == "Pendiente") {
        
         $inscrip = DB::table('inscripciones')->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 'Pendiente')->get();
-        //dd($inscrip);
-        
 
          $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt/*, 'user'=>$user*/]);
    
@@ -313,11 +285,7 @@ public function store(Request $request)
 
         $aux = DB::table('becas')->where('id','=',$request->beca)->select('nombre')->first(); //busco el nombre de la beca
    
-        $aux1 = DB::table('datos_personas')->where('beca_id',$request->beca)->get();//->paginate(3);
-     //dd($inscrip);
-/*
-        return view('vendor.voyager.inscripciones.seleccion', compact('inscrip','aux','aux1'));
-  */  
+        $aux1 = DB::table('datos_personas')->where('beca_id',$request->beca)->get();  
             return view('vendor.voyager.inscripciones.seleccion', ['inscrip'=>$inscrip]);
   
 
@@ -331,11 +299,9 @@ public function store(Request $request)
     }
 
     public function datos_usuario(Request $request,$beca_id,$id){
-        //dd($beca_id);
           
         $calculos=DB::table('calculos_aux')->leftjoin('becas','calculos_aux.anio','=','becas.anio')->where('becas.id',$beca_id)->select('calculos_aux.*')->first();
-        //dd($calculos);
-
+       
         if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){ 
 
             
@@ -349,10 +315,6 @@ public function store(Request $request)
 
 
         $inscrip=DB::table('inscripciones')->where('datos_id',$datos->id)->first();
-
-        
-        
-//        dd($datos,$condicion,$familiar,$consideraciones);
 
 
         return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'));
@@ -368,8 +330,7 @@ public function store(Request $request)
 
 
     public function getFile($filename)
-    {  //No quedo andando esto? 
-
+    { 
      return response()->download(storage_path($filename), null, [], null);
     }
   
@@ -381,30 +342,24 @@ public function store(Request $request)
         $user = Auth::user();;
        
         $datos_beca = DB::table('inscripciones')
-        //->join('datos_personas',  'inscripciones.user_id', '=', 'datos_personas.user_id')/*datosp en insc*/
         ->join('becas', 'inscripciones.beca_id', '=', 'becas.id') /*mismas becas*/
-        //->join('cronogramas', 'becas.id', '=', 'cronogramas.beca_id')/*cronograma de becas*/
         ->where('inscripciones.user_id', '=', $user->id)
-        //->select('becas.nombre', 'inscripciones.otorgamiento','becas.anio'/*'cronogramas,.fecha_1', 'cronogramas.fecha_2', 'cronogramas.fecha_3', 'cronogramas.fecha_4', 'cronogramas.fecha_5', 'cronogramas.fecha_6', 'cronogramas.fecha_6', 'cronogramas.fecha_7', 'cronogramas.fecha_8','cronogramas.beca_id' /*'datos_personas.user_name'*/)
-        ->get();
-
-       // dd($datos_beca);
-        return $datos_beca;//redirect('administracion', compact('dato', $datos_beca));
+          ->get();
+        return $datos_beca;
         }
+
 
 
 //Home del voyagerdel comun
     public function revision($id){
         $user = Auth::user();
         $datos_personas = DB::table('datos_personas')->where('user_id', $id)->select('id','revision','beca_id','user_id')->get(); 
-       //dd($datos_personas);
       
         return $datos_personas;
         }
 
 
     public function carga(Request $request){
-       //dd($request);
          Session::put('beca', $request->beca_id);
         try {
 
@@ -428,7 +383,6 @@ public function store(Request $request)
                          $ms = "Usuario postulado para la beca";
                      }
 
-        //return redirect('/administracion/inscripciones')->with('message', $ms);//
         return redirect()->back()->with(['message'=>$ms, 'alert-type'=>'warning']);
             }
         }
@@ -444,7 +398,6 @@ public function store(Request $request)
 
     
         $inscrip = DB::table('inscripciones')->where('user_id', $user_id)->first();
-//        dd($inscrip);     
         return view('vendor.voyager.inscripciones.observacion',compact('inscrip'));
     } 
        else{
@@ -456,7 +409,6 @@ public function store(Request $request)
 
     public function guarda_observacion (Request $request){
         $aux_inscripto=DB::table('inscripciones')->where('id',$request->id)->first();
-   //dd($request);
                 
          Session::put('beca', $aux_inscripto->beca_id);
         if($request->obs_new == NULL & $request->meritos_new==NULL & $request->otorgamiento == NULL){
@@ -466,16 +418,13 @@ public function store(Request $request)
             if($request->btn=="s"){
 
                 try {
-                    //dd($request->id);
                     if($request->otorgamiento=="Suspendida"){
                     $inscrip=DB::table('inscripciones')->where('id',$request->id)
                     ->update([
                         'observacion'=>$request->obs_new, 
                         'merito'=>-1,
                         'otorgamiento'=>$request->otorgamiento
-                        ]);
-                    //dd($inscrip);
-    
+                        ]);    
                     }else{
                     $inscrip=DB::table('inscripciones')->where('id',$request->id)
                     ->update([
@@ -499,14 +448,6 @@ public function store(Request $request)
     }
 
 
-
-/*
-Que pueda otorgar solo si estan chequeados los datos y con merito
-*/
-
-
-
- 
     public function otorgar(Request $request){
        // dd($request->all());
         Session::put('beca', $request->beca_id);//para que permita relogear
@@ -524,7 +465,6 @@ Que pueda otorgar solo si estan chequeados los datos y con merito
 
      
      if ($request->cant_otor > $cantidad) { //Si puso mas becas que inscriptos
-       //return redirect('/administracion/inscripciones')->with('message','Error =( Mucha cantidad de becas para pocos postulantes');
         return redirect()->back()->with(['message'=>"Mucha cantidad de becas para pocos postulantes", 'alert-type'=>'warning']);
      }  
 
@@ -539,7 +479,6 @@ Que pueda otorgar solo si estan chequeados los datos y con merito
         
         foreach ($datos_beca as $id => $datos) {
          $aux_chequeo=DB::table('datos_personas')->find($datos->datos_id); //Para ver si revisaron todos
-       // dd($aux_chequeo->band!=0);
         if($aux_chequeo->band==0){
         return redirect()->back()->with(['message'=>"Faltan revisar los datos de: ".$aux_chequeo->user_name." ".$aux_chequeo->user_apellido." - DNI:".$aux_chequeo->user_dni, 'alert-type'=>'error']);
                 }
@@ -550,8 +489,6 @@ Que pueda otorgar solo si estan chequeados los datos y con merito
 
           foreach ($datos_beca as $id => $datos) {//recorro todos los inscriptos
             if ($request->cant_otor > 0) {
-                //dd($datos_beca,$id,$datos,$datos->user_id);
-                //dd($datos->datos_id);
             $aux_chequeo_sin_completar=DB::table('datos_personas')->find($datos->datos_id); //Para ver si tiene datos completos
 
           
@@ -568,7 +505,6 @@ Que pueda otorgar solo si estan chequeados los datos y con merito
 
             }}$request->cant_otor=$request->cant_otor-1;
         }
-        //dd($datos_beca);
         return redirect()->back()->with(['message'=>$ms, 'alert-type'=>$alert]);
     }
 }
@@ -600,17 +536,11 @@ public function update(Request $request){
         $datos=DB::table('datos_personas')->where('id',$user_id)->where('beca_id',$beca)->delete();
         $fam=DB::table('familiars')->where('datos_id',$user_id)->where('beca_id',$beca)->delete();
         $con=DB::table('consideraciones')->where('datos_id',$user_id)->where('beca_id',$beca)->delete();
-     //dd($user_id,);
-    //if($request->ajax()){
-     //$inscrip->delete();
-      //  return response()->json(['msg' =>'Borrado!', 'status'=>'success']); 
+
         Session::put('beca', $beca);    
-        /*$inscrip->delete();
-        $datos->delete();
-        $fam->delete();
-        $con->delete();*/ 
-   return redirect()->back()->with(['message'=>"Borrado con exito!", 'alert-type'=>'warning'])  ;
-    }catch (Exception $e) {
+
+       return redirect()->back()->with(['message'=>"Borrado con exito!", 'alert-type'=>'warning'])  ;
+        }catch (Exception $e) {
             return redirect('administracion/inscripciones')->with('message','Error en la accion con el usuario');
         }
 
@@ -625,10 +555,10 @@ public function update(Request $request){
         $con=DB::table('consideraciones')->where('datos_id',$request->id)->where('beca_id',$request->beca_id)->delete();
 
 
-   return redirect('administracion/inscripciones')->with(['message'=>"Borrado con exito!", 'alert-type'=>'warning'])  ;
-    }catch (Exception $e) {
-            return redirect('administracion/inscripciones')->with('message','Error en la accion con el usuario');
-        }
+       return redirect('administracion/inscripciones')->with(['message'=>"Borrado con exito!", 'alert-type'=>'warning'])  ;
+        }catch (Exception $e) {
+                return redirect('administracion/inscripciones')->with('message','Error en la accion con el usuario');
+            }
      }   
 
 
@@ -638,20 +568,13 @@ public function update(Request $request){
     public function merito(Request $request, $datos_id,$beca_id){
        if( (Auth::user()->role_id == '3') or (Auth::user()->role_id == '1')){
         
-      //dd($request,$beca_id,$user_id);
-          //  dd($request);
         $datos=DB::table('datos_personas')->where('id',$datos_id)->first();
-        //dd($datos,$datos_id);
         $fam=DB::table('familiars')->where('datos_id',$datos_id)->get();
         $con=DB::table('consideraciones')->where('datos_id',$datos_id)->get();
         $beca=DB::table('becas')->where('id',$beca_id)->first();
         $carrera= DB::table('carreras')->where('id',$datos->carrera_id)->first();
-        $calculos_aux=DB::table('calculos_aux')->where('anio',$beca->anio)->first();
+        $calculos_aux=DB::table('calculos_aux')->where('anio',$beca->anio)->first(); // Debe existir un calculo auxiliar que tenga el mismo año que la beca.
       
-        //dd($datos);
-
-
-                    
 
         try{
             /*
@@ -685,15 +608,15 @@ public function update(Request $request){
                 //suma de alquileres estudiante+familia
                 $alquiler_mensual=$datos->monto_alq+$datos->precio_alquiler;
 
-                ///falta otro pasaje?=***//////////
+                //Sumatoria de todos los transportes (pasajes*cant de viajes)
                 $transporte=($datos->cant_viajes*$calculos_aux->precio_urbano)+($datos->precio_pasaje*$datos->cant_viaja_media)+($datos->cant_viaja_larga*$datos->precio_pasaje_larga);
 
-                ///Sumatoria de los ingresos y gastos / la cantidad de gente
+                ///Sumatoria de los ingresos - gastos / la cantidad de gente
                 $total_ingreso_por_persona=($ingreso_total_familiar-$alquiler_mensual-$transporte-$datos->otros_gastos_cant)/$cant_grupo_familiar;
 
                 $aux_pto_ingresos=0;
 
-                ////Salen los valores de DB::calculos_aux
+                ////Salen los valores de DB::calculos_aux 
                 if ($total_ingreso_por_persona<($calculos_aux->minimo_vital_movil/10)) {
                     $aux_pto_ingresos=50;
                 }else{
@@ -898,7 +821,6 @@ public function update(Request $request){
             $aux_merito=$aux_pto_procedencia+$aux_pto_ingresos+$aux_pto_enfermedad+$aux_pto_academica;
 
 
-            //hasta aca
               $inscripto=DB::table('inscripciones')->where('datos_id',$datos_id)
               ->update([
             'pto_procedencia' => $aux_pto_procedencia,
@@ -915,9 +837,8 @@ public function update(Request $request){
     }
 
         catch (\Exception $e){
-           dd($e);
 
-            abort(404);//return redirect()->route('datospersona.index')->with('msg', ' Algo salio mal prueba de nuevo.');
+            abort(404);
 
         }
 
@@ -941,8 +862,6 @@ public function update(Request $request){
 
     $inscrip=DB::table('inscripciones')->join('datos_personas','inscripciones.datos_id','=','datos_personas.id')->where('inscripciones.beca_id','=',$request->beca_id)->where('inscripciones.datos_id',$request->id)->select('inscripciones.id','inscripciones.user_nombre','inscripciones.user_apellido','inscripciones.beca_nombre','inscripciones.created_at')->first();
 
-   //$inscrip->created_at->format('d/m/Y - h:m:s');
-    //dd($datos);
 
     $pdf = PDF::loadView('vendor.voyager.inscripciones.Comprobante_inscripcion',['inscrip'=>$inscrip,'dt'=>$dt/*, 'user'=>$user*/]);
    
@@ -959,10 +878,9 @@ public function update(Request $request){
     
 
      public function restablecer(Request $request, $datos_id,$beca_id){
-       if( (Auth::user()->role_id == '3') or (Auth::user()->role_id == '1')){
-        try{
-
-        $inscrip=DB::table('inscripciones')->where('datos_id',$datos_id)->where('beca_id',$beca_id)->update([
+        if( (Auth::user()->role_id == '3') or (Auth::user()->role_id == '1')){
+            try{
+                $inscrip=DB::table('inscripciones')->where('datos_id',$datos_id)->where('beca_id',$beca_id)->update([
                         'merito'=>0,
                         'pto_procedencia'=>0,
                         'pto_ingresos'=>0,
@@ -971,56 +889,45 @@ public function update(Request $request){
                         'observacion'=>"Restablecido",
                         'otorgamiento'=>"Pendiente"
                         ]);
-        $datos=DB::table('datos_personas')->where('id',$datos_id)->update([
-            'revision'=>0,
-            'band'=>0
-            ]);
-        //dd($inscrip,$datos);
-
-     return redirect()->back()->with(['message'=>"Restablecimiento con exito!", 'alert-type'=>'warning']);
-
+                $datos=DB::table('datos_personas')->where('id',$datos_id)->update([
+                    'revision'=>0,
+                    'band'=>0
+                    ]);
+                    //dd($inscrip,$datos);
+                return redirect()->back()->with(['message'=>"Restablecimiento con exito!", 'alert-type'=>'warning']);
+            }
+            catch (\Exception $e){
+                abort(404);
+            }
         }
-        catch (\Exception $e){
-       
-            abort(404);//return redirect()->route('datospersona.index')->with('msg', ' Algo salio mal prueba de nuevo.');
-
-        }
-
-         }
-     else
+        else
         {
             return redirect()->back()->with(['message'=>"Error", 'alert-type'=>'error']);
-
-
         }
+    }
+
+
+    public function verificar(Request $request)
+    {   //estado = id de beca - x=creacion sin id
+
+        if($request->estado==''){
+            $beca=DB::table('becas')->where('habilitada','Si')->count();    
+            if ($beca>=1){
+            return response (['message'=>"Ya se posee una beca habilitada",'valor'=>'0']);
+        }else{
+            return response (['message'=>"Estas por habilitar la beca",'valor'=>'1']);
+        }   
         }
-
-
-        public function verificar(Request $request)
-        {   //estado = id de beca - x=creacion sin id
-
-            if($request->estado==''){
-                $beca=DB::table('becas')->where('habilitada','Si')->count();    
-                if ($beca>=1){
-                return response (['message'=>"Ya se posee una beca habilitada",'valor'=>'0']);
-            }else{
-                return response (['message'=>"Estas por habilitar la beca",'valor'=>'1']);
-            }   
-            }
-            else{
-
-
-
+        else{
             $beca=DB::table('becas')->where('id','<>',$request->estado)->where('habilitada','Si')->count();
-            dd($beca);
+            //dd($beca);
             if ($beca>=1){
                 return response (['message'=>"Ya se posee una beca habilitada",'valor'=>'0']);
             }else{
                 return response (['message'=>"Estas por habilitar la beca",'valor'=>'1']);
             }
-            }
         }
-     
+    }
 
 
 
