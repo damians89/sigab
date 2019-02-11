@@ -76,12 +76,12 @@
 
     <br>
 
- <input type="radio" name="habilitada" onclick="verificar('@if (isset($dataTypeContent->id))@endif')" value="Si" @if(isset($dataTypeContent->habilitada)){{ ($dataTypeContent->habilitada=='Si' ? 'checked' : '')}} @endif/> <strong></strong> 
+ <input type="radio" name="habilitada" onclick="verificar('@if (isset($dataTypeContent->id))@endif')" value="Si" @if(isset($dataTypeContent->habilitada)){{ ($dataTypeContent->habilitada==1 ? 'checked' : '')}} @endif/> <strong></strong> 
 
     <label for="option-habilitada-si">Habilitar</label>
    <br> 
 
-<input type="radio" name="habilitada" onclick="verificar_no('@if(isset($dataTypeContent->id ))@endif')" value="No" @if(isset($dataTypeContent->habilitada)) {{ ($dataTypeContent->habilitada=='No' ? 'checked' : '')}} @endif/> <strong></strong>  
+<input type="radio" name="habilitada" onclick="verificar_no('@if(isset($dataTypeContent->id ))@endif')" value="No" @if(isset($dataTypeContent->habilitada)) {{ ($dataTypeContent->habilitada==0 ? 'checked' : '')}} @endif/> <strong></strong>  
     <label for="option-habilitada-no">No habilitada</label>
                                 </div>
 
@@ -91,6 +91,21 @@
                                 <input type="number" class="form-control" id="anio" name="anio" placeholder="Año"
                                        value="@if(isset($dataTypeContent->anio)){{ $dataTypeContent->anio }}@endif">
                             </div>
+
+                            <div class="form-group">
+                                <label for="calculo_id">Seleccione el cálculo auxiliar para el cómputo de la beca</label>
+                                @if(count($calculos)!=0)
+                                <select name="calculo_id" required>
+                                  <option value="">Seleccione una opción</option>
+                                  @foreach($calculos as $uncalculo)
+                                  <option value="@if(isset($uncalculo->id)){{ $uncalculo->id }}@endif">Mínimo vital móvil: ${{$uncalculo->minimo_vital_movil}} - Precio colectivo urbano: ${{$uncalculo->precio_urbano}}</option>
+                                  @endforeach
+                                </select>
+                                @else
+                                <label class="label label-danger">Porfavor cree un calculo auxiliar</label>
+                                @endif
+                            </div>
+
 
                             
 

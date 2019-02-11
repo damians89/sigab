@@ -34,14 +34,14 @@ class Inscriptos extends AbstractWidget
             */
         /*$count = DB::table('inscripciones')
         ->join('becas', 'inscripciones.beca_id', '=', 'becas.id')->where('becas.habilitada','=','Si')->count();*/
-        $count=DB::table('becas')->where('becas.habilitada','=','Si')->count();
+        $count=DB::table('becas')->where('becas.habilitada','=',1)->count();
 
         $count_sin_revisar = DB::table('datos_personas')
         ->join('becas', 'datos_personas.beca_id', '=', 'becas.id')
         ->where('datos_personas.revision','=','0')
-        ->where('becas.habilitada','=','Si')->count();
+        ->where('becas.habilitada','=',1)->count();
 
-$total_inscrip = DB::table('inscripciones')->join('becas', 'inscripciones.beca_id', '=', 'becas.id')->where('becas.habilitada','=','Si')->count();
+$total_inscrip = DB::table('inscripciones')->join('becas', 'inscripciones.beca_id', '=', 'becas.id')->where('becas.habilitada','=',1)->count();
 
 //dd($count,$count_sin_revisar);
 

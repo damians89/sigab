@@ -25,7 +25,7 @@ class NamespacedAttributeBag extends AttributeBag
      * @param string $storageKey         Session storage key
      * @param string $namespaceCharacter Namespace character to use in keys
      */
-    public function __construct($storageKey = '_sf2_attributes', $namespaceCharacter = '/')
+    public function __construct(string $storageKey = '_sf2_attributes', string $namespaceCharacter = '/')
     {
         $this->namespaceCharacter = $namespaceCharacter;
         parent::__construct($storageKey);
@@ -115,7 +115,7 @@ class NamespacedAttributeBag extends AttributeBag
                 return $array;
             }
 
-            $array[$parts[0]] = array();
+            $array[$parts[0]] = [];
 
             return $array;
         }
@@ -130,7 +130,7 @@ class NamespacedAttributeBag extends AttributeBag
                     return $null;
                 }
 
-                $array[$part] = array();
+                $array[$part] = [];
             }
 
             $array = &$array[$part];

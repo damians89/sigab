@@ -39,8 +39,8 @@ $(document).ready(function () {
     $('.readmore').readmore({
         collapsedHeight: 60,
         embedCSS: true,
-        lessLink: '<a href="#" class="readm-link">Leer más</a>',
-        moreLink: '<a href="#" class="readm-link">Leer menos</a>',
+        lessLink: '<a href="#" class="readm-link">Read Less</a>',
+        moreLink: '<a href="#" class="readm-link">Read More</a>',
     });
 
     $(".hamburger, .navbar-expand-toggle").on('click', function () {

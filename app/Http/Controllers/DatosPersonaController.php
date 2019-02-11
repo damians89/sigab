@@ -66,9 +66,9 @@ class DatosPersonaController extends Controller
         
 
         $beca = DB::table('becas')->join('datos_personas','datos_personas.beca_id','!=','becas.id')
-        ->where('habilitada', "Si")->select('becas.habilitada','becas.id','datos_personas.beca_id')->get(); //Si tiene mas becas habilitada explota adrede
+        ->where('habilitada', 1)->select('becas.habilitada','becas.id','datos_personas.beca_id')->get(); 
 
-        $aux = DB::table('becas')->where('habilitada',"Si")->first();
+        $aux = DB::table('becas')->where('habilitada',1)->first();
         $carrera = DB::table('carreras')->get();
         $condicion = DB::table('condicion')->get();
 
@@ -76,7 +76,7 @@ class DatosPersonaController extends Controller
         $super=DB::table('datos_personas')
         ->join('becas','datos_personas.beca_id','=','becas.id')
         ->where('datos_personas.user_id',$user->id)
-        ->where('becas.habilitada','=',"Si")
+        ->where('becas.habilitada','=',1)
         ->get();
 
         if(count($super)){
@@ -120,7 +120,7 @@ class DatosPersonaController extends Controller
      */
     public function store(CrearDatosPersona $request)
     {       
-        $beca_aux = DB::table('becas')->where('habilitada', "Si")->first(); //Si tiene mas becas habilitada explota adrede y ademas comprobar que no se altero el hidden del form
+        $beca_aux = DB::table('becas')->where('habilitada', 1)->first(); //Si tiene mas becas habilitada explota adrede y ademas comprobar que no se altero el hidden del form
 
 //            dd($request); 
         if ($beca_aux->id==$request->becaid){

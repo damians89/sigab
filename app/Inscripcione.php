@@ -37,9 +37,9 @@ class Inscripcione extends Model
     //////////PAra calcular el merito... se podria llamar a una funcion externa...///
 
     public function Inscribir($request, $id){
-        //echo "HOLAAAAAAAAAA estamos en Inscripcione.php";
-      //  dd($request,$id);
-        $aux_beca =  DB::table('becas')->where('habilitada', "Si")->first(); //Si tiene mas becas habilitada  ardeee!
+        
+
+        $aux_beca =  DB::table('becas')->where('habilitada', 1)->first(); //Si tiene mas becas habilitada  ardeee!
         //dd($aux_beca);
         $inscripto = new Inscripcione();
             

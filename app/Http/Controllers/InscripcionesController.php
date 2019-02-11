@@ -911,7 +911,7 @@ public function update(Request $request){
     {   //estado = id de beca - x=creacion sin id
 
         if($request->estado==''){
-            $beca=DB::table('becas')->where('habilitada','Si')->count();    
+            $beca=DB::table('becas')->where('habilitada',1)->count();    
             if ($beca>=1){
             return response (['message'=>"Ya se posee una beca habilitada",'valor'=>'0']);
         }else{
@@ -919,7 +919,7 @@ public function update(Request $request){
         }   
         }
         else{
-            $beca=DB::table('becas')->where('id','<>',$request->estado)->where('habilitada','Si')->count();
+            $beca=DB::table('becas')->where('id','<>',$request->estado)->where('habilitada',1)->count();
             //dd($beca);
             if ($beca>=1){
                 return response (['message'=>"Ya se posee una beca habilitada",'valor'=>'0']);
@@ -935,3 +935,4 @@ public function update(Request $request){
     }
 
 
+    
