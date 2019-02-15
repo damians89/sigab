@@ -7,13 +7,13 @@ use App\Provincia;
 use App\Localidad;
 use App\Http\Controllers\Controller;
 
-class ProvinciaController extends Controller
+class eliminarProvinciaController extends Controller
 {
     public function index()
     {
     	$provincia = Provincia::pluck('provincia', 'id');
     	$provincia->all();	
-    	return view('selects', compact('provincia'));
+    	return view('eliminarselects', compact('provincia'));
     }
 
     public function getLocalidades(Request $request, $id)

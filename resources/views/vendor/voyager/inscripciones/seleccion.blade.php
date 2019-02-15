@@ -54,16 +54,16 @@
 	
 		@foreach($inscrip as $inscriptos)
 
-<?php if ($inscriptos->otorgamiento == "No"): ?>
+<?php if ($inscriptos->otorgamiento == 0): ?>
 				<tr style="background-color: #9999CC; color: black;">
 <?php endif; ?>
-<?php if ($inscriptos->otorgamiento == "Suspendida"): ?>
+<?php if ($inscriptos->otorgamiento == 3): ?>
 			<tr style="background-color: #993300; color: black;">
 <?php endif; ?>
-<?php if ($inscriptos->otorgamiento == "Si"): ?>
+<?php if ($inscriptos->otorgamiento == 1): ?>
 			<tr style="background-color: #339933; color: black; ">
 <?php endif; ?>
-<?php if ($inscriptos->otorgamiento == "Pendiente"): ?>
+<?php if ($inscriptos->otorgamiento == 0): ?>
 			<tr style="background-color: #999999; color: black;">
 <?php endif; ?>
 				<td>
@@ -232,4 +232,31 @@ paging: true,
     });
 
 </script>
+
+
+<script type="text/javascript">
+	function conPonerReadOnly(campos,pos)
+	{
+		$("#"+campos+pos).attr("readonly", "readonly");
+		$("#"+campos+pos).addClass("readOnly");
+		var valor = $("#"+campos+pos).val();
+		var nombre = $("#"+campos+pos).attr('name');
+		var idCon = $("#consideracion"+pos).val();
+		var idUsuario = $(user_id).val();
+		var idBeca = $(beca_id).val();
+		var tabla = "consideraciones"
+
+
+		$.ajax({
+		  type: "POST",
+		  url: '/update',
+		  dataType: 'JSON',
+		  //contentType: 'application/x-www-form-urlencoded',
+		  data:{"idBeca":idBeca,"idCon":idCon,"nombre":nombre,"valor":valor,"tabla":tabla,"idUsuario":idUsuario},
+		  success: function(data){
+
+		  }
+		}
+		);
+	}
 @endsection

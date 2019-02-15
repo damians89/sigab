@@ -24,7 +24,7 @@
 </thead>
 <tbody>
 
-
+{{$inscrip->beca_nombre}}
 <tr align="center">
 	<td style="width: 180px">{{$inscrip->beca_nombre}}</td>
 	<td style="width: 180px">{{$inscrip->anio}}</td>

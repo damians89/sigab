@@ -149,6 +149,34 @@
         <div class="form-group">
           <label for="validate-select">Provincia:</label>
             <div class="input-group">
+{!! Form::select('provincia', $provincia, 9, ['id' => 'provincia','class'=>'form-control','required']) !!}
+                         <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
+        </div> 
+
+<!--
+        <div class="form-group">
+          <label for="validate-select">Localidad:</label>
+            <div class="input-group">
+
+{<!! Form::select('localidad', ['placeholder'=>'Selecciona una provincia'], null, ['id'=>'localidad','class'=>'form-control','required']) !!}
+
+<span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
+        </div> 
+-->
+  <div class="form-group">
+              <label for="validate-letras">Localidad:</label>
+                <div class="input-group">
+                  <select value="{{ old('localidad') }}" class="form-control" name="localidad" id="localidad" placeholder="Seleccione una opción" required>
+                    <option value="" selected>Seleccione una opción</option></select>
+                <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
+          </div>
+<!---
+        <div class="form-group">
+          <label for="validate-select">Provincia:</label>
+            <div class="input-group">
                 <select class="form-control" id="provincia" name="provincia" required><option value="">Seleccione una provincia</option><option value="1">Buenos Aires</option><option value="2">Buenos Aires-GBA</option><option value="3">Capital Federal</option><option value="4">Catamarca</option><option value="5">Chaco</option><option value="6">Chubut</option><option value="7">Córdoba</option><option value="8">Corrientes</option><option value="9">Entre Ríos</option><option value="10">Formosa</option><option value="11">Jujuy</option><option value="12">La Pampa</option><option value="13">La Rioja</option><option value="14">Mendoza</option><option value="15">Misiones</option><option value="16">Neuquén</option><option value="17">Río Negro</option><option value="18">Salta</option><option value="19">San Juan</option><option value="20">San Luis</option><option value="21">Santa Cruz</option><option value="22">Santa Fe</option><option value="23">Santiago del Estero</option><option value="24">Tierra del Fuego</option><option value="25">Tucumán</option></select>
               <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -161,7 +189,7 @@
               <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
         </div> 
-
+-->
         <div class="form-group">
         <label for="validate-number">Código Postal:</label>
         <div class="input-group" data-validate="number">
@@ -270,7 +298,7 @@
                 <div class="input-group">
                   <select  class="form-control" name="discaest" id="discaest" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="Si">Si</option><option value="No">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -278,8 +306,6 @@
           </div>
         
         </div>
-
-
         <div id="openModalConsideraciones" class="modalDialog">
                   <div>
                     <a href="#close" title="Close" class="close">X</a>
@@ -378,7 +404,7 @@ if (selected === "") {
 }
 else{
 
-if(selected === "Si") {
+if(selected === "1") {
  $('#imagendiscaestdiv').html(" <label class='label label-info' for='validate-number'>Imagen Certificado</label> <div class='input-group'>   <input  type='file' id='imagendiscaest' name='imagendiscaest' class='form-control' accept='.jpg, .jpeg, .png' required><span class='input-group-addon danger'><span class='glyphicon glyphicon-remove'></span></span>              </div></div> <div id='list-imagendiscaest-1' style='display:none;' class='form-group'><div class='input-group'>       <img class='thumb' id='list-imagendiscaest' />   </div></div>");
 
 $(document).ready(function() {
@@ -435,7 +461,7 @@ $(document).ready(function() {
          });
 
 }
-else if(selected === "No") {
+else if(selected === "0") {
 
 $('#imagendiscaestdiv').html('');
 }
@@ -454,7 +480,7 @@ $("#provincia").change(function (event) {
               $.get("localidad/"+event.target.value+"", function(response, state) {
               
               for(i=0; i<response.length; i++){
-              $("#localidad").append("<option value='"+response[i].localidad+"'>"+response[i].localidad+" </option>");
+              $("#localidad").append("<option value='"+response[i].id+"'>"+response[i].localidad+" </option>");
             }
             });
         });

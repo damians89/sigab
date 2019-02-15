@@ -39,11 +39,11 @@ class DatosPersonaController extends Controller
 
 
     public function index()
-    {
+    {   /*
         $dato = DatosPersona::with(['user_name', 'user_id'])->get();
         $user = Auth::user(); 
         $carrera = DB::table('carreras')->get();
-        
+        */
         
         
         return view('datospersona.index', compact('dato','user','carrera'));
@@ -52,17 +52,14 @@ class DatosPersonaController extends Controller
         
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         
         $user = Auth::user();
-        
-        $id = DB::table('datos_personas')->where('user_id', $user->id)->get(); //devuelvo todos que encuentra
+
+        //devuelvo la persona logeada
+        $id = DB::table('datos_personas')->where('user_id', $user->id)->get(); 
         
 
         $beca = DB::table('becas')->join('datos_personas','datos_personas.beca_id','!=','becas.id')
@@ -79,12 +76,16 @@ class DatosPersonaController extends Controller
         ->where('becas.habilitada','=',1)
         ->get();
 
+        //Para mandar los datos de la provincia
+        $provincia = Provincia::pluck('provincia', 'id');
+        $provincia->all();
+        
         if(count($super)){
         return redirect('administracion')->with('message','Ya estas inscripto en la beca ');
         //Porque ya esta inscripto en la beca
         }else{
             //No tiene ningun dato cargado
-        return view ('datospersona.create', compact('user', 'carrera', 'id', 'condicion','beca','aux'));
+        return view ('datospersona.create', compact('user', 'carrera', 'id', 'condicion','beca','aux','provincia'));
         }
 
 
@@ -98,11 +99,11 @@ class DatosPersonaController extends Controller
     public function getLocalidades(Request $request, $id)
     {
         if($request->ajax()){
-            $localidad = Localidad::localidades($id);
+            $localidad = db::table('localidades')->where('id_privincia',$id)->get();
             return response()->json($localidad);
         }
     }
-    public function getCarreras(Request $request, $id)
+    public function getCarreras(Request $request,$id)
     {
         if($request->ajax()){
             
@@ -121,9 +122,11 @@ class DatosPersonaController extends Controller
     public function store(CrearDatosPersona $request)
     {       
         $beca_aux = DB::table('becas')->where('habilitada', 1)->first(); //Si tiene mas becas habilitada explota adrede y ademas comprobar que no se altero el hidden del form
-
-//            dd($request); 
+//dd($request->all());
         if ($beca_aux->id==$request->becaid){
+            //Apertura de transaccion
+            DB::beginTransaction();
+
 
         $random = str_random(100);
 
@@ -134,20 +137,16 @@ class DatosPersonaController extends Controller
             $datos = new DatosPersona;
             $datos->beca_id = $request->becaid;
             $datos->user_id = $request->user_id;
-            $datos->user_apellido = $request->apellido;
-            $datos->user_name = $request->nombre;
-            $datos->user_dni = $request->dni;
             $datos->cuil = $request->cuil;
             $datos->estado_civil = $request->estcivil;
             $datos->cumple = $request->cumple;
             $datos->domicilio = $request->domi;
             $datos->provincia = $request->provincia;
-            $datos->localidad = $request->localidad;
+            $datos->localidad_id = $request->localidad;
             $datos->cp = $request->cp;
             $datos->km_procedencia=$request->kmprocedencia;
             $datos->nacionalidad = $request->nacionalidad;
             $datos->cel = $request->cel;
-            $datos->user_email = $request->email;
             $datos->face = $request->face;
             $datos->disca_estudiante = $request->discaest;
             $datos->condicion_estudiante = $request->cond;
@@ -199,11 +198,8 @@ $nombre='constancia_estudiante'.'-'.$request->dni.'-'.$random.'.'.$img->getClien
             } 
 
             //********************************************************///
-            // Para que me devuelva el nombre de la carrera y no el id//
+           // dd($request->carrera_cursa);
             $datos->carrera_id=$request->carrera_cursa; 
-            $aux_carrera = DB::table('carreras')->where('id',$request->carrera_cursa)->first();
-            $datos->carrera_cursa = $aux_carrera->nombre;
-            /////////////////////////////////////////////////////////////
             $datos->anio_ingreso = $request->anioingreso;
             $datos->anio_cursado = $request->aniocursado;
             
@@ -225,6 +221,7 @@ $nombre='constancia_estudiante'.'-'.$request->dni.'-'.$random.'.'.$img->getClien
             $datos->sueldo = $request->sueldo;
             $datos->tiene_beca = $request->beca;
             $datos->tiene_progresar = $request->progresar;
+            $datos->tiene_pasantia=$request->pasan;
             $datos->tiene_asig = $request->asig;
             $datos->otros_ing = $request->otrosing;
             $datos->otros_ing_cant=$request->otrosingcant;
@@ -443,10 +440,8 @@ $nombre='comprobante_ingresos-1'.'-'.$request->dni.'-'.$random.'.'.$img->getClie
                 }
     
 
-            $datos->save();
+            $datos->saveorfail();
             
-
-        
             $id = DB::getPdo()->lastInsertId();;
         //    dd($id);
 
@@ -457,8 +452,6 @@ $nombre='comprobante_ingresos-1'.'-'.$request->dni.'-'.$random.'.'.$img->getClie
                 $con = new consideracione;
                 $con->datos_id = $datos->id;
                 $con->beca_id = $request->becaid;
-                
-                
                 $con->user_id = $request->user_id;
                 $con->parentesco = $request->consideraciones[$k]['parentesco'];
                 $con->enfermedad = $request->consideraciones[$k]['enfermedad'];
@@ -475,9 +468,7 @@ $nombre='comprobante_ingresos-1'.'-'.$request->dni.'-'.$random.'.'.$img->getClie
                 }else{abort(404);}
             }
 
-
-
-                $con->save();
+                $con->saveorfail();
             }
             
             }//cierra el if de empty
@@ -567,34 +558,34 @@ $nombre='comprobante_ingresos-1'.'-'.$request->dni.'-'.$random.'.'.$img->getClie
                     $fam->anses = $ruta.'/'.$nombre;    
                 }else{abort(404);}
 
-              $fam->save();
+              $fam->saveorfail();
             }
         }//cierra el if del fam vacio
-            $inscripto = new Inscripcione();
-            $inscripto->Inscribir($request,$datos->id);
+        
+        $inscripto = new Inscripcione();
+        $inscripto->user_id = $request->user_id;
+        $inscripto->datos_id = $id;
+        $inscripto->beca_id = $request->becaid;
+        $inscripto->carrera_id = $request->carrera_cursa;
+
+        //hasta aca
+        $inscripto->merito = 0;
+        $inscripto->observacion = 'Alta inicial';
+        $inscripto->saveorfail();
+
+            DB::commit();
         }
            
 
-           /* if (auth()->check()) {
-                auth()->user()->datos()->save($datos);
-            }
-
-            event(new MessageWasReceived($datos));
-            */
-        //esta forma sirve cuando sabemos que siempre tenemos un usario autenticado
-        //auth()->user()->messages()->create($request->all());
-
         catch (\Exception $e){
+           //DB::rollback();
            dd($e);
-
-           // abort(404);//return redirect()->route('datospersona.index')->with('msg', ' Algo salio mal prueba de nuevo.');
-
+           return redirect('/administracion')->with(['message'=>"Algo salio mal, vuelve a completar el formulario",'alert-type'=>'danger']);
+          
         }
         }
-         return redirect('/administracion')->with('message', "Felicitaciones, hemos recibido tu inscripcion");//
+         return redirect('/administracion')->with(['message', "Felicitaciones, hemos recibido tu inscripcion",'alert-type'=>'danger']);//
        
-
-        //meter el alert https://www.youtube.com/watch?v=t2OgwDHKIkQ
 
     }
 
@@ -615,22 +606,9 @@ $nombre='comprobante_ingresos-1'.'-'.$request->dni.'-'.$random.'.'.$img->getClie
      * @param  \App\DatosPersona  $datosPersona
      * @return \Illuminate\Http\Response
      */
-    //public function edit(DatosPersona $datosPersona)
     public function edit($user_id)
     {
-        $user = Auth::user();
-
-        $carrera = DB::table('carreras')->get();
-        $condicion = DB::table('condicion')->get();
-        
-
-        //$datos = DatosPersona::findOrFail($user_id);// si descomento esto se edita con el id de datos persona y no con el user_id por eso el datos de abajo VER
-
-
-        $datos = DB::table('datos_personas')->where('user_id', $user->id)->first(); //devuelvo el primero que encuentra
-
-        return view('datospersona.edit', compact('datos','carrera', 'user','condicion'));
-    
+        //para editar los datos cargados, no requeridos
     }
 
     /**
@@ -642,16 +620,7 @@ $nombre='comprobante_ingresos-1'.'-'.$request->dni.'-'.$random.'.'.$img->getClie
      */
     public function update(Request $request, DatosPersona $datosPersona)
     {
-
-        
-       /* $datos_upd = DatosPersona::findOrFail($datosPersona->id);
-
-        $datos_upd->update($request->all());            
-
-        return redirect()->route('datosPersona.index');
-
-        crear la vista..... (datospersona->id andara?=)
-        */
+        // 
     }
 
     /**
@@ -672,8 +641,8 @@ $nombre='comprobante_ingresos-1'.'-'.$request->dni.'-'.$random.'.'.$img->getClie
         //dd($id_user->id);
         $datos = DB::table('datos_personas')->where('user_id', $user->id)->first(); //devuelvo el primero que encuentra
         return $datos->revision;
-        }
 
+    }
 
 
 }

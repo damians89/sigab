@@ -156,7 +156,8 @@ public function store(Request $request)
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
-        $relationships = $this->getRelationships($dataType);
+
+        //$relationships = $this->getRelationships($dataType);
 
         
         if (strlen($dataType->model_name) != 0) {
@@ -190,10 +191,15 @@ public function store(Request $request)
         $view = 'voyager::bread.read';
 
         $request->beca=$aaa;
-        $inscrip = DB::table('inscripciones')->join('users', function ($join)
-        {
-            $join->on('inscripciones.user_id','=','users.id');
-        })->where('beca_id','=',$request->beca)->orderBy('inscripciones.merito','desc')->get();//->paginate(3);
+        $inscrip = DB::table('inscripciones')
+                ->join('users','inscripciones.user_id','=','users.id')
+                ->join('datos_personas','datos_personas.id','inscripciones.datos_id')
+                ->join('becas','inscripciones.beca_id','becas.id')
+                ->join('carreras','inscripciones.carrera_id','carreras.id')
+                ->where('inscripciones.beca_id','=',$request->beca)->orderBy('inscripciones.merito','desc')
+                ->select('users.apellido as user_apellido','inscripciones.otorgamiento as otorgamiento','users.id as user_id','datos_personas.id as datos_id','becas.id as beca_id','users.name as user_nombre','users.dni as dni','carreras.sede_id as sede_nombre','inscripciones.merito as merito','inscripciones.observacion as observacion')
+                ->get();
+
 
         $aux = DB::table('becas')->where('id','=',$request->beca)->select('nombre')->first(); //busco el nombre de la beca
    
@@ -274,29 +280,26 @@ public function store(Request $request)
     
     public function seleccion(Request $request)
     {
-    //dd($request);
-    if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){ 
-
-
-        $inscrip = DB::table('inscripciones')->join('users', function ($join)
-        {
-            $join->on('inscripciones.user_id','=','users.id');
-        })->where('beca_id','=',$request->beca)->orderBy('inscripciones.merito','desc')->get();
-
-        $aux = DB::table('becas')->where('id','=',$request->beca)->select('nombre')->first(); //busco el nombre de la beca
-   
-        $aux1 = DB::table('datos_personas')->where('beca_id',$request->beca)->get();  
-            return view('vendor.voyager.inscripciones.seleccion', ['inscrip'=>$inscrip]);
-  
-
-    }    
-    else{
-        return view('errors.404');
-    
+        if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){
+            try{
+                $inscrip = DB::table('inscripciones')
+                ->join('users','inscripciones.user_id','=','users.id')
+                ->join('datos_personas','datos_personas.id','inscripciones.datos_id')
+                ->join('becas','inscripciones.beca_id','becas.id')
+                ->join('carreras','inscripciones.carrera_id','carreras.id')
+                ->where('inscripciones.beca_id','=',$request->beca)->orderBy('inscripciones.merito','desc')
+                ->select('users.apellido as user_apellido','inscripciones.otorgamiento as otorgamiento','users.id as user_id','datos_personas.id as datos_id','becas.id as beca_id','users.name as user_nombre','users.dni as dni','carreras.sede_id as sede_nombre','inscripciones.merito as merito','inscripciones.observacion as observacion')
+                ->get();
+                return view('vendor.voyager.inscripciones.seleccion', ['inscrip'=>$inscrip]);
+            }catch(Exception $e){
+                return redirect()->back()->with(['message'=>"Error al listar los inscriptos", 'alert-type'=>'warning']);
+            }
+        }
+        else{
+            return view('errors.404');
+        }
     }
 
- 
-    }
 
     public function datos_usuario(Request $request,$beca_id,$id){
           
@@ -342,8 +345,12 @@ public function store(Request $request)
         $user = Auth::user();;
        
         $datos_beca = DB::table('inscripciones')
-        ->join('becas', 'inscripciones.beca_id', '=', 'becas.id') /*mismas becas*/
+        ->join('becas', 'inscripciones.beca_id', '=', 'becas.id')
+        ->join('users','inscripciones.user_id','users.id')
+        ->join('datos_personas','inscripciones.datos_id','datos_personas.id')
+        ->join('carreras','inscripciones.carrera_id','carreras.id')
         ->where('inscripciones.user_id', '=', $user->id)
+        ->select('becas.nombre as beca_nombre', 'becas.anio as anio','users.id as user_id','becas.id as beca_id')
           ->get();
         return $datos_beca;
         }
@@ -394,16 +401,21 @@ public function store(Request $request)
 
 
     public function observacion (Request $request, $user_id){
-        if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){ 
-
-    
-        $inscrip = DB::table('inscripciones')->where('user_id', $user_id)->first();
-        return view('vendor.voyager.inscripciones.observacion',compact('inscrip'));
-    } 
-       else{
-        return view('errors.404');
-    }
-    
+        if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){
+            $inscrip = DB::table('inscripciones')
+            ->join('users','inscripciones.user_id','users.id')
+            ->join('datos_personas','inscripciones.datos_id','datos_personas.id')
+            ->join('carreras','inscripciones.carrera_id','carreras.id')
+            ->join('becas','inscripciones.beca_id','becas.id')
+            ->where('inscripciones.user_id', $user_id)
+            ->select('users.apellido as user_apellido','inscripciones.otorgamiento as otorgamiento','users.id as user_id','datos_personas.id as datos_id','becas.id as beca_id','users.name as user_nombre','users.dni as dni','carreras.sede_id as sede_nombre','inscripciones.merito as merito','inscripciones.observacion as observacion','inscripciones.id as id')
+            ->first();
+            return view('vendor.voyager.inscripciones.observacion',compact('inscrip'));
+        }
+        else
+        {
+            return view('errors.404');
+        }
     }
 
 
@@ -449,83 +461,98 @@ public function store(Request $request)
 
 
     public function otorgar(Request $request){
-       // dd($request->all());
-        Session::put('beca', $request->beca_id);//para que permita relogear
-
         
-      
-        $datos_beca = DB::table('inscripciones')
-        ->where('beca_id', '=', $request->beca_id)->orderBy('inscripciones.merito','desc')->get();
+        DB::beginTransaction();
+        try{
+            Session::put('beca', $request->beca_id);//para que permita relogear
+            $datos_beca = DB::table('inscripciones')
+            ->where('beca_id', '=', $request->beca_id)->orderBy('inscripciones.merito','desc')->get();
 
-     $cantidad = $datos_beca->count();
+            $cantidad = $datos_beca->count();
+            if($request->cant_otor==null or $request->cant_otor==0 ){ //Por si no ingresa cantidad de otorgamiento
+                return redirect()->back()->with(['message'=>"Falta indicar cuantas becas se otorgaran!", 'alert-type'=>'warning']);
 
-     if($request->cant_otor==null or $request->cant_otor==0 ){ //Por si no ingresa cantidad de otorgamiento
-        return redirect()->back()->with(['message'=>"Falta indicar cuantas becas se otorgaran!", 'alert-type'=>'warning']);
-     } 
+            }
 
-     
-     if ($request->cant_otor > $cantidad) { //Si puso mas becas que inscriptos
-        return redirect()->back()->with(['message'=>"Mucha cantidad de becas para pocos postulantes", 'alert-type'=>'warning']);
-     }  
 
-      //Inicializo a todos los postulante como NO OTORGADAS!
-     $datos_usuario=DB::table('inscripciones')->where('beca_id','=',$request->beca_id)->where('otorgamiento','<>',"Suspendida")->update(['otorgamiento'=>"No"]);
-    
+            if ($request->cant_otor > $cantidad) { //Si puso mas becas que inscriptos
+                return redirect()->back()->with(['message'=>"Mucha cantidad de becas para pocos postulantes", 'alert-type'=>'warning']);
+            }
 
-     if ($datos_beca == null){ ///Pregunta si existen inscripciones con esa beca
-        return redirect()->back()->with(['message'=>"Ningun inscripto en esta beca!", 'alert-type'=>'error']);
-    }else//Si existen inscriptos.....
-    {
-        
-        foreach ($datos_beca as $id => $datos) {
-         $aux_chequeo=DB::table('datos_personas')->find($datos->datos_id); //Para ver si revisaron todos
-        if($aux_chequeo->band==0){
-        return redirect()->back()->with(['message'=>"Faltan revisar los datos de: ".$aux_chequeo->user_name." ".$aux_chequeo->user_apellido." - DNI:".$aux_chequeo->user_dni, 'alert-type'=>'error']);
+
+            if ($datos_beca == null){ ///Pregunta si existen inscripciones con esa beca
+                return redirect()->back()->with(['message'=>"Ningun inscripto en esta beca!", 'alert-type'=>'error']);
+                }else//Si existen inscriptos.....
+                {
+
+                    foreach ($datos_beca as $id => $datos) {//Para ver si revisaron todos
+                        $aux_chequeo=DB::table('datos_personas')
+                        ->join('users','users.id','datos_personas.user_id')
+                        ->where('datos_personas.id',$datos->datos_id)
+                        ->select('users.name as user_name','users.apellido as user_apellido','users.dni as user_dni','datos_personas.band as band','datos_personas.revision as revision')
+                        ->first();
+                        //Veo uno por uno si estan chequedos o no
+                        if($aux_chequeo->band==0){
+                            return redirect()->back()->with(['message'=>"Faltan revisar los datos de: ".$aux_chequeo->user_name." ".$aux_chequeo->user_apellido." - DNI:".$aux_chequeo->user_dni, 'alert-type'=>'error']);
+                        }
+                        if($aux_chequeo->revision==0){
+                            $ms="El dni: ".$aux_chequeo->user_dni." tiene los datos sin completar";
+                            $alert="warning";
+                            return redirect()->back()->with(['message'=>$ms, 'alert-type'=>$alert]);
+                        }
+                    }
+                    foreach ($datos_beca as $id => $datos) {//recorro todos los inscriptos
+                        if ($request->cant_otor > 0) {
+                            $aux_chequeo_sin_completar=DB::table('datos_personas')
+                            ->join('users','users.id','datos_personas.user_id')
+                            ->where('datos_personas.id',$datos->datos_id)
+                            ->select('users.name as user_name','users.apellido as user_apellido','users.dni as user_dni')->first(); //Para ver si tiene datos completos
+
+                            $d2=DB::table('inscripciones')
+                            ->where('beca_id','=',$request->beca_id)
+                            ->where('datos_id','=',$datos->datos_id)
+                            ->update(['observacion'=>'Por Orden de Merito', 'otorgamiento'=>1]);
+
+                            $ms="Becas otorgadas con exito";
+                            $alert="success";
+                            //dd($d2);
+                        }
+                        else//Los que quedaron afuera de la corte
+                        {
+                            $datos_usuario=DB::table('inscripciones')
+                            ->where('beca_id','=',$request->beca_id)
+                            ->where('datos_id','=',$datos->datos_id)
+                            ->update(['otorgamiento'=>0]);
+                        }
+                        $request->cant_otor=$request->cant_otor-1;
+                    }
                 }
-
+                DB::commit();
+                return redirect()->back()->with(['message'=>$ms, 'alert-type'=>$alert]);
+           
+        }//cierra el try
+        catch (Exception $e){
+            DB::rollback();
+            return redirect()->back()->with(['message'=>"Problema al realizar la accion", 'alert-type'=>'warning']);
         }
-  
-
-
-          foreach ($datos_beca as $id => $datos) {//recorro todos los inscriptos
-            if ($request->cant_otor > 0) {
-            $aux_chequeo_sin_completar=DB::table('datos_personas')->find($datos->datos_id); //Para ver si tiene datos completos
-
-          
-          if($aux_chequeo_sin_completar->revision==1){
-            $ms="El dni: ".$aux_chequeo_sin_completar->user_dni." tiene los datos sin completar";
-            $alert="warning";
-            }else{
-
-                $d2=DB::table('inscripciones')->where('datos_id','=',$datos->datos_id)
-                ->update(['observacion'=>'Por Orden de Merito', 'otorgamiento'=>'Si']);
-                //dd($d2);
-                $ms="Becas otorgadas con exito";
-                $alert="success";
-
-            }}$request->cant_otor=$request->cant_otor-1;
-        }
-        return redirect()->back()->with(['message'=>$ms, 'alert-type'=>$alert]);
     }
-}
 
 
-
-public function update(Request $request){
+        public function update(Request $request){
   //Recibo el nombre de las tablas, y segun la tabla es donde se inserta segun el "campo" y segun el "valor" totalmente random
-    if ($request->tabla=='familiar'){
-        $consulta=DB::table('familiars')->where('datos_id',$request->idUsuario)->where('beca_id',$request->idBeca)->where('id',$request->idFam)->update([$request->nombre=>$request->valor]);
-        return redirect()->back()->with(['message'=>"Modificado con exito!", 'alert-type'=>'success']);
-    }
-    elseif ($request->tabla=='datos_personas') {
-        $consulta=DB::table('datos_personas')->where('id',$request->idUsuario)->where('beca_id',$request->idBeca)->update([$request->nombre=>$request->valor]);
-        return redirect()->back()->with(['message'=>"Modificado con exito!", 'alert-type'=>'success']);
-    }
-    elseif ($request->tabla=='consideraciones') {
-        $consulta=DB::table('consideraciones')->where('datos_id',$request->idUsuario)->where('beca_id',$request->idBeca)->where('id',$request->idCon)->update([$request->nombre=>$request->valor]);
-        return redirect()->back()->with(['message'=>"Modificado con exito!", 'alert-type'=>'success']);
-    }
-}
+            if ($request->tabla=='familiar'){
+                $consulta=DB::table('familiars')->where('datos_id',$request->idUsuario)->where('beca_id',$request->idBeca)->where('id',$request->idFam)->update([$request->nombre=>$request->valor]);
+                return redirect()->back()->with(['message'=>"Modificado con exito!", 'alert-type'=>'success']);
+            }
+            elseif ($request->tabla=='datos_personas') {
+                $consulta=DB::table('datos_personas')->where('id',$request->idUsuario)->where('beca_id',$request->idBeca)->update([$request->nombre=>$request->valor]);
+                return redirect()->back()->with(['message'=>"Modificado con exito!", 'alert-type'=>'success']);
+            }
+            elseif ($request->tabla=='consideraciones') {
+                $consulta=DB::table('consideraciones')->where('datos_id',$request->idUsuario)->where('beca_id',$request->idBeca)->where('id',$request->idCon)->update([$request->nombre=>$request->valor]);
+                return redirect()->back()->with(['message'=>"Modificado con exito!", 'alert-type'=>'success']);
+            }
+        }
 
 
 

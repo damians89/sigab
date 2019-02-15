@@ -11,7 +11,7 @@
                 <div class="input-group">
                   <select value="{{ old('propietario') }}" class="form-control" name="propietario" id="propietario" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="1">Si</option><option value="2">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -22,7 +22,7 @@
                 <div class="input-group">
                   <select value="{{ old('alquila') }}" class="form-control" name="alquila" id="alquila" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="Si">Si</option><option value="No">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -49,7 +49,7 @@
                 <div class="input-group">
                   <select value="{{ old('prestada') }}" class="form-control" name="prestada" id="prestada" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="1">Si</option><option value="2">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -69,7 +69,7 @@
                 <div class="input-group">
                   <select value="{{ old('campo') }}" class="form-control" name="campo" id="campo" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="Si">Si</option><option value="No">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -93,7 +93,7 @@
                 <div class="input-group">
                   <select value="{{ old('terreno') }}" class="form-control" name="terreno" id="terreno" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="Si">Si</option><option value="No">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -114,7 +114,7 @@
                 <div class="input-group">
                   <select value="{{ old('auto') }}" class="form-control" name="auto" id="auto" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="Si">Si</option><option value="No">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -133,7 +133,7 @@
                 <div class="input-group">
                   <select value="{{ old('moto') }}" class="form-control" name="moto" id="moto" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="Si">Si</option><option value="No">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -152,7 +152,7 @@
                 <div class="input-group">
                   <select value="{{ old('otrosgastos') }}" class="form-control" name="otrosgastos" id="otrosgastos" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="Si">Si</option><option value="No">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -207,7 +207,7 @@ $('#reciboalqfamdiv').html("");
 }
 else{
 
-if(selected === "Si") {
+if(selected === "1") {
 $('#precioalqdiv').html("<label class='label label-info' for='validate-number'>Monto  $</label>                <div class='input-group' data-validate='number'>                  <input  type='number' min='0' class='form-control' name='precioalquiler' id='precioalquiler' placeholder='Ingrese solo números' required>                  <span class='input-group-addon danger'><span class='glyphicon glyphicon-remove'></span></span>                </div>");
  
           $('#reciboalqfamdiv').html("<label class='label label-info' for='validate-number'>Recibo de Alquiler</label><div class='input-group'> <input  type='file' id='reciboalqfam' name='reciboalqfam' accept='.jpg, .jpeg, .png' class='form-control' required> <span class='input-group-addon danger'><span class='glyphicon glyphicon-remove'></span></span></div></div> <div id='list-reciboalqfam-1' style='display:none;' class='form-group'><div class='input-group'>       <img class='thumb' id='list-reciboalqfam' /> </div>  </div>");
@@ -252,7 +252,7 @@ $('#precioalqdiv').html("<label class='label label-info' for='validate-number'>M
                
         });
 }
-else if(selected === "No") {
+else if(selected === "0") {
 $('#precioalqdiv').html("");
 $('#reciboalqfamdiv').html("");  
 
@@ -275,7 +275,7 @@ $('#actividaddiv').html("");
 }
 else{
 
-if(selected === "Si") {
+if(selected === "1") {
 $('#hasdiv').html("<label class='label label-info' for='validate-optional'>Superficie en Hectáreas</label><div class='input-group'>              <input  type='number' min='0' class='form-control' name='has' id='has' placeholder='Ingrese solo números'>              <span class='input-group-addon danger'><span class='glyphicon glyphicon-remove'></span></span>        </div>"); 
 $('#actividaddiv').html("<label class='label label-info' for='validate-text'>Actividad</label>                  <div class='input-group' >                  <input  type='text' class='form-control' name='actividad' id='actividad' placeholder='Ingrese solo letras'>                  <span class='input-group-addon danger'><span class='glyphicon glyphicon-remove'></span></span>                </div>"); 
 
@@ -319,7 +319,7 @@ $('#actividaddiv').html("<label class='label label-info' for='validate-text'>Act
                
         });
 }
-else if(selected === "No") {
+else if(selected === "0") {
 $('#hasdiv').html(""); 
 $('#actividaddiv').html(""); 
 }
@@ -339,7 +339,7 @@ $('#terrenocantdiv').html("");
 }
 else{
 
-if(selected === "Si") {
+if(selected === "1") {
 $('#terrenocantdiv').html("<label for='validate-number' class='label label-info'>Cuántos</label>              <div class='input-group'><input  type='number' min='0' class='form-control' name='terrenocant' id='terrenocant' placeholder='Ingrese solo números'>          <span class='input-group-addon danger'><span class='glyphicon glyphicon-remove'></span></span>       </div>"); 
  $(document).ready(function() {
 
@@ -381,7 +381,7 @@ $('#terrenocantdiv').html("<label for='validate-number' class='label label-info'
         });
 
 }
-else if(selected === "No") {
+else if(selected === "0") {
 $('#terrenocantdiv').html(""); 
 }
 }
@@ -400,7 +400,7 @@ $('#autocantdiv').html("");
 }
 else{
 
-if(selected === "Si") {
+if(selected === "1") {
 $('#autocantdiv').html("<label for='validate-number' class='label label-info'>Cuántos</label>                <div class='input-group'>                <input  type='number' min='0' class='form-control' name='autocant' id='autocant' placeholder='Ingrese solo números'>               <span class='input-group-addon danger'><span class='glyphicon glyphicon-remove'></span></span>                </div>              </div>"); 
 
 $(document).ready(function() {
@@ -443,7 +443,7 @@ $(document).ready(function() {
         });
 
 }
-else if(selected === "No") {
+else if(selected === "0") {
 $('#autocantdiv').html(""); 
 }
 }
@@ -462,7 +462,7 @@ $('#motocantdiv').html("");
 }
 else{
 
-if(selected === "Si") {
+if(selected === "1") {
 $('#motocantdiv').html("<label for='validate-number' class='label label-info'>Cuántos</label>                <div class='input-group'>                <input  type='number' class='form-control' min='0' name='motocant' id='motocant' placeholder='Ingrese solo números'>                <span class='input-group-addon danger'><span class='glyphicon glyphicon-remove'></span></span>                </div>"); 
 
 $(document).ready(function() {
@@ -505,7 +505,7 @@ $(document).ready(function() {
         });
 
 }
-else if(selected === "No") {
+else if(selected === "0") {
 $('#motocantdiv').html("");  
 }
 }
@@ -525,7 +525,7 @@ $('#otrosgastosrecibodiv').html("");
 $('#otrosgastoscantdiv').html(""); 
 $('#otrosgastosdescrdiv').html(""); 
 }
-else if(selected === "Si") {
+else if(selected === "1") {
 
 
 
@@ -575,7 +575,7 @@ $(document).ready(function() {
         });
 
 }
-else if(selected === "No") {
+else if(selected === "0") {
 $('#otrosgastosrecibodiv').html(""); 
 $('#otrosgastoscantdiv').html(""); 
 $('#otrosgastosdescrdiv').html("");  

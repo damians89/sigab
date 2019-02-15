@@ -21,7 +21,7 @@
                 <div class="input-group">
                   <select value="{{ old('casafam') }}" class="form-control" name="casafam" id="casafam" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="Si">Si</option><option value="No">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -33,7 +33,7 @@
                 <div class="input-group">
                   <select value="{{ old('urbano') }}" class="form-control" name="alq" id="alq" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="Si">Si</option><option value="No">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -81,7 +81,7 @@ else{
 
 
 
-if(selected === "Si") {
+if(selected === "1") {
 
 $('#reciboalqdiv').html("<label class='label label-info' for='validate-number'>Recibo de Alquiler</label><div class='input-group'> <input  type='file' id='reciboalq' name='reciboalq' accept='.jpg, .jpeg, .png' class='form-control' required>  <span class='input-group-addon danger'><span class='glyphicon glyphicon-remove'></span></span> </div> </div><div id='list-reciboalq-1' style='display:none;' class='form-group'><div class='input-group'> <img class='thumb' id='list-reciboalq' />  </div>");
 $('#montoalqdiv').html("<label class='label label-info' for='validate-number'>Monto  $</label>     <div class='input-group' data-validate='number'>            <input type='number' min='0' class='form-control' name='montoalq' id='montoalq' placeholder='Ingrese solo números' required>            <span class='input-group-addon danger'><span class='glyphicon glyphicon-remove'></span></span>          </div>");
@@ -126,7 +126,7 @@ $('#montoalqdiv').html("<label class='label label-info' for='validate-number'>Mo
         }); //cierra div document ready
 
 }
-else if(selected === "No") {
+else if(selected === "0") {
 $('#montoalqdiv').html(""); 
 $('#reciboalqdiv').html(""); 
 

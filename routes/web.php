@@ -11,8 +11,6 @@
 |
 */
 
-use App\Localidad;
-
 
 Route::get('/', function () {
     return view('home');
@@ -27,8 +25,8 @@ Route::get('login', ['uses'=>'Auth\LoginController@showLoginForm', 'as' => 'voya
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-/*Esto es el restfull de datos*/
-Route::resource('datospersona', 'DatosPersonaController');
+/*Esto es el restfull de datos sacando los inecesario*/ 
+Route::resource('datospersona', 'DatosPersonaController')->except(['edit','show','update','destroy']);
 
 Auth::routes();
 
@@ -47,9 +45,7 @@ Route::get('acerca', function () {
     return view('acerca');
 });
 
-
-Route::resource('selects', 'ProvinciaController');
-
+//Para ver la localidad json
 Route::get('datospersona/localidad/{id}', 'DatosPersonaController@getLocalidades');
 
 Route::post('administracion/inscripciones/seleccion', 'InscripcionesController@seleccion')->name('seleccion'); //seleccion de beca

@@ -12,7 +12,7 @@
                 <div class="input-group">
                   <select value="{{ old('trabaja') }}"  class="form-control" name="trabaja" id="trabaja" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="Si">Si</option><option value="No">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -110,7 +110,7 @@
                 <div class="input-group">
                   <select value="{{ old('otrosing') }}" class="form-control" name="otrosing" id="otrosing" placeholder="Seleccione una opción" required>
                     <option value="">Seleccione una opción</option>
-                    <option value="Si">Si</option><option value="No">No</option>
+                    <option value=1>Si</option><option value=0>No</option>
                 </select>
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
@@ -162,7 +162,7 @@ $('#comprobanteIngresosinf').html("");
 }
 else{
 
-if(selected === "Si") {
+if(selected === "1") {
 
 $('#actividad').html("<label class='label label-info' for='validate-letras'>Actividad laboral</label> <div class='input-group'> <select class='form-control' onchange='comprobante(value)' name='actlab' id='actlab' placeholder='Seleccione una opción' required><option value=''>Seleccione una opción</option> <option value='activos'>Empleados Activos o Jubilados</option><option value='monotri'>Autónomos y Monotributistas</option>  <option value='informal'>Trabajadores Informales</option></select><span class='input-group-addon danger'><span class='glyphicon glyphicon-remove'></span></span></div>");
 
@@ -422,7 +422,7 @@ $('#otrosingdescrdiv').html("");
 $('#otrosingcantdiv').html(""); 
 
 }
-else if(selected === "Si") {
+else if(selected === "1") {
 
 
 
@@ -470,7 +470,7 @@ $(document).ready(function() {
         });
 
 }
-else if(selected === "No") {
+else if(selected === "0") {
 $('#otrosingcantdiv').html(""); 
 $('#otrosingdescrdiv').html(""); 
 

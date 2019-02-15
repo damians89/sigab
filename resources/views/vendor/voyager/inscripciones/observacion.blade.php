@@ -45,7 +45,7 @@ Observación: <br>
 </p>
 
 <button name="btn" value="s" type="submit" class="btn btn-success">Guardar cambios</button>
-<button name="btn" value="c" type="" class="btn btn-danger">Cancelar</button>
+<a href="{{URL::previous()}}" class="button btn-secondary">Cancelar</a>
 </div>
 
 
