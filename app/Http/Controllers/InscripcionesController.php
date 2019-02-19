@@ -19,7 +19,8 @@ use TCG\Voyager\Database\Schema\SchemaManager;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 use Yajra\Datatables\Datatables;
-
+use Response;
+use Redirect;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -328,6 +329,75 @@ public function store(Request $request)
     }
 
     }
+    public function datos_usuario2(Request $request){
+      //  if($request->ajax()){ 
+         //   if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){
+                $calculos=DB::table('calculos_aux')->leftjoin('becas','calculos_aux.anio','=','becas.anio')->where('becas.id',$request->idBeca)->select('calculos_aux.*')->first();
+                /*$datos = DB::table('inscripciones')
+                    ->join('users','inscripciones.user_id','users.id')
+                    ->where('users.id',$request->idUsuario)
+                    ->join('datos_personas','inscripciones.datos_id','datos_personas.id')->where('datos_personas.id',$request->datos_p)
+                    ->join('becas','inscripciones.beca_id','becas.id')
+                    ->join('carreras','inscripciones.carrera_id','carreras.id')
+                    ->where('inscripciones.beca_id','=',$request->idBeca)
+                    ->where('inscripciones.datos_id','=',$request->datos_p)
+                    ->orderBy('inscripciones.merito','desc')
+                    ->select(
+                        'users.apellido as user_apellido',
+                        'users.name as user_name',
+                        'users.dni as user_dni',
+                        'users.email as user_email',
+                        'datos_personas.id as datos_id',
+                        'datos_personas.user_id as user_id',
+                        'datos_personas.carrera_id as carrera_cursa',
+                        'datos_personas.user_id as id',
+                        'datos_personas.imagen_dni_frente as imagen_dni_frente',
+                        'becas.id as beca_id',
+                        'users.name as user_nombre',
+                        'users.dni as dni',
+                        'carreras.sede_id as sede_nombre'
+                    )
+                    ->first();*/
+
+        $datos = DB::table('datos_personas')->where('datos_personas.id','=',$request->datos_p)->join('users','datos_personas.user_id','users.id')
+        ->where('users.id',$request->idUsuario)
+        ->select('users.name as user_name',
+            'users.id as id',
+            'users.apellido as user_apellido',
+            'users.dni as user_dni',
+            'users.email as user_email',
+            'datos_personas.beca_id as beca_id',
+            'datos_personas.carrera_id as carrera_cursa',
+            'datos_personas.*')
+        ->first();
+        $aux2=DB::table('datos_personas')->where('datos_personas.id','=',$request->datos_p)->first();
+                    $inscrip=DB::table('inscripciones')->where('datos_id',$request->datos_p)->first();
+
+                    $familiar=DB::table('familiars')->where('datos_id',$request->datos_p)->where('beca_id','=',$request->idBeca)->where('user_id',$request->idUsuario)->get();
+  
+                    $consideraciones=DB::table('consideraciones')->where('datos_id',$request->datos_p)->where('beca_id','=',$request->idBeca)->where('user_id',$request->idUsuario)->get();
+  
+                    $condicion = DB::table('condicion')->get();
+            //return response()->json(['html' => view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'))->render(), ]);
+                    //return Response()->make('vendor.voyager.inscripciones.usuario.datos_usuario',['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos]);
+//                    return redirect()->to('administracion/inscripciones/seleccion/usuario/datos_usuario21/pepe',['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos]);
+              //      $data=view('administracion/inscripciones/seleccion/usuario/datos_usuario21', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'));
+//                    return $data;
+//                    return route('prueba',['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos]);
+//                    return response()->json(['datos','condicion','familiar','consideraciones','inscrip','calculos']);
+                    //return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'));
+             // }
+            //}
+            //else{
+              //  return view('errors.404');
+            //} 
+                    $data=['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos];
+                    //$data=['prueba'=>"hola"];   
+                    return $data;
+        }
+        public function dpsajax(Request $request){
+            return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('data'));
+        }
 
     
 

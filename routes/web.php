@@ -12,6 +12,11 @@
 */
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Inicial con el formulario
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 Route::get('/', function () {
     return view('home');
 });
@@ -24,12 +29,9 @@ Route::get('login', ['uses'=>'Auth\LoginController@showLoginForm', 'as' => 'voya
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
-
 /*Esto es el restfull de datos sacando los inecesario*/ 
 Route::resource('datospersona', 'DatosPersonaController')->except(['edit','show','update','destroy']);
-
 Auth::routes();
-
 Route::get('datospersona/carrera/{id}', 'DatosPersonaController@getCarreras');
 
 
@@ -48,18 +50,40 @@ Route::get('acerca', function () {
 //Para ver la localidad json
 Route::get('datospersona/localidad/{id}', 'DatosPersonaController@getLocalidades');
 
-Route::post('administracion/inscripciones/seleccion', 'InscripcionesController@seleccion')->name('seleccion'); //seleccion de beca
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////Para proceasar inscripciones
+//Seleccion de beca
+Route::post('administracion/inscripciones/seleccion', 'InscripcionesController@seleccion')->name('seleccion');
 
-//VER LOS DATOS INSCRIPTS, dps de seleccion
+//VER LOS DATOS INSCRIPTS, dps de seleccion borrar el primero
 Route::get('administracion/inscripciones/seleccion/usuario/datos_usuario/{beca_id}/{user_id}', 'InscripcionesController@datos_usuario')->name('datos_usuario'); 
- 
 
-//ve la obs
+//VER LOS DATOS INSCRIPTS este tiene que quedar ajax
+Route::post('administracion/inscripciones/seleccion/ver','InscripcionesController@datos_usuario2')->name('datos_usuario2');
+
+
+//Route::view('/administracion/inscripciones/seleccion/usuario/datos_usuario21','vendor.voyager.inscripciones.usuario.datos_usuario')->name('prueba');
+
+
+
+/*Route::any('administracion/inscripciones/seleccion/usuario/datos_usuario/{datos_id}', function () {
+    return view('vendor.voyager.inscripciones.usuario.datos_usuario');
+})->name('prueba');
+*/
+Route::post('administracion/inscripciones/seleccion/ver/dpsajax','InscripcionesController@dpsajax')->name('dpsajax');
+
+
+
+
+//ve la observacion
 Route::get('administracion/inscripciones/seleccion/{user_id}/obsevacion', 'InscripcionesController@observacion' )->name('observacion'); 
+
 
 //Calculo merito  (ADREDE el cambio de user:id a id)
 Route::get('/administracion/inscripciones/seleccion/usuario/datos_usuario/{datos_id}/{beca_id}/merito', 'InscripcionesController@merito')->name('merito');
+
 
 //borrar datos de inscripcion (ptaje merito y estados)
 Route::get('/administracion/inscripciones/seleccion/usuario/datos_usuario/{datos_id}/{beca_id}/restablecer', 'InscripcionesController@restablecer')->name('restablecer');
@@ -72,7 +96,8 @@ Route::post('administracion/inscripciones/seleccion/guarda_observacion', 'Inscri
 
 
 //para revision ---- y este?
-Route::post('administracion/inscripciones/usuarios/datos_usuario', 'DatosPersonaController@revision')->name('rev');
+
+//Route::post('administracion/inscripciones/usuarios/datos_usuario', 'DatosPersonaController@revision')->name('rev');
 
 
 //para carga postulante y sus valores de revision,(Acepta o mno los datos)
@@ -101,17 +126,29 @@ Route::get('/administracion/pdf/{beca_id}','InscripcionesController@generarPdf')
 Route::get('storage/{filename}', 'InscripcionesController@getFile')->where('filename', '^[^/]+$');
 
 
-   // Backup routes
-Route::get('/administracion/backup', 'BackupController@index');
-Route::get('/administracion/backup/create/{id}', 'BackupController@create');
-Route::get('/administracion/backup/download/{file_name}', ['as'=>'backDownload', 'uses'=>'BackupController@download']);
-Route::get('/administracion/backup/delete/{file_name}', 'BackupController@delete');
 
 //update de cada uno de los datos del usuario(uno a uno los dato), lo que ve el secretario
 Route::post('update', 'InscripcionesController@update')->name('update'); 
 
-//Verificar si eesta habilitada la beca
+//para otorgar becas en el listado
+Route::post('administracion/inscripciones/seleccion/otorgadas', 'InscripcionesController@otorgar')->name('otorgar');
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// Lo que ve el estudiante
+//Comprobante de inscripcion del usuario
+Route::POST('/administracion/comprobante','InscripcionesController@comprobante_beca')->name('comprobante');
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////Carga de beca///
+//Verificar si eesta habilitada la beca ajax
 Route::post('verificar', 'InscripcionesController@verificar')->name('verificar'); 
 
-//comprobante de inscripcion del usuario
-Route::POST('/administracion/comprobante','InscripcionesController@comprobante_beca')->name('comprobante');
+
+
+////////// Backup routes
+Route::get('/administracion/backup', 'BackupController@index');
+Route::get('/administracion/backup/create/{id}', 'BackupController@create');
+Route::get('/administracion/backup/download/{file_name}', ['as'=>'backDownload', 'uses'=>'BackupController@download']);
+Route::get('/administracion/backup/delete/{file_name}', 'BackupController@delete');

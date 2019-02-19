@@ -68,9 +68,9 @@
 <?php endif; ?>
 				<td>
 				{{$loop->index + 1}} - <input type="checkbox" hidden  name="id" value="{{$inscriptos->user_id}}">
-				<input type="hidden" name="user_id" value="{{$inscriptos->user_id}}">
-				<input type="hidden" name="datos_id" value="{{$inscriptos->datos_id}}">
-				<input type="hidden" name="beca_id" value="{{$inscriptos->beca_id}}">
+				<input type="hidden" name="user_id" id="user_id" value="{{$inscriptos->user_id}}">
+				<input type="hidden" name="datos_id" id="datos_id" value="{{$inscriptos->datos_id}}">
+				<input type="hidden" name="beca_id" id="beca_id" value="{{$inscriptos->beca_id}}">
 
 				</td>
 
@@ -104,6 +104,11 @@
 				<div class="btn-group-sm">
 				         {!! link_to_route('observacion', 'Modificar', ['user_id'=>$inscriptos->user_id], ['class'=>'btn btn-success btn-sm']) !!}
 
+				         <form name="myForm" id="myForm" action="{{route('dpsajax')}}" method="POST">
+				         <a onclick="ver_datos({{$inscriptos->datos_id}},{{$loop->index + 1}})" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">preuba</a> 
+				         <div id="loading" style="display: none;">Loading..........................</div>
+<div id="mySpan"></div>
+				     </form>
 					                {!! link_to_route('datos_usuario', 'Ver', ['user_id' => $inscriptos->datos_id,'beca_id'=>$inscriptos->beca_id],['class'=>'btn btn-warning btn-sm']) !!}
 
 
@@ -234,29 +239,42 @@ paging: true,
 </script>
 
 
-<script type="text/javascript">
-	function conPonerReadOnly(campos,pos)
-	{
-		$("#"+campos+pos).attr("readonly", "readonly");
-		$("#"+campos+pos).addClass("readOnly");
-		var valor = $("#"+campos+pos).val();
-		var nombre = $("#"+campos+pos).attr('name');
-		var idCon = $("#consideracion"+pos).val();
-		var idUsuario = $(user_id).val();
-		var idBeca = $(beca_id).val();
-		var tabla = "consideraciones"
+<script>
+  function ver_datos(campos,pos)
+  {
+    var nombre = $("#"+campos+pos).attr('name');
+    var datos_p = $(datos_id).val();
+    var idUsuario = $(user_id).val();
+    var idBeca = $(beca_id).val();
+  
+
+    $.ajax({
+      type: "POST",
+      url: '{{route("datos_usuario2")}}',
+      dataType: 'html',
+
+      //contentType: 'application/x-www-form-urlencoded',
+      data:{"_token": "{{ csrf_token() }}","idBeca":idBeca,"datos_p":datos_p,"nombre":nombre,"idUsuario":idUsuario},
+      success: function(data){
+//console.log(data[].html);
+//location.reload(true);
+//window.location.href="";
+    
+    $('#mySpan').hide();
+    $('#loading').show();
+                    $('#loading').hide();
+                    $('#mySpan').show();
+                    $('#mySpan').html(data);
+ 		$('#myForm').submit();
+    
 
 
-		$.ajax({
-		  type: "POST",
-		  url: '/update',
-		  dataType: 'JSON',
-		  //contentType: 'application/x-www-form-urlencoded',
-		  data:{"idBeca":idBeca,"idCon":idCon,"nombre":nombre,"valor":valor,"tabla":tabla,"idUsuario":idUsuario},
-		  success: function(data){
 
-		  }
-		}
-		);
-	}
+
+      }   
+    });
+
+
+  }
+</script>
 @endsection
