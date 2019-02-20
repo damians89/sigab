@@ -63,15 +63,16 @@ Route::get('administracion/inscripciones/seleccion/usuario/datos_usuario/{beca_i
 //VER LOS DATOS INSCRIPTS este tiene que quedar ajax
 Route::post('administracion/inscripciones/seleccion/ver','InscripcionesController@datos_usuario2')->name('datos_usuario2');
 
-
-//Route::view('/administracion/inscripciones/seleccion/usuario/datos_usuario21','vendor.voyager.inscripciones.usuario.datos_usuario')->name('prueba');
-
-
-
-/*Route::any('administracion/inscripciones/seleccion/usuario/datos_usuario/{datos_id}', function () {
-    return view('vendor.voyager.inscripciones.usuario.datos_usuario');
-})->name('prueba');
+/*
+Route::view('/administracion/inscripciones/seleccion/usuario/datos_usuario21','vendor.voyager.inscripciones.usuario.datos_usuario')->name('prueba');
 */
+
+
+Route::get('administracion/inscripciones/seleccion/usuario/datos_usuario21', function () {
+    return view::make('vendor.voyager.inscripciones.usuario.datos_usuario');
+})->name('prueba');
+
+
 Route::post('administracion/inscripciones/seleccion/ver/dpsajax','InscripcionesController@dpsajax')->name('dpsajax');
 
 

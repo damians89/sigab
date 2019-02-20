@@ -104,11 +104,7 @@
 				<div class="btn-group-sm">
 				         {!! link_to_route('observacion', 'Modificar', ['user_id'=>$inscriptos->user_id], ['class'=>'btn btn-success btn-sm']) !!}
 
-				         <form name="myForm" id="myForm" action="{{route('dpsajax')}}" method="POST">
 				         <a onclick="ver_datos({{$inscriptos->datos_id}},{{$loop->index + 1}})" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">preuba</a> 
-				         <div id="loading" style="display: none;">Loading..........................</div>
-<div id="mySpan"></div>
-				     </form>
 					                {!! link_to_route('datos_usuario', 'Ver', ['user_id' => $inscriptos->datos_id,'beca_id'=>$inscriptos->beca_id],['class'=>'btn btn-warning btn-sm']) !!}
 
 
@@ -190,6 +186,10 @@ No tienes permisos para otorgar becas</font></strong>
 @endif <!--If de queesta vacia-->
 </div>
 
+<form name="mandardatos" id="mandardatos" action="{{route('dpsajax')}}" method="POST">
+<div id="loading"></div>
+<div id="mySpan"></div>
+     </form>
 @endsection
   
 
@@ -240,7 +240,55 @@ paging: true,
 
 
 <script>
-  function ver_datos(campos,pos)
+	function ver_datos(campos,pos)
+  {
+  	 var nombre = $("#"+campos+pos).attr('name');
+    var datos_p = $(datos_id).val();
+    var idUsuario = $(user_id).val();
+    var idBeca = $(beca_id).val();
+
+    $.ajax({
+      type: "POST",
+      url: '{{route("datos_usuario2")}}',
+      data:{"_token": "{{ csrf_token() }}","idBeca":idBeca,"datos_p":datos_p,"nombre":nombre,"idUsuario":idUsuario},
+      success: function(data){
+      	console.log(data);
+
+
+
+/*      	
+      	var html="";  
+      	html+="<input type=hidden name=datos[] value='"+data+"'>"
+      	+ "<input type=hidden name=csrf value='{{csrf_token()}}'>";
+        $("#mandardatos").html(html);
+        mandardatos();
+        */
+    }
+});
+}	
+</script>
+
+<script>
+	function mandardatos(){
+		$.ajax({
+			type: "POST",
+			url: '{{route("dpsajax")}}',
+			data: $("#mandardatos").serialize(),
+
+			success: function(datasss){
+	//						console.log($("#mandardatos").serialize());
+
+//				console.log(datasss)
+			}
+		});
+	}
+</script>
+@endsection
+
+
+<!--
+<script>
+/*  function ver_datos(campos,pos)
   {
     var nombre = $("#"+campos+pos).attr('name');
     var datos_p = $(datos_id).val();
@@ -256,25 +304,29 @@ paging: true,
       //contentType: 'application/x-www-form-urlencoded',
       data:{"_token": "{{ csrf_token() }}","idBeca":idBeca,"datos_p":datos_p,"nombre":nombre,"idUsuario":idUsuario},
       success: function(data){
-//console.log(data[].html);
-//location.reload(true);
-//window.location.href="";
-    
-    $('#mySpan').hide();
-    $('#loading').show();
-                    $('#loading').hide();
-                    $('#mySpan').show();
-                    $('#mySpan').html(data);
- 		$('#myForm').submit();
-    
-
-
-
-
+//console.log(data);
+        function mandarvalores(data);
+  
       }   
     });
-
-
   }
+*/
 </script>
-@endsection
+<script>
+/*	
+function mandarvalores(datos){
+		$('#mySpan').hide();
+		$('#loading').html();
+		$('#loading').show();
+		$('#mySpan').show();
+		$('#mySpan').append(data); // Esto anda... muestra los valores de "data"
+		$('#myForm').submit();
+
+
+
+
+
+
+	}*/
+</script>
+-->

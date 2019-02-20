@@ -378,25 +378,33 @@ public function store(Request $request)
                     $consideraciones=DB::table('consideraciones')->where('datos_id',$request->datos_p)->where('beca_id','=',$request->idBeca)->where('user_id',$request->idUsuario)->get();
   
                     $condicion = DB::table('condicion')->get();
+
             //return response()->json(['html' => view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'))->render(), ]);
                     //return Response()->make('vendor.voyager.inscripciones.usuario.datos_usuario',['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos]);
-//                    return redirect()->to('administracion/inscripciones/seleccion/usuario/datos_usuario21/pepe',['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos]);
-              //      $data=view('administracion/inscripciones/seleccion/usuario/datos_usuario21', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'));
-//                    return $data;
+                  //  return redirect()->to('administracion/inscripciones/seleccion/usuario/datos_usuario21/pepe',['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos]);
+                  //  $data=view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'));
+                    //return $data;
 //                    return route('prueba',['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos]);
 //                    return response()->json(['datos','condicion','familiar','consideraciones','inscrip','calculos']);
                     //return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'));
              // }
             //}
             //else{
-              //  return view('errors.404');
+                return view('errors.404');
             //} 
+
+             ///       return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'));
+                    /*
                     $data=['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos];
-                    //$data=['prueba'=>"hola"];   
-                    return $data;
+                    //$data=['prueba'=>"hola"];
+                      // $data['data']=$datos;
+                    return response()->Json($data);*/
         }
         public function dpsajax(Request $request){
-            return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('data'));
+           //$var=json_decode($request->datos[0]);
+            dd($request);
+            die();
+            //return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('data'));
         }
 
     
