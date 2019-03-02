@@ -221,48 +221,78 @@ public function store(Request $request)
 
     public function generarPdf(Request $request, $beca_id){
     if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') ){ 
+     //   dd($request->all(),$beca_id);
 
      Carbon::SetLocale('es');
      $dt=Carbon::now();
      $dt="Oro Verde, Entre Rios ".$dt->format('d/m/Y - h:m:s');
 
     if($request->pdf == "Si"){
-        $inscrip = DB::table('inscripciones')->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 'Si')->get(); /*mismas becas*/
+        $inscrip = DB::table('inscripciones')
+        ->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 1)
+        ->join('users','inscripciones.user_id','users.id')
+        ->join('carreras','inscripciones.carrera_id','carreras.id')
+        ->join('sedes','carreras.sede_id','sedes.id')
+        ->select('users.apellido as user_apellido', 'users.name as user_nombre', 'users.dni as user_dni','inscripciones.*','carreras.nombre as carrera_nombre','sedes.nombre as sede_nombre')
+        ->get(); 
+        //dd($inscrip);
         
       
-         $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt/*, 'user'=>$user*/]);
+         $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt]);
    
         return $pdf->download('Reporte.pdf');
         }
         elseif ($request->pdf == "No") {
-            $inscrip = DB::table('inscripciones')->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 'No')->get();
-        
+            $inscrip = DB::table('inscripciones')
+            ->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 0)
+            ->join('users','inscripciones.user_id','users.id')
+            ->join('carreras','inscripciones.carrera_id','carreras.id')
+            ->join('sedes','carreras.sede_id','sedes.id')
+            ->select('users.apellido as user_apellido', 'users.name as user_nombre', 'users.dni as user_dni','inscripciones.*','carreras.nombre as carrera_nombre','sedes.nombre as sede_nombre')->get();
 
-         $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt/*, 'user'=>$user*/]);
+         $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt]);
    
         return $pdf->download('Reporte.pdf');
         
             
         }elseif($request->pdf == "Todos"){
-            $inscrip = DB::table('inscripciones')->where('beca_id', '=', $beca_id)->get();
+            $inscrip = DB::table('inscripciones')
+            ->where('beca_id', '=', $beca_id)
+            ->join('users','inscripciones.user_id','users.id')
+            ->join('carreras','inscripciones.carrera_id','carreras.id')
+            ->join('sedes','carreras.sede_id','sedes.id')
+            ->select('users.apellido as user_apellido', 'users.name as user_nombre', 'users.dni as user_dni','inscripciones.*','carreras.nombre as carrera_nombre','sedes.nombre as sede_nombre')->get();
 
-         $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt/*, 'user'=>$user*/]);
+
+            $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt]);
    
         return $pdf->download('Reporte.pdf');
 
         }elseif ($request->pdf == "Suspendida") {
-            $inscrip = DB::table('inscripciones')->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 'Suspendida')->get();
-        
-         $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt/*, 'user'=>$user*/]);
-   
-        return $pdf->download('Reporte.pdf');
+            $inscrip = DB::table('inscripciones')
+            ->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 3)
+            ->join('users','inscripciones.user_id','users.id')
+            ->join('carreras','inscripciones.carrera_id','carreras.id')
+            ->join('sedes','carreras.sede_id','sedes.id')
+            ->select('users.apellido as user_apellido', 'users.name as user_nombre', 'users.dni as user_dni','inscripciones.*','carreras.nombre as carrera_nombre','sedes.nombre as sede_nombre')->get();
+
+
+            $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt]);
+
+            return $pdf->download('Reporte.pdf');
 
 
         }elseif($request->pdf == "Pendiente") {
        
-        $inscrip = DB::table('inscripciones')->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 'Pendiente')->get();
+        $inscrip = DB::table('inscripciones')
+        ->where('beca_id', '=', $beca_id)->where('inscripciones.otorgamiento', 2)
+        ->join('users','inscripciones.user_id','users.id')
+        ->join('carreras','inscripciones.carrera_id','carreras.id')
+        ->join('sedes','carreras.sede_id','sedes.id')
+        ->select('users.apellido as user_apellido', 'users.name as user_nombre', 'users.dni as user_dni','inscripciones.*','carreras.nombre as carrera_nombre','sedes.nombre as sede_nombre')->get();
 
-         $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt/*, 'user'=>$user*/]);
+
+         $pdf = PDF::loadView('vendor.voyager.inscripciones.pdfview',['inscrip'=>$inscrip,'dt'=>$dt]);
    
         return $pdf->download('Reporte.pdf');
 
@@ -283,13 +313,16 @@ public function store(Request $request)
     {
         if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){
             try{
+
+
                 $inscrip = DB::table('inscripciones')
                 ->join('users','inscripciones.user_id','=','users.id')
                 ->join('datos_personas','datos_personas.id','inscripciones.datos_id')
                 ->join('becas','inscripciones.beca_id','becas.id')
                 ->join('carreras','inscripciones.carrera_id','carreras.id')
+                ->join('sedes','carreras.sede_id','sedes.id')
                 ->where('inscripciones.beca_id','=',$request->beca)->orderBy('inscripciones.merito','desc')
-                ->select('users.apellido as user_apellido','inscripciones.otorgamiento as otorgamiento','users.id as user_id','datos_personas.id as datos_id','becas.id as beca_id','users.name as user_nombre','users.dni as dni','carreras.sede_id as sede_nombre','inscripciones.merito as merito','inscripciones.observacion as observacion')
+                ->select('users.apellido as user_apellido','inscripciones.otorgamiento as otorgamiento','users.id as user_id','datos_personas.id as datos_id','becas.id as beca_id','users.name as user_nombre','users.dni as dni','sedes.nombre as sede_nombre','inscripciones.merito as merito','inscripciones.observacion as observacion')
                 ->get();
                 return view('vendor.voyager.inscripciones.seleccion', ['inscrip'=>$inscrip]);
             }catch(Exception $e){
@@ -330,9 +363,9 @@ public function store(Request $request)
 
     }
     public function datos_usuario2(Request $request){
-      //  if($request->ajax()){ 
-         //   if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){
-                $calculos=DB::table('calculos_aux')->leftjoin('becas','calculos_aux.anio','=','becas.anio')->where('becas.id',$request->idBeca)->select('calculos_aux.*')->first();
+        
+            if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){
+                $calculos=DB::table('calculos_aux')->leftjoin('becas','calculos_aux.anio','=','becas.anio')->where('becas.id',$request->beca)->select('calculos_aux.*')->first();
                 /*$datos = DB::table('inscripciones')
                     ->join('users','inscripciones.user_id','users.id')
                     ->where('users.id',$request->idUsuario)
@@ -359,54 +392,42 @@ public function store(Request $request)
                     )
                     ->first();*/
 
-        $datos = DB::table('datos_personas')->where('datos_personas.id','=',$request->datos_p)->join('users','datos_personas.user_id','users.id')
-        ->where('users.id',$request->idUsuario)
+        $datos = DB::table('datos_personas')
+        ->where('datos_personas.id','=',$request->datos)
+        ->join('carreras','datos_personas.carrera_id','carreras.id')
+        ->join('users','datos_personas.user_id','users.id')
+        ->where('users.id',$request->user)
         ->select('users.name as user_name',
-            'users.id as id',
+            'users.id as user_id',
             'users.apellido as user_apellido',
             'users.dni as user_dni',
             'users.email as user_email',
             'datos_personas.beca_id as beca_id',
-            'datos_personas.carrera_id as carrera_cursa',
+            'carreras.nombre as carrera_cursa',
+            'datos_personas.carrera_id as carrera_id',
             'datos_personas.*')
         ->first();
-        $aux2=DB::table('datos_personas')->where('datos_personas.id','=',$request->datos_p)->first();
-                    $inscrip=DB::table('inscripciones')->where('datos_id',$request->datos_p)->first();
 
-                    $familiar=DB::table('familiars')->where('datos_id',$request->datos_p)->where('beca_id','=',$request->idBeca)->where('user_id',$request->idUsuario)->get();
-  
-                    $consideraciones=DB::table('consideraciones')->where('datos_id',$request->datos_p)->where('beca_id','=',$request->idBeca)->where('user_id',$request->idUsuario)->get();
-  
-                    $condicion = DB::table('condicion')->get();
+        $carreras=DB::table('carreras')->get();
 
-            //return response()->json(['html' => view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'))->render(), ]);
-                    //return Response()->make('vendor.voyager.inscripciones.usuario.datos_usuario',['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos]);
-                  //  return redirect()->to('administracion/inscripciones/seleccion/usuario/datos_usuario21/pepe',['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos]);
-                  //  $data=view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'));
-                    //return $data;
-//                    return route('prueba',['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos]);
-//                    return response()->json(['datos','condicion','familiar','consideraciones','inscrip','calculos']);
-                    //return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'));
-             // }
-            //}
-            //else{
+        
+        //dd($request->all());
+        //$user=DB::table('users')->where('id',$request->user)->select('users.name as user_name')->first();
+        //$datos=DB::table('datos_personas')->where('datos_personas.id','=',$request->datos)->first();
+        $inscrip=DB::table('inscripciones')->where('datos_id',$request->datos)->first();
+        $familiar=DB::table('familiars')->where('datos_id',$request->datos)->where('beca_id',$request->beca)->where('user_id',$request->user)->get();
+        
+        $consideraciones=DB::table('consideraciones')->where('datos_id',$request->datos)->where('beca_id','=',$request->beca)->where('user_id',$request->user)->get();
+        $condicion = DB::table('condicion')->get();
+return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos','carreras'));
+              }
+            else{
                 return view('errors.404');
-            //} 
+            } 
 
-             ///       return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'));
-                    /*
-                    $data=['datos'=>$datos,'condicion'=>$condicion,'familiar'=>$familiar,'consideraciones'=>$consideraciones,'inscrip'=>$inscrip,'calculos'=>$calculos];
-                    //$data=['prueba'=>"hola"];
-                      // $data['data']=$datos;
-                    return response()->Json($data);*/
+            
         }
-        public function dpsajax(Request $request){
-           //$var=json_decode($request->datos[0]);
-            dd($request);
-            die();
-            //return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('data'));
-        }
-
+       
     
 
 
@@ -445,14 +466,14 @@ public function store(Request $request)
 
 
     public function carga(Request $request){
-         Session::put('beca', $request->beca_id);
+
         try {
 
             $datos = DatosPersona::where('id',$request->id)->first();
 
-            $fam = Familiar::where('datos_id',$request->id)->get();
+          /*  $fam = Familiar::where('datos_id',$request->id)->get();
             $con = Consideracione::where('datos_id',$request->id)->get();
-           
+           */
             if ($datos != null) {
             
                 if ($request->revision==1) {
@@ -468,7 +489,13 @@ public function store(Request $request)
                          $ms = "Usuario postulado para la beca";
                      }
 
-        return redirect()->back()->with(['message'=>$ms, 'alert-type'=>'warning']);
+//      return redirect()->back()->with(['message'=>$ms, 'alert-type'=>'warning']);
+  
+//                     return $data
+    
+                     return redirect()->action('InscripcionesController@datos_usuario2',['beca'=>$datos->beca_id, 'user'=>$datos->user_id, 'datos'=>$datos->id]);
+
+//       return redirect('administracion/inscripciones/seleccion/usuario/datos')->with(['message'=>$ms, 'alert-type'=>'warning']);
             }
         }
         catch (Exception $e) {
@@ -618,17 +645,35 @@ public function store(Request $request)
 
         public function update(Request $request){
   //Recibo el nombre de las tablas, y segun la tabla es donde se inserta segun el "campo" y segun el "valor" totalmente random
+            try{
+
+            if($request->nombre=="name" or $request->nombre=="apellido" or $request->nombre=="dni" or $request->nombre=="email"){
+                 $consulta=DB::table('users')->where('id',$request->idUsuario)->update([$request->nombre=>$request->valor]);
+                 $data=['message'=>"Modificado con exito!", 'alert-type'=>'success',"valor"=>"0"];
+                return $data;
+            }
+
             if ($request->tabla=='familiar'){
-                $consulta=DB::table('familiars')->where('datos_id',$request->idUsuario)->where('beca_id',$request->idBeca)->where('id',$request->idFam)->update([$request->nombre=>$request->valor]);
-                return redirect()->back()->with(['message'=>"Modificado con exito!", 'alert-type'=>'success']);
+                $consulta=DB::table('familiars')->where('datos_id',$request->idDatos)->where('user_id',$request->idUsuario)->where('beca_id',$request->idBeca)->where('id',$request->idFam)->update([$request->nombre=>$request->valor]);
+                $data=['message'=>"Modificado con exito!", 'alert-type'=>'success',"valor"=>"0"];
+                return $data;
             }
             elseif ($request->tabla=='datos_personas') {
-                $consulta=DB::table('datos_personas')->where('id',$request->idUsuario)->where('beca_id',$request->idBeca)->update([$request->nombre=>$request->valor]);
-                return redirect()->back()->with(['message'=>"Modificado con exito!", 'alert-type'=>'success']);
+                $consulta=DB::table('datos_personas')->where('id',$request->idDatos)->where('beca_id',$request->idBeca)->update([$request->nombre=>$request->valor]);
+                $data=['message'=>"Modificado con exito!", 'alert-type'=>'success',"valor"=>"0"];
+                return $data;
+               // return redirect()->back()->with(['message'=>"Modificado con exito!", 'alert-type'=>'success']);
             }
             elseif ($request->tabla=='consideraciones') {
-                $consulta=DB::table('consideraciones')->where('datos_id',$request->idUsuario)->where('beca_id',$request->idBeca)->where('id',$request->idCon)->update([$request->nombre=>$request->valor]);
-                return redirect()->back()->with(['message'=>"Modificado con exito!", 'alert-type'=>'success']);
+                $consulta=DB::table('consideraciones')->where('datos_id',$request->idDatos)->where('user_id',$request->idUsuario)->where('beca_id',$request->idBeca)->where('id',$request->idCon)->update([$request->nombre=>$request->valor]);
+                $data=['message'=>"Modificado con exito!", 'alert-type'=>'success',"valor"=>"0"];
+                return $data;
+            }
+            }
+            catch(Exception $e){
+                $data=['message'=>"No se pudo modificar!", 'alert-type'=>'warning',"valor"=>"1"];
+                  return $data;
+
             }
         }
 
@@ -668,19 +713,19 @@ public function store(Request $request)
 
 
 
+public function merito(Request $request, $datos_id,$beca_id){}
 
-
-    public function merito(Request $request, $datos_id,$beca_id){
+    public function calculo_merito(Request $request){
        if( (Auth::user()->role_id == '3') or (Auth::user()->role_id == '1')){
         
-        $datos=DB::table('datos_personas')->where('id',$datos_id)->first();
-        $fam=DB::table('familiars')->where('datos_id',$datos_id)->get();
-        $con=DB::table('consideraciones')->where('datos_id',$datos_id)->get();
-        $beca=DB::table('becas')->where('id',$beca_id)->first();
+        $datos=DB::table('datos_personas')->where('id',$request->datos_id)->first();
+        $fam=DB::table('familiars')->where('datos_id',$request->datos_id)->get();
+        $con=DB::table('consideraciones')->where('datos_id',$request->datos_id)->get();
+        $beca=DB::table('becas')->where('id',$request->beca_id)->first();
         $carrera= DB::table('carreras')->where('id',$datos->carrera_id)->first();
-        $calculos_aux=DB::table('calculos_aux')->where('anio',$beca->anio)->first(); // Debe existir un calculo auxiliar que tenga el mismo año que la beca.
-      
-
+  //      $calculos_aux=DB::table('calculos_aux')->where('anio',$beca->anio)->first(); // Debe existir un calculo auxiliar que tenga el mismo año que la beca.
+        $calculos_aux=DB::table('calculos_aux')->join('becas','calculos_aux.id','becas.id_calculos_auxiliares')->where('becas.id',$beca->id)->first();
+//dd($calculos_aux,$calculos_aux2);
         try{
             /*
             /////////////////////////////////////////////////
@@ -742,7 +787,7 @@ public function store(Request $request)
 
             $aux_pto_enfermedad=0;
 
-            if($datos->disca_estudiante == "Si"){      //estudiante tiene discapacidad
+            if($datos->disca_estudiante == 1){      //estudiante tiene discapacidad
                 $aux_pto_enfermedad = 10;
             }else{
                 $aux_pto_enfermedad=0;
@@ -750,7 +795,7 @@ public function store(Request $request)
 
 
             foreach ($con as $id => $obj) {
-                if ($obj->incapacidad == "Si") { //familiar(consideraciones) tiene discapacidad
+                if ($obj->incapacidad == 1) { //familiar(consideraciones) tiene discapacidad
                     if($aux_pto_enfermedad <20){
                         $aux_pto_enfermedad=$aux_pto_enfermedad+5;
                     }else{
@@ -926,7 +971,7 @@ public function store(Request $request)
             $aux_merito=$aux_pto_procedencia+$aux_pto_ingresos+$aux_pto_enfermedad+$aux_pto_academica;
 
 
-              $inscripto=DB::table('inscripciones')->where('datos_id',$datos_id)
+              $inscripto=DB::table('inscripciones')->where('datos_id',$request->datos_id)
               ->update([
             'pto_procedencia' => $aux_pto_procedencia,
             'pto_ingresos' => $aux_pto_ingresos,
@@ -936,9 +981,11 @@ public function store(Request $request)
             'observacion' => 'Por calculo de Merito'
                 ]);
 
-
-
-            return redirect()->back()->with(['message'=>"Merito calculado con exito!", 'alert-type'=>'warning']);
+//dd($inscripto);
+              //return redirect('administracion/seleccion')->with(['message'=>"Merito calculado con exito!", 'alert-type'=>'warning']);
+              $data=['message'=>"Merito calculado con exito!", 'alert-type'=>'warning'];
+ //           return redirect()->back()->with(['message'=>"Merito calculado con exito!", 'alert-type'=>'warning']);
+              return $data;
     }
 
         catch (\Exception $e){
@@ -981,25 +1028,29 @@ public function store(Request $request)
      
     }
     
+public function restablecer(Request $request, $datos_id,$beca_id){}
 
-     public function restablecer(Request $request, $datos_id,$beca_id){
+     public function restablecer_merito(Request $request){
         if( (Auth::user()->role_id == '3') or (Auth::user()->role_id == '1')){
             try{
-                $inscrip=DB::table('inscripciones')->where('datos_id',$datos_id)->where('beca_id',$beca_id)->update([
+                $inscrip=DB::table('inscripciones')->where('datos_id',$request->datos_id)->where('beca_id',$request->beca_id)->update([
                         'merito'=>0,
                         'pto_procedencia'=>0,
                         'pto_ingresos'=>0,
                         'pto_enfermedad'=>0,
                         'pto_academica'=>0,
                         'observacion'=>"Restablecido",
-                        'otorgamiento'=>"Pendiente"
+                        'otorgamiento'=>2
+                        //cambiar a 1 0 2
                         ]);
-                $datos=DB::table('datos_personas')->where('id',$datos_id)->update([
+                $datos=DB::table('datos_personas')->where('id',$request->datos_id)->update([
                     'revision'=>0,
                     'band'=>0
                     ]);
                     //dd($inscrip,$datos);
-                return redirect()->back()->with(['message'=>"Restablecimiento con exito!", 'alert-type'=>'warning']);
+                $data=['message'=>"Restablecimiento con exito!", 'alert-type'=>'warning'];
+                //return redirect()->back()->with(['message'=>"Restablecimiento con exito!", 'alert-type'=>'warning']);
+                return $data;
             }
             catch (\Exception $e){
                 abort(404);
@@ -1007,7 +1058,9 @@ public function store(Request $request)
         }
         else
         {
-            return redirect()->back()->with(['message'=>"Error", 'alert-type'=>'error']);
+            $data=['message'=>"Error", 'alert-type'=>'error'];
+            return $data; 
+            //redirect()->back()->with(['message'=>"Error", 'alert-type'=>'error']);
         }
     }
 

@@ -68,9 +68,9 @@
 <?php endif; ?>
 				<td>
 				{{$loop->index + 1}} - <input type="checkbox" hidden  name="id" value="{{$inscriptos->user_id}}">
-				<input type="hidden" name="user_id" id="user_id" value="{{$inscriptos->user_id}}">
-				<input type="hidden" name="datos_id" id="datos_id" value="{{$inscriptos->datos_id}}">
-				<input type="hidden" name="beca_id" id="beca_id" value="{{$inscriptos->beca_id}}">
+				<input type="hidden" name="user_id{{$loop->index}}" id="user_id{{$loop->index}}" value="{{$inscriptos->user_id}}">
+				<input type="hidden" name="datos_id{{$loop->index}}" id="datos_id{{$loop->index}}" value="{{$inscriptos->datos_id}}">
+				<input type="hidden" name="beca_id{{$loop->index}}" id="beca_id{{$loop->index}}" value="{{$inscriptos->beca_id}}">
 
 				</td>
 
@@ -91,7 +91,7 @@
 				</td>
 
 				<td class="col-md-1">
-					{{$inscriptos->otorgamiento}} 
+					@if($inscriptos->otorgamiento==0) No @else @if($inscriptos->otorgamiento==1) Si  @else @if ($inscriptos->otorgamiento==2) Pendiente @else (inscriptos->otorgamiento==3) Suspendida @endif @endif @endif
 				</td>
 
 
@@ -100,12 +100,13 @@
 				</td>
 
 
-				<td>
+				<td class="col-md-offset-2">
 				<div class="btn-group-sm">
 				         {!! link_to_route('observacion', 'Modificar', ['user_id'=>$inscriptos->user_id], ['class'=>'btn btn-success btn-sm']) !!}
 
-				         <a onclick="ver_datos({{$inscriptos->datos_id}},{{$loop->index + 1}})" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">preuba</a> 
-					                {!! link_to_route('datos_usuario', 'Ver', ['user_id' => $inscriptos->datos_id,'beca_id'=>$inscriptos->beca_id],['class'=>'btn btn-warning btn-sm']) !!}
+
+				         <a id="enviarDatos" class="btn btn-warning btn-sm" title="Guardar" onclick="enviarDatos('{{$loop->index}}')" value="Ver">Ver</a> 
+
 
 
                     			@if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') )
@@ -186,18 +187,20 @@ No tienes permisos para otorgar becas</font></strong>
 @endif <!--If de queesta vacia-->
 </div>
 
-<form name="mandardatos" id="mandardatos" action="{{route('dpsajax')}}" method="POST">
-<div id="loading"></div>
-<div id="mySpan"></div>
+<form name="mandardatos" id="mandardatos" action="{{route('datos_usuario2')}}" method="POST">
+	@csrf
+	<input type="hidden" name="datos" id="datos">
+	<input type="hidden" name="user" id="user">
+	<input type="hidden" name="beca" id="beca">
+  	
+  	
+
      </form>
 @endsection
   
-
-
-
 @section('javascript')
-<script>
 
+<script>
 $(document).ready( function () {
     $('#myTable').DataTable({
 
@@ -239,94 +242,21 @@ paging: true,
 </script>
 
 
+
 <script>
-	function ver_datos(campos,pos)
-  {
-  	 var nombre = $("#"+campos+pos).attr('name');
-    var datos_p = $(datos_id).val();
-    var idUsuario = $(user_id).val();
-    var idBeca = $(beca_id).val();
+function enviarDatos(indice){
+$(document).ready(function(){
+		//alert(indice);
+		$("#enviarDatos").click(function(){
+		$("#datos").val($("#datos_id"+indice).val());
+  		$("#user").val($("#user_id"+indice).val());
+  		$("#beca").val($("#beca_id"+indice).val());
+  		
 
-    $.ajax({
-      type: "POST",
-      url: '{{route("datos_usuario2")}}',
-      data:{"_token": "{{ csrf_token() }}","idBeca":idBeca,"datos_p":datos_p,"nombre":nombre,"idUsuario":idUsuario},
-      success: function(data){
-      	console.log(data);
-
-
-
-/*      	
-      	var html="";  
-      	html+="<input type=hidden name=datos[] value='"+data+"'>"
-      	+ "<input type=hidden name=csrf value='{{csrf_token()}}'>";
-        $("#mandardatos").html(html);
-        mandardatos();
-        */
-    }
+  		$("#mandardatos").submit();
+	});
 });
-}	
-</script>
+}
 
-<script>
-	function mandardatos(){
-		$.ajax({
-			type: "POST",
-			url: '{{route("dpsajax")}}',
-			data: $("#mandardatos").serialize(),
-
-			success: function(datasss){
-	//						console.log($("#mandardatos").serialize());
-
-//				console.log(datasss)
-			}
-		});
-	}
 </script>
 @endsection
-
-
-<!--
-<script>
-/*  function ver_datos(campos,pos)
-  {
-    var nombre = $("#"+campos+pos).attr('name');
-    var datos_p = $(datos_id).val();
-    var idUsuario = $(user_id).val();
-    var idBeca = $(beca_id).val();
-  
-
-    $.ajax({
-      type: "POST",
-      url: '{{route("datos_usuario2")}}',
-      dataType: 'html',
-
-      //contentType: 'application/x-www-form-urlencoded',
-      data:{"_token": "{{ csrf_token() }}","idBeca":idBeca,"datos_p":datos_p,"nombre":nombre,"idUsuario":idUsuario},
-      success: function(data){
-//console.log(data);
-        function mandarvalores(data);
-  
-      }   
-    });
-  }
-*/
-</script>
-<script>
-/*	
-function mandarvalores(datos){
-		$('#mySpan').hide();
-		$('#loading').html();
-		$('#loading').show();
-		$('#mySpan').show();
-		$('#mySpan').append(data); // Esto anda... muestra los valores de "data"
-		$('#myForm').submit();
-
-
-
-
-
-
-	}*/
-</script>
--->

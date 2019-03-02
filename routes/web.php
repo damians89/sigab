@@ -57,37 +57,24 @@ Route::get('datospersona/localidad/{id}', 'DatosPersonaController@getLocalidades
 //Seleccion de beca
 Route::post('administracion/inscripciones/seleccion', 'InscripcionesController@seleccion')->name('seleccion');
 
-//VER LOS DATOS INSCRIPTS, dps de seleccion borrar el primero
-Route::get('administracion/inscripciones/seleccion/usuario/datos_usuario/{beca_id}/{user_id}', 'InscripcionesController@datos_usuario')->name('datos_usuario'); 
-
-//VER LOS DATOS INSCRIPTS este tiene que quedar ajax
-Route::post('administracion/inscripciones/seleccion/ver','InscripcionesController@datos_usuario2')->name('datos_usuario2');
-
-/*
-Route::view('/administracion/inscripciones/seleccion/usuario/datos_usuario21','vendor.voyager.inscripciones.usuario.datos_usuario')->name('prueba');
-*/
-
-
-Route::get('administracion/inscripciones/seleccion/usuario/datos_usuario21', function () {
-    return view::make('vendor.voyager.inscripciones.usuario.datos_usuario');
-})->name('prueba');
-
-
-Route::post('administracion/inscripciones/seleccion/ver/dpsajax','InscripcionesController@dpsajax')->name('dpsajax');
-
-
+//VER LOS DATOS INSCRIPTS -  ajax
+Route::post('administracion/inscripciones/seleccion/usuario/datos','InscripcionesController@datos_usuario2')->name('datos_usuario2');
 
 
 //ve la observacion
 Route::get('administracion/inscripciones/seleccion/{user_id}/obsevacion', 'InscripcionesController@observacion' )->name('observacion'); 
 
 
-//Calculo merito  (ADREDE el cambio de user:id a id)
-Route::get('/administracion/inscripciones/seleccion/usuario/datos_usuario/{datos_id}/{beca_id}/merito', 'InscripcionesController@merito')->name('merito');
+//Calculo merito por ajax
+Route::post('/administracion/inscripciones/seleccion/usuario/datos/merito', 'InscripcionesController@calculo_merito')->name('calculo_merito');
+
+
 
 
 //borrar datos de inscripcion (ptaje merito y estados)
 Route::get('/administracion/inscripciones/seleccion/usuario/datos_usuario/{datos_id}/{beca_id}/restablecer', 'InscripcionesController@restablecer')->name('restablecer');
+//ajax este tiene que quedar
+Route::post('/administracion/inscripciones/seleccion/usuario/datos_usuario/restablecer', 'InscripcionesController@restablecer_merito')->name('restablecer_merito');
 
 //ve la obs
 Route::post('administracion/inscripciones/seleccion/guarda_observacion', 'InscripcionesController@guarda_observacion' )->name('guarda_observacion'); 

@@ -46,6 +46,7 @@
                 var nombre = $("#"+campos+pos).attr('name');
                 var idCon = $("#consideracion"+pos).val();
                 var idUsuario = $(user_id).val();
+                var idDatos = $(datos_id).val();
                 var idBeca = $(beca_id).val();
                 var tabla = "consideraciones"
 
@@ -55,10 +56,17 @@
                   url: '/update',
                   dataType: 'JSON',
                   //contentType: 'application/x-www-form-urlencoded',
-                  data:{"idBeca":idBeca,"idCon":idCon,"nombre":nombre,"valor":valor,"tabla":tabla,"idUsuario":idUsuario},
+                  data:{"idBeca":idBeca,"idDatos":idDatos,"idCon":idCon,"nombre":nombre,"valor":valor,"tabla":tabla,"idUsuario":idUsuario},
                   success: function(data){
-                
-          
+
+                                     if(data.valor==0){
+                  toastr.success(data.message);
+                window.location.reload();
+                 }else{
+                    
+                  toastr.warning(data.message);
+                                  window.location.reload();
+                 }
 
                 
                   }   
@@ -93,6 +101,7 @@
                 var nombre = $("#"+campos+pos).attr('name');
                 var idFam = $("#familiar"+pos).val();
                 var idUsuario = $(user_id).val();
+                var idDatos = $(datos_id).val();
                 var idBeca = $(beca_id).val();
                 var tabla = "familiar"
 
@@ -102,9 +111,16 @@
                   url: '/update',
                   dataType: 'JSON',
                   //contentType: 'application/x-www-form-urlencoded',
-                  data:{"idBeca":idBeca,"idFam":idFam,"nombre":nombre,"valor":valor,"tabla":tabla,"idUsuario":idUsuario},
+                  data:{"idDatos":idDatos,"idBeca":idBeca,"idFam":idFam,"nombre":nombre,"valor":valor,"tabla":tabla,"idUsuario":idUsuario},
                   success: function(data){
-                     
+                  if(data.valor==0){
+                  toastr.success(data.message);
+                window.location.reload();
+                 }else{
+                    
+                  toastr.warning(data.message);
+                                  window.location.reload();
+                 }
           
 
                 
@@ -139,6 +155,7 @@
 
           var idBeca = $(beca_id).val();
           var idUsuario = $(user_id).val();
+          var idDatos = $(datos_id).val();
          var nombre = $("#"+id).attr('name');
           var valor = $("#"+id).val();
           var tabla = "datos_personas"
@@ -150,8 +167,16 @@
             url: '/update',
             dataType: 'JSON',
             //contentType: 'application/x-www-form-urlencoded',
-            data:{"idBeca":idBeca,"idUsuario":idUsuario,"nombre":nombre,"valor":valor,"tabla":tabla},
+            data:{"idDatos":idDatos,"idBeca":idBeca,"idUsuario":idUsuario,"nombre":nombre,"valor":valor,"tabla":tabla},
             success: function(data){
+                 if(data.valor==0){
+                  toastr.success(data.message);
+                window.location.reload();
+                 }else{
+                    
+                  toastr.warning(data.message);
+                                  window.location.reload();
+                 }
              
             }
             });
@@ -198,10 +223,11 @@
 
 <div class="form-group">
 
-<input type="hidden" value="{{ $datos->id}}"  name="user_id" id="user_id" required>
+<input type="hidden" value="{{ $datos->user_id}}"  name="user_id" id="user_id" required>
+<input type="hidden" value="{{ $datos->id}}"  name="datos_id" id="datos_id" required>
 <input type="hidden" value="{{ $datos->beca_id}}"  name="beca_id" id="beca_id" required>
 
-
+   @include('voyager::alerts')
 
 <div class="rwd">
   <h2 align="center"><div class="p-3 mb-2 bg-primary text-white">Datos de {{$datos->user_name}} {{$datos->user_apellido}}</div></h2>
@@ -225,11 +251,11 @@
       <tr>          
       <th width="20%">Nombre</th>
       <td>
-      <input readonly value="{{ $datos->user_name}}" type="text"  class="form-control" name="user_name" id="idNombre" required>
+      <input readonly value="{{ $datos->user_name}}" type="text"  class="form-control" name="name" id="idNombre" required>
       </td>
       <td></td>
       <td>
-      <a onclick="quitarReadOnly('idNombre')" title="Editar" class="btn btn-sm btn-primary pull-left" name="user_name" style="display: inline;">
+      <a onclick="quitarReadOnly('idNombre')" title="Editar" class="btn btn-sm btn-primary pull-left" name="name" style="display: inline;">
             <i class="voyager-edit"></i> <span class="hidden-xs hidden-sm"></span>
         </a>
          <a onclick="ponerReadOnly('idNombre')" title="Guardar" class="btn btn-sm btn btn-success pull-right " style="display: inline;">
@@ -242,9 +268,9 @@
   <tr>
       <th width="20%">Apellido</th> 
       <td width="40%">
-        <input readonly value="{{$datos->user_apellido}}" type="text" class="form-control" name="user_apellido" id="idApellido" required></td><td></td>
+        <input readonly value="{{$datos->user_apellido}}" type="text" class="form-control" name="apellido" id="idApellido" required></td><td></td>
       <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idApellido')"  class="btn btn-sm btn-primary pull-left" name="user_apellido" title="Editar" value="Modificar">
+        <a style="display: inline;" onclick="quitarReadOnly('idApellido')"  class="btn btn-sm btn-primary pull-left" name="apellido" title="Editar" value="Modificar">
           <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
         </a>
         <a style="display: inline;" onclick="ponerReadOnly('idApellido')" class="btn btn-sm btn-success pull-right" title="Guardar" value="Guardar">
@@ -258,7 +284,7 @@
       <th>DNI/CUIT</th>
       
       <td width="40%">
-      <input readonly value="{{$datos->user_dni}}" type="text" class="form-control" name="user_dni" id="idDNI" required></td>
+      <input readonly value="{{$datos->user_dni}}" type="text" class="form-control" name="dni" id="idDNI" required></td>
       <td>
       <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox"> 
         Imagen del DNI frente
@@ -403,7 +429,7 @@
     <tr>
     <th>Correo electrónico</th>
     
-    <td width="40%"><input readonly value="{{ $datos->user_email }}" type="text" class="form-control" name="user_email" id="idEmail" required></td><td></td>
+    <td width="40%"><input readonly value="{{ $datos->user_email }}" type="text" class="form-control" name="email" id="idEmail" required></td><td></td>
       
       <td>
         <a style="display: inline;" onclick="quitarReadOnly('idEmail')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
@@ -434,16 +460,16 @@
 
 
     <select  readonly  class="form-control" name="disca_estudiante" id="idDiscaest" placeholder="Seleccione una opción" required>
-
-        <option value="Si" {{ ($datos->disca_estudiante) == 'Si' ? 'selected' : '' }}>Si</option>
-        <option value="No" {{ ($datos->disca_estudiante) == 'No' ? 'selected' : '' }}>No</option>
+camvbiar el si por 0 y 1
+        <option value="1" {{ ($datos->disca_estudiante) == '1' ? 'selected' : '' }}>Si</option>
+        <option value="0" {{ ($datos->disca_estudiante) == '0' ? 'selected' : '' }}>No</option>
         
       </select>
       
       
       </td>
       <td>
-      <?php if ($datos->disca_estudiante == "Si"): ?>
+      <?php if ($datos->disca_estudiante == 1): ?>
       <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox">
             Certificado de discapacidad 
               <img src="{{ action('InscripcionesController@getFile',['filename' => $datos->certificado_discapacidad]) }}" alt="..." class="img-responsive lightbox hide">
@@ -522,17 +548,22 @@
         <a style="display: inline;" onclick="ponerReadOnly('IdCond')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
         <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             
-      </td>
-       </tr>
-
+      </td>   </tr>
        <tr>
         <th>Carrera que cursa</th>
-        <td>{{ $datos->carrera_cursa}} 
-        </td><td></td>
+        <td> <select readonly class="form-control" name="carrera_id" id="IdCarrera" placeholder="Seleccione una opción" required>
+            @foreach($carreras as $unacarrera)
+            <option value={{$unacarrera->id}} {{ ($datos->carrera_id)==($unacarrera->id) ? 'selected' : ''}}>{{$unacarrera->nombre}}</option>
+            @endforeach
+          </select>
+ 
+        </td><td>
+ 
+                 </td>
         <td>
-        <a style="display: inline;" onclick="quitarReadOnly('IdCond')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+        <a style="display: inline;" onclick="quitarReadOnly('IdCarrera')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
         <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('IdCond')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+        <a style="display: inline;" onclick="ponerReadOnly('IdCarrera')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
         <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
       </td>
        </tr>
@@ -679,8 +710,8 @@
             <td>
               <select readonly  class="form-control" name="tiene_trabajo" id="Idtrabaja" required>
                     
-                    <option value="Si" {{ ($datos->tiene_trabajo) == 'Si' ? 'selected' : '' }}>Si</option>
-                    <option value="No" {{ ($datos->tiene_trabajo) == 'No' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ ($datos->tiene_trabajo) == '1' ? 'selected' : '' }}>Si</option>
+                    <option value="0" {{ ($datos->tiene_trabajo) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td>
@@ -715,7 +746,7 @@
           <tr>
             <th>Sueldo</th>
             <td width="40%"><input readonly value="{{$datos->sueldo}}" type="text" class="form-control" name="sueldo" id="idSueldo" required></td><td>
-               <?php if ($datos->disca_estudiante == "Si"): ?>
+               <?php if ($datos->disca_estudiante == 1): ?>
               <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox"> 
               Comprobante de ingresos
                <img src="{{ action('InscripcionesController@getFile',['filename' => $datos->comprobante_ingresos_1]) }}" alt="..." class="img-responsive lightbox hide">
@@ -738,7 +769,7 @@
               <select readonly  class="form-control" name="tiene_beca" id="IdBeca" required>
                     
                     <option value="1" {{ ($datos->tiene_beca) == '1' ? 'selected' : '' }}>Si</option>
-                    <option value="2" {{ ($datos->tiene_beca) == '2' ? 'selected' : '' }}>No</option>
+                    <option value="0" {{ ($datos->tiene_beca) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td>
@@ -758,7 +789,7 @@
               <select readonly  class="form-control" name="tiene_progresar" id="IdProgresar" required>
                     
                     <option value="1" {{ ($datos->tiene_progresar) == '1' ? 'selected' : '' }}>Si</option>
-                    <option value="2" {{ ($datos->tiene_progresar) == '2' ? 'selected' : '' }}>No</option>
+                    <option value="0" {{ ($datos->tiene_progresar) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td>
@@ -778,7 +809,7 @@
               <select readonly  class="form-control" name="tiene_pasantia" id="idPasan" required>
                     
                     <option value="1" {{ ($datos->tiene_pasantia) == '1' ? 'selected' : '' }}>Si</option>
-                    <option value="2" {{ ($datos->tiene_pasantia) == '2' ? 'selected' : '' }}>No</option>
+                    <option value="0" {{ ($datos->tiene_pasantia) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td>
@@ -799,7 +830,7 @@
               <select readonly  class="form-control" name="tiene_asig" id="idAsig" required>
                     
                     <option value="1" {{ ($datos->tiene_asig) == '1' ? 'selected' : '' }}>Si</option>
-                    <option value="2" {{ ($datos->tiene_asig) == '2' ? 'selected' : '' }}>No</option>
+                    <option value="0" {{ ($datos->tiene_asig) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td>
@@ -828,7 +859,7 @@
 
 
 
-@if($datos->otros_ing=="Si")
+@if($datos->otros_ing==1)
 
           <tr>
             <th>Otros ingresos cantidad</th>
@@ -901,8 +932,8 @@
             <th>Vive con la familia</th>
             <td>
             <select readonly class="form-control" name="casa_fam" id="idCasafam" required>
-                    <option value="Si" {{ ($datos->casa_fam) == 'Si' ? 'selected' : '' }}>Si</option>
-                    <option value="No" {{ ($datos->casa_fam) == 'No' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ ($datos->casa_fam) == '1' ? 'selected' : '' }}>Si</option>
+                    <option value="0" {{ ($datos->casa_fam) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
                 <td></td>
@@ -921,8 +952,8 @@
             
               <td>
             <select readonly class="form-control" name="tiene_alq" id="idAlq" required>
-                    <option value="Si" {{ ($datos->tiene_alq) == 'Si' ? 'selected' : '' }}>Si</option>
-                    <option value="No" {{ ($datos->tiene_alq) == 'No' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ ($datos->tiene_alq) == '1' ? 'selected' : '' }}>Si</option>
+                    <option value="0" {{ ($datos->tiene_alq) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
                 <td></td>
@@ -942,7 +973,7 @@
               <input readonly value="{{ $datos->monto_alq }}" type="text-area" class="form-control" name="monto_alq" id="idMontoalq">            
             </td>
             <td>
-            <?php if ($datos->tiene_alq == "Si"): ?>
+            <?php if ($datos->tiene_alq == 1): ?>
         
               <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox"> 
               Recibo Alquiler
@@ -986,8 +1017,8 @@
             <th>Usa colectivo urbano</th>
             <td> 
                <select readonly class="form-control" name="usa_urbano" id="idUrbano"  required>
-                    <option value="Si" {{ ($datos->usa_urbano) == 'Si' ? 'selected' : '' }}>Si</option>
-                    <option value="No" {{ ($datos->usa_urbano) == 'No' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ ($datos->usa_urbano) == '1' ? 'selected' : '' }}>Si</option>
+                    <option value="0" {{ ($datos->usa_urbano) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td></td>
@@ -998,7 +1029,7 @@
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-<?php if ($datos->usa_urbano == "Si"): ?>
+<?php if ($datos->usa_urbano == 1): ?>
           <tr>
 
             <th> Cantidad de viajes</th>
@@ -1073,8 +1104,8 @@
               
               <td> 
                <select readonly class="form-control" name="usa_media_dist" id="idMediadist"  required>
-                    <option value="Si" {{ ($datos->usa_media_dist) == 'Si' ? 'selected' : '' }}>Si</option>
-                    <option value="No" {{ ($datos->usa_media_dist) == 'No' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ ($datos->usa_media_dist) == '1' ? 'selected' : '' }}>Si</option>
+                    <option value="0" {{ ($datos->usa_media_dist) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td>  
@@ -1087,7 +1118,7 @@
             </td>
           </tr>
 
-            <?php if ($datos->usa_media_dist == "Si"): ?>
+            <?php if ($datos->usa_media_dist == 1): ?>
           <tr>
             <th>Cantidad de viajes</th>
             
@@ -1178,8 +1209,8 @@
             <th>Larga distancia</th>
             <td>
               <select readonly class="form-control" name="larga_distancia" id="idLargaDistancia" required>
-                <option value="Si" {{ ($datos->larga_distancia) == 'Si' ? 'selected' : '' }}>Si</option>
-                    <option value="No" {{ ($datos->larga_distancia) == 'No' ? 'selected' : '' }}>No</option>
+                <option value="1" {{ ($datos->larga_distancia) == '1' ? 'selected' : '' }}>Si</option>
+                    <option value="0" {{ ($datos->larga_distancia) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td></td>
@@ -1192,7 +1223,7 @@
           </tr>
         
 
-            <?php if ($datos->larga_distancia == "Si"): ?>
+            <?php if ($datos->larga_distancia == 1): ?>
          
                                   <tr>
             <th>Cantidad de viajes</th>
@@ -1282,7 +1313,7 @@
             <td>
                 <select readonly class="form-control" name="es_propietario" id="idPropietario" required>
                     <option value="1" {{ ($datos->es_propietario) == '1' ? 'selected' : '' }}>Si</option>
-                    <option value="2" {{ ($datos->es_propietario) == '2' ? 'selected' : '' }}>No</option>
+                    <option value="0" {{ ($datos->es_propietario) == '0' ? 'selected' : '' }}>No</option>
                 </select>
              </td>   
             <td></td>
@@ -1301,7 +1332,7 @@
             <td>
               <select readonly class="form-control" name="alquila" id="idAlquila" required>
                     <option value="1" {{ ($datos->alquila) == '1' ? 'selected' : '' }}>Si</option>
-                    <option value="2" {{ ($datos->alquila) == '2' ? 'selected' : '' }}>No</option>
+                    <option value="0" {{ ($datos->alquila) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td>
@@ -1321,7 +1352,7 @@
               <input readonly value="{{ $datos->precio_alquiler}}"  type="number" min="0" class="form-control" name="precio_alquiler" id="idReciboalqfam" required>
             </td>
             <td>
-            <?php if ($datos->alquila == "Si"): ?>
+            <?php if ($datos->alquila == 1): ?>
         
              <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox"> 
               Recibo Alquiler
@@ -1344,7 +1375,7 @@
             
               <select readonly class="form-control" name="prestada" id="idPrestada" required>
                     <option value="1" {{ ($datos->prestada) == '1' ? 'selected' : '' }}>Si</option>
-                    <option value="2" {{ ($datos->prestada) == '2' ? 'selected' : '' }}>No</option>
+                    <option value="0" {{ ($datos->prestada) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             
           </td>            
@@ -1376,8 +1407,8 @@
             <th>Posee campo</th>
             <td>
               <select readonly class="form-control" name="tiene_campo" id="idCampo" required>
-                    <option value="Si" {{ ($datos->tiene_campo) == 'Si' ? 'selected' : '' }}>Si</option>
-                    <option value="No" {{ ($datos->tiene_campo) == 'No' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ ($datos->tiene_campo) == '1' ? 'selected' : '' }}>Si</option>
+                    <option value="0" {{ ($datos->tiene_campo) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td></td>
@@ -1421,8 +1452,8 @@
             <th>Posee terreno</th>
             <td>
                 <select readonly class="form-control" name="tiene_terreno" id="idTerreno" required>
-                    <option value="Si" {{ ($datos->tiene_terreno) == 'Si' ? 'selected' : '' }}>Si</option>
-                    <option value="No" {{ ($datos->tiene_terreno) == 'No' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ ($datos->tiene_terreno) == '1' ? 'selected' : '' }}>Si</option>
+                    <option value="0" {{ ($datos->tiene_terreno) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td></td>
@@ -1452,8 +1483,8 @@
             <th>Automóvil</th>
             <td>
                 <select readonly class="form-control" name="tiene_auto" id="idAuto" required>
-                    <option value="Si" {{ ($datos->tiene_auto) == 'Si' ? 'selected' : '' }}>Si</option>
-                    <option value="No" {{ ($datos->tiene_auto) == 'No' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ ($datos->tiene_auto) == '1' ? 'selected' : '' }}>Si</option>
+                    <option value="0" {{ ($datos->tiene_auto) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td></td>
@@ -1483,8 +1514,8 @@
             <th>Motovehiculo</th>
             <td>
                 <select readonly class="form-control" name="tiene_moto" id="idMoto" required>
-                    <option value="Si" {{ ($datos->tiene_moto) == 'Si' ? 'selected' : '' }}>Si</option>
-                    <option value="No" {{ ($datos->tiene_moto) == 'No' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ ($datos->tiene_moto) == '1' ? 'selected' : '' }}>Si</option>
+                    <option value="0" {{ ($datos->tiene_moto) == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </td>
             <td></td>
@@ -1515,8 +1546,8 @@
             <td>
             
           <select readonly class="form-control" name="otros_gastos" id="idOtrosGastos" required>
-          <option value="Si" {{ ($datos->otros_gastos) == 'Si' ? 'selected' : '' }}>Si</option>
-          <option value="No" {{ ($datos->otros_gastos) == 'No' ? 'selected' : '' }}>No</option>
+          <option value="1" {{ ($datos->otros_gastos) == '1' ? 'selected' : '' }}>Si</option>
+          <option value="0" {{ ($datos->otros_gastos) == '0' ? 'selected' : '' }}>No</option>
           </select>
           </td>            
             <td></td>
@@ -1817,7 +1848,7 @@
             <td> <input readonly value="{{ $consideraciones[$i]->incapacidad}}"  type="text" class="form-control" name="incapacidad" id="idConIncapacidad{{$i}}" required>              
             </td>
             <td>
-            <?php if ($consideraciones[$i]->incapacidad == "Si"): ?>
+            <?php if ($consideraciones[$i]->incapacidad == 1): ?>
               <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox"> 
                   Certificado
                       <img src="{{ action('InscripcionesController@getFile',['filename' => $consideraciones[$i]->cert_incapacidad]) }}" alt="..." class="img-responsive lightbox hide">
@@ -1982,10 +2013,14 @@
               <div class="panel-footer">
                 <div class="row">
                     <div class="col-sm-pull-4 pull-left"  style=" margin-right: -1%; margin-left: 2%;">
-                        {!! link_to_route('merito', 'Calcular mérito', ['beca_id'=>$datos->beca_id,'datos_id' => $datos->id],['class'=>'btn btn-danger btn-sm','style'=>'font-size:13px']) !!}
+
+                        <a id="CalcularMerito" class="btn btn-danger btn-sm" title="CalcularMerito" onclick="CalculaMerito()" value="Ver" style="font-size: 13px">Calcular mérito</a> 
+
+
                     </div>
                     <div class="col-sm-pull-8 pull-right" style="margin-right: 2%; margin-left: -1%;">
-                        {!! link_to_route('restablecer', 'Restablecer evaluación de inscripción', ['beca_id'=>$datos->beca_id,'datos_id' => $datos->id],['class'=>'btn btn-warning btn-sm','style'=>'font-size:13px']) !!}
+                        <a id="restablecer_merito"  title="CalcularMerito" onclick="restablecer_merito()" value="Ver" class="btn btn-warning btn-sm" style="font-size: 13px">Restablecer evaluación de inscripción</a> 
+
                     </div>
                     
                 </div>
@@ -2042,23 +2077,22 @@
         </div>        
     </div>
 
+   <?php
+    Session::put('beca', $datos->beca_id);
+Session::put('datos',$datos->id);
+Session::put('user',$datos->user_id);
 
+    ?>
 
 
 
     
     <div class="col-md-12">
-    <?php
-    Session::put('beca', $datos->beca_id);
-
-    ?>
+ 
       <h3 align="center"> <a href="/administracion/inscripciones/seleccion"><span class="label label-primary text-white" align="center" >Volver</span></a></h3>
     </div>
 
 </div>
-
-
-
 
 
 
@@ -2101,3 +2135,50 @@ $('#myModal').modal('show')
     });
 });
 </script>
+
+<script type="text/javascript">
+              function CalculaMerito()
+              {
+                var idUsuario = $(user_id).val();
+                var idDatos = $(datos_id).val();
+                var idBeca = $(beca_id).val();
+               
+
+                $.ajax({
+                  type: "POST",
+                  url: '{{route("calculo_merito")}}',
+                  dataType: 'JSON',
+                  //contentType: 'application/x-www-form-urlencoded',
+                  data:{"datos_id":idDatos,"beca_id":idBeca,"user_id":idUsuario},
+                  success: function(data){
+                                   toastr.warning(data.message);
+                                    window.location.reload();
+                  }   
+                });
+
+
+              }
+            </script>
+            <script type="text/javascript">
+              function restablecer_merito()
+              {
+                var idUsuario = $(user_id).val();
+                var idDatos = $(datos_id).val();
+                var idBeca = $(beca_id).val();
+               
+
+                $.ajax({
+                  type: "POST",
+                  url: '{{route("restablecer_merito")}}',
+                  dataType: 'JSON',
+                  //contentType: 'application/x-www-form-urlencoded',
+                  data:{"datos_id":idDatos,"beca_id":idBeca,"user_id":idUsuario},
+                  success: function(data){
+                                    window.location.reload();
+                                   toastr.warning(data.message);
+                  }   
+                });
+
+
+              }
+            </script>
