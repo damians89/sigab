@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 20-02-2019 a las 00:31:29
+-- Tiempo de generación: 13-03-2019 a las 18:46:45
 -- Versión del servidor: 5.7.25-0ubuntu0.18.04.2
 -- Versión de PHP: 7.0.30-0ubuntu0.16.04.1
 
@@ -149,14 +149,6 @@ CREATE TABLE `consideraciones` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Volcado de datos para la tabla `consideraciones`
---
-
-INSERT INTO `consideraciones` (`id`, `user_id`, `datos_id`, `beca_id`, `parentesco`, `enfermedad`, `incapacidad`, `cert_incapacidad`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 37, 2, 2, 'Concubino', 'Comer', 1, NULL, '2019-02-14 23:26:50', '2019-02-14 23:26:50', NULL),
-(2, 37, 2, 2, 'Concubino', 'asdddd', 1, NULL, '2019-02-14 23:26:50', '2019-02-14 23:26:50', NULL);
 
 -- --------------------------------------------------------
 
@@ -368,7 +360,7 @@ CREATE TABLE `datos_personas` (
   `domicilio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `cp` int(11) NOT NULL,
   `km_procedencia` float NOT NULL,
-  `provincia` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `provincia_id` int(10) NOT NULL,
   `nacionalidad` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `cel` int(13) UNSIGNED NOT NULL,
   `face` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -389,7 +381,7 @@ CREATE TABLE `datos_personas` (
   `tiene_beca` tinyint(1) DEFAULT NULL COMMENT '0 no, 1 si',
   `tiene_pasantia` tinyint(1) NOT NULL COMMENT '0 no, 1 si',
   `tiene_asig` tinyint(1) NOT NULL COMMENT '0 no, 1 si',
-  `otros_ing` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `otros_ing` tinyint(1) DEFAULT NULL COMMENT '0 no, 1 si',
   `otros_ing_cant` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `otros_ing_descr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `domi_cursado` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -432,8 +424,8 @@ CREATE TABLE `datos_personas` (
   `localidad_id` int(10) UNSIGNED NOT NULL,
   `anio_cursado` int(11) NOT NULL,
   `tiene_progresar` tinyint(1) NOT NULL COMMENT '0 no, 1 si',
-  `revision` int(2) DEFAULT '0',
-  `band` int(2) DEFAULT '0',
+  `revision` int(2) DEFAULT '0' COMMENT '0 recien inscripto, 1 incompletos o inconsistentes,2 postulado',
+  `band` int(2) DEFAULT '0' COMMENT '0 sin revisar, 1 revisado',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -443,9 +435,8 @@ CREATE TABLE `datos_personas` (
 -- Volcado de datos para la tabla `datos_personas`
 --
 
-INSERT INTO `datos_personas` (`id`, `beca_id`, `user_id`, `carrera_id`, `imagen_dni_frente`, `imagen_dni_dorso`, `cert_anses`, `cuil`, `estado_civil`, `cumple`, `domicilio`, `cp`, `km_procedencia`, `provincia`, `nacionalidad`, `cel`, `face`, `disca_estudiante`, `certificado_discapacidad`, `condicion_estudiante`, `constancia_estudiante`, `certificado_estudiante`, `anio_ingreso`, `cant_materia`, `promedio`, `tiene_trabajo`, `tipo_trabajo`, `comprobante_ingresos_1`, `comprobante_ingresos_2`, `comprobante_ingresos_3`, `sueldo`, `tiene_beca`, `tiene_pasantia`, `tiene_asig`, `otros_ing`, `otros_ing_cant`, `otros_ing_descr`, `domi_cursado`, `casa_fam`, `tiene_alq`, `recibo_alquiler`, `monto_alq`, `usa_urbano`, `cant_viajes`, `usa_media_dist`, `precio_pasaje`, `cant_km`, `cant_viaja_media`, `recibo_pasaje`, `larga_distancia`, `cant_viaja_larga`, `recibo_pasaje_larga`, `cant_km_larga`, `precio_pasaje_larga`, `es_propietario`, `alquila`, `recibo_alquiler_familiar`, `precio_alquiler`, `prestada`, `otros_vivienda`, `tiene_campo`, `cant_has`, `actividad`, `tiene_terreno`, `cant_terreno`, `tiene_auto`, `cant_auto`, `tiene_moto`, `cant_moto`, `otros_gastos`, `otros_gastos_descripcion`, `otros_gastos_cant`, `otros_gastos_recibo`, `motivos`, `localidad_id`, `anio_cursado`, `tiene_progresar`, `revision`, `band`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 4, 37, 5, '4/32456852/imagen_frente-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.png', '4/32456852/imagen_dorso-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.png', '4/32456852/certificado_anses-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.png', 20342998462, 'soltero', '2018-01-13', 'asdasdasd', 123, 11, '11', 'Argentino', 3436213984, 'prueba.pruebita', 1, '4/32456852/certificado_discapacidad-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.png', 'Renovante', '4/32456852/constancia_estudiante-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.png', '4/32456852/certificado_estudiante-0-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.jpg', 2000, 3, 0, 0, NULL, NULL, NULL, NULL, NULL, 2, 2, 2, '0', NULL, NULL, 'asdasd', 0, 0, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, 0, 'Ninguno', 0, NULL, NULL, 0, NULL, 0, NULL, '0', NULL, 0, NULL, NULL, NULL, 'asdasd', 1281, 2, 2, 0, 0, '2019-02-14 03:43:21', '2019-02-14 03:43:21', NULL),
-(2, 2, 37, 2, '2/32456852/imagen_frente-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.png', '2/32456852/imagen_dorso-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.jpeg', '2/32456852/certificado_anses-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.jpeg', 20342998462, 'casado', '2017-12-11', 'av siempre vivias 123', 3100, 39, '11', 'Argentino', 3436123123, 'prueba.pruebita', 1, '2/32456852/certificado_discapacidad-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.png', 'Nuevo', '2/32456852/constancia_estudiante-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.jpeg', '2/32456852/certificado_estudiante-0-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.png', 2009, 9, 0, 1, 'activos', '2/32456852/comprobante_ingresos-1-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.jpg', '2/32456852/comprobante_ingresos-2-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.jpg', '2/32456852/comprobante_ingresos-3-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.jpeg', 43, 1, 1, 1, '1', '2123', 'asdasdasd', 'av siempre vivas 1111', 1, 1, '2/32456852/recibo_alquiler-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.png', 2222, 1, 12, 1, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, 1, 1, '2/32456852/recibo_alquiler_familiar-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.jpg', 16, 1, 'Ninguno', 1, 14, 'Comer', 1, 5, 1, 5, '1', 1, 1, NULL, NULL, NULL, 'asdasdasd', 1281, 3, 1, 1, 1, '2019-02-14 23:26:50', '2019-02-14 23:26:50', NULL);
+INSERT INTO `datos_personas` (`id`, `beca_id`, `user_id`, `carrera_id`, `imagen_dni_frente`, `imagen_dni_dorso`, `cert_anses`, `cuil`, `estado_civil`, `cumple`, `domicilio`, `cp`, `km_procedencia`, `provincia_id`, `nacionalidad`, `cel`, `face`, `disca_estudiante`, `certificado_discapacidad`, `condicion_estudiante`, `constancia_estudiante`, `certificado_estudiante`, `anio_ingreso`, `cant_materia`, `promedio`, `tiene_trabajo`, `tipo_trabajo`, `comprobante_ingresos_1`, `comprobante_ingresos_2`, `comprobante_ingresos_3`, `sueldo`, `tiene_beca`, `tiene_pasantia`, `tiene_asig`, `otros_ing`, `otros_ing_cant`, `otros_ing_descr`, `domi_cursado`, `casa_fam`, `tiene_alq`, `recibo_alquiler`, `monto_alq`, `usa_urbano`, `cant_viajes`, `usa_media_dist`, `precio_pasaje`, `cant_km`, `cant_viaja_media`, `recibo_pasaje`, `larga_distancia`, `cant_viaja_larga`, `recibo_pasaje_larga`, `cant_km_larga`, `precio_pasaje_larga`, `es_propietario`, `alquila`, `recibo_alquiler_familiar`, `precio_alquiler`, `prestada`, `otros_vivienda`, `tiene_campo`, `cant_has`, `actividad`, `tiene_terreno`, `cant_terreno`, `tiene_auto`, `cant_auto`, `tiene_moto`, `cant_moto`, `otros_gastos`, `otros_gastos_descripcion`, `otros_gastos_cant`, `otros_gastos_recibo`, `motivos`, `localidad_id`, `anio_cursado`, `tiene_progresar`, `revision`, `band`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 4, 37, 5, '4/32456852/imagen_frente-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.png', '4/32456852/imagen_dorso-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.png', '4/32456852/certificado_anses-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.png', 20342998462, 'soltero', '2018-01-13', 'asdasdasd', 123, 112222, 9, 'Argentino', 3436213984, 'prueba.pruebita', 1, '4/32456852/certificado_discapacidad-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.png', 'Renovante', '4/32456852/constancia_estudiante-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.png', '4/32456852/certificado_estudiante-0-32456852-3d7nkRrcJwNUDW2QODJqFUAUwtQxEbrCz8BTEcY7kjD9PltiWopw3Sb6sZnAmqzJ78wIMlL7lW55b7aUOxYKFLoG2uw5PSN9L9L8.jpg', 2000, 3, 0, 0, NULL, NULL, NULL, NULL, NULL, 2, 2, 2, 0, NULL, NULL, 'asdasd', 0, 0, NULL, NULL, 1, 18, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, 0, 'Ninguno', 0, NULL, NULL, 0, NULL, 0, NULL, '0', NULL, 0, NULL, NULL, NULL, 'asdasd', 1166, 2, 2, 2, 1, '2019-02-14 03:43:21', '2019-03-04 22:25:35', NULL);
 
 -- --------------------------------------------------------
 
@@ -500,14 +491,6 @@ CREATE TABLE `familiars` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Volcado de datos para la tabla `familiars`
---
-
-INSERT INTO `familiars` (`id`, `user_id`, `datos_id`, `beca_id`, `parentesco`, `apeynom`, `dni`, `imagen_dni_frente`, `imagen_dni_dorso`, `edad`, `ocupacion`, `tiene_trabajo`, `actividad_laboral`, `comprobante_ingresos_1`, `comprobante_ingresos_2`, `comprobante_ingresos_3`, `ingresos`, `anses`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 37, 2, 2, 'Concubino', 'mamita', 34299845, '2/32456852/familiar-0/imagen_dni_familiar-frente-0-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.png', '2/32456852/familiar-0/imagen_dni_familiar-dorso-0-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.jpg', 44, 'Rascar higo', 1, NULL, NULL, NULL, NULL, NULL, '2/32456852/familiar-0/comprobante_anses-0-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.png', '2019-02-14 23:26:50', '2019-02-14 23:26:50', NULL),
-(2, 37, 2, 2, 'Concubino', 'leonss', 222, '2/32456852/familiar-1/imagen_dni_familiar-frente-1-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.png', '2/32456852/familiar-1/imagen_dni_familiar-dorso-1-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.jpeg', 22, 'ladrar', 1, NULL, NULL, NULL, NULL, NULL, '2/32456852/familiar-1/comprobante_anses-1-32456852-lIPSH5fe7r7r5gLbGYrM9XNx4o1J9LbYTCKyCEBYTIxzm4erVNsNvklb1umDZQbAoHFsZNn1pAd46OIUkxuZ65LvcPDCM3bZXe14.png', '2019-02-14 23:26:51', '2019-02-14 23:26:51', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -536,8 +519,7 @@ CREATE TABLE `inscripciones` (
 --
 
 INSERT INTO `inscripciones` (`id`, `user_id`, `datos_id`, `beca_id`, `carrera_id`, `merito`, `pto_procedencia`, `pto_ingresos`, `pto_enfermedad`, `pto_academica`, `observacion`, `otorgamiento`, `created_at`, `updated_at`) VALUES
-(1, 37, 1, 4, 5, 0, 0, 0, 0, 0, 'Alta inicial', 3, '2019-02-14 03:43:21', '2019-02-14 03:43:21'),
-(2, 37, 2, 2, 2, 0, 0, 0, 0, 0, 'Por Orden de Merito', 1, '2019-02-14 23:26:51', '2019-02-14 23:26:51');
+(1, 37, 1, 4, 5, 0, 0, 0, 0, 0, 'Por Orden de Merito', 1, '2019-02-14 03:43:21', '2019-02-14 03:43:21');
 
 -- --------------------------------------------------------
 
@@ -3500,9 +3482,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `role_id`, `name`, `apellido`, `dni`, `email`, `avatar`, `password`, `remember_token`, `settings`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Administrador', 'admin', 1, 'admin@admin.com', 'users/September2018/yXKktPmHdj0HUxLce1xA.jpeg', '$2y$10$B5r4YrVVtfEsWRyujJoGV.JbVqAyGbzXumdf8Kilk.cUHk5bPjJc2', '4pW3I2c9qwHbM17avtoKYwotkV06v1AvlbcIefql4FBc1u2WyoZY7Qn002Wh', NULL, '2017-10-16 08:55:45', '2018-09-27 02:23:39'),
+(1, 1, 'Administrador', 'admin', 1, 'admin@admin.com', 'users/September2018/yXKktPmHdj0HUxLce1xA.jpeg', '$2y$10$B5r4YrVVtfEsWRyujJoGV.JbVqAyGbzXumdf8Kilk.cUHk5bPjJc2', 'ivYP9hYpAk5eob6lTc1I3MbOU5SyrZKZdXyFu5tB3IAc8SvQYfFMgjShYYIx', NULL, '2017-10-16 08:55:45', '2018-09-27 02:23:39'),
 (36, 3, 'damian', 'sacks', 1231321231, 'damian@damian.com', 'users/user-default.png', '$2y$10$tRUVvS2WMc40.UmB7I0uGekuhI0G98lmzJ2pOpAbx9tfTSmg6JBsi', 'JmmkE0vnmcEOt8dMz1khU17yx0hY6HBzzieVxmcjrm2LKnuNDaXdXrFBwQI2', NULL, '2018-12-15 14:11:52', '2018-12-19 21:30:16'),
-(37, 2, 'Andress', 'Gimenez', 32456852, 'andres@andres.com', 'users/user-default.png', '$2y$10$I8UzeTbADmX1DxMI2X/1aeMWqoyZB91Co.FjGvwLIg.Hi9oVXv6mG', 'S0RRrg5nzWK3LtGZ0Y4IqsHXZwFUv7qyBOa3lTRRNqv656BjG47dbXDhfXL2', NULL, '2019-02-11 23:12:21', '2019-02-14 23:15:39');
+(37, 2, 'Andress', 'Gimenez', 324568522, 'andres@andres.com', 'users/user-default.png', '$2y$10$XdaBhrbh77cylsoA38aFPub4rwbQcxxzDKrDVEeGd.uJPnElQ96da', '7EK4Zr58v6iMmPMZhG6fLkY1Ggjd9BwNua62kuGNCaPeRq287bktJ8tUYAuw', NULL, '2019-02-11 23:12:21', '2019-03-12 02:06:12');
 
 -- --------------------------------------------------------
 
@@ -3754,7 +3736,7 @@ ALTER TABLE `condicion`
 -- AUTO_INCREMENT de la tabla `consideraciones`
 --
 ALTER TABLE `consideraciones`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `cronogramas`
 --
@@ -3774,7 +3756,7 @@ ALTER TABLE `data_types`
 -- AUTO_INCREMENT de la tabla `datos_personas`
 --
 ALTER TABLE `datos_personas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `facultades`
 --
@@ -3784,12 +3766,12 @@ ALTER TABLE `facultades`
 -- AUTO_INCREMENT de la tabla `familiars`
 --
 ALTER TABLE `familiars`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `inscripciones`
 --
 ALTER TABLE `inscripciones`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `localidades`
 --
