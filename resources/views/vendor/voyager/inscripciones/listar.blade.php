@@ -16,7 +16,7 @@
 <div align="center" class=""  >
 	<h4>Seleccionar la beca para listar los inscritos: </h4>
 	<div class="" align="center" class="form-control">
-	<select name = 'beca' >
+	<select name = 'beca_id' >
 		@foreach($becas as $beca)
 			<option value="{{$beca->id}}" >Nombre: {{$beca->nombre}} - Año: {{$beca->anio}}</option>
 		@endforeach

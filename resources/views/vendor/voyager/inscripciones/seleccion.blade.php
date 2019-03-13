@@ -26,9 +26,6 @@
 
 
 
-
-
-
 <br><br>
 
 {!! Form::open(['route' => 'otorgar', 'method' => 'post' ]) !!}
@@ -44,7 +41,7 @@
 				<th class="col-md-1">Méritos</th>
 				<th class="col-md-1">Otorgada</th>
 				<th class="col-md-2">Observación</th>
-				<th class="col-md-2">Acciones</th>
+				<th class="">Acciones</th>
 			</tr>
 		</thead>
 		@if(count($inscrip)==null)
@@ -70,7 +67,9 @@
 				{{$loop->index + 1}} - <input type="checkbox" hidden  name="id" value="{{$inscriptos->user_id}}">
 				<input type="hidden" name="user_id{{$loop->index}}" id="user_id{{$loop->index}}" value="{{$inscriptos->user_id}}">
 				<input type="hidden" name="datos_id{{$loop->index}}" id="datos_id{{$loop->index}}" value="{{$inscriptos->datos_id}}">
-				<input type="hidden" name="beca_id{{$loop->index}}" id="beca_id{{$loop->index}}" value="{{$inscriptos->beca_id}}">
+				
+
+				<input type="hidden" name="beca_id" id="beca_id" value="{{$inscriptos->beca_id}}">
 
 				</td>
 
@@ -102,7 +101,10 @@
 
 				<td class="col-md-offset-2">
 				<div class="btn-group-sm">
-				         {!! link_to_route('observacion', 'Modificar', ['user_id'=>$inscriptos->user_id], ['class'=>'btn btn-success btn-sm']) !!}
+
+
+				         <a id="modificar_datos" class="btn btn-success btn-sm" title="Modificar" onclick="modificar_datos('{{$loop->index}}')" value="Modificar">Modificar</a> 
+
 
 
 				         <a id="enviarDatos" class="btn btn-warning btn-sm" title="Guardar" onclick="enviarDatos('{{$loop->index}}')" value="Ver">Ver</a> 
@@ -160,6 +162,11 @@ No tienes permisos para otorgar becas</font></strong>
 
 @endif
 </div>
+        <?php
+
+Session::put('beca_id',$inscriptos->beca_id);
+
+    ?>
 {{ Form::close() }}
 
 
@@ -191,11 +198,21 @@ No tienes permisos para otorgar becas</font></strong>
 	@csrf
 	<input type="hidden" name="datos" id="datos">
 	<input type="hidden" name="user" id="user">
-	<input type="hidden" name="beca" id="beca">
+	<input type="hidden" name="beca_id" id="beca">
   	
   	
 
      </form>
+     <form name="modificar" id="modificar" action="{{route('modificar_datos')}}" method="POST">
+	@csrf
+	<input type="hidden" name="datos" id="datos1">
+	<input type="hidden" name="user" id="user1">
+	<input type="hidden" name="beca_id" id="beca1">
+     </form>
+
+
+
+
 @endsection
   
 @section('javascript')
@@ -250,7 +267,7 @@ $(document).ready(function(){
 		$("#enviarDatos").click(function(){
 		$("#datos").val($("#datos_id"+indice).val());
   		$("#user").val($("#user_id"+indice).val());
-  		$("#beca").val($("#beca_id"+indice).val());
+  		$("#beca").val($("#beca_id").val());
   		
 
   		$("#mandardatos").submit();
@@ -259,4 +276,23 @@ $(document).ready(function(){
 }
 
 </script>
+<script>
+function modificar_datos(indice){
+$(document).ready(function(){
+	//	alert(indice);
+		$("#modificar_datos").click(function(){
+		$("#datos1").val($("#datos_id"+indice).val());
+  		$("#user1").val($("#user_id"+indice).val());
+  		$("#beca1").val($("#beca_id").val());
+  		
+
+  		$("#modificar").submit();
+	});
+});
+}
+
+</script>
+
+
+
 @endsection

@@ -47,8 +47,10 @@ Route::get('acerca', function () {
     return view('acerca');
 });
 
-//Para ver la localidad json
+//Para ver la localidad json desde el formulario de inscripcion
 Route::get('datospersona/localidad/{id}', 'DatosPersonaController@getLocalidades');
+//Localidades desde el panel del inscripto
+Route::get('administracion/inscripciones/seleccion/localidad/{id}', 'InscripcionesController@getLocalidades')->name('localidad_datos');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -58,27 +60,32 @@ Route::get('datospersona/localidad/{id}', 'DatosPersonaController@getLocalidades
 Route::post('administracion/inscripciones/seleccion', 'InscripcionesController@seleccion')->name('seleccion');
 
 //VER LOS DATOS INSCRIPTS -  ajax
-Route::post('administracion/inscripciones/seleccion/usuario/datos','InscripcionesController@datos_usuario2')->name('datos_usuario2');
+Route::post('administracion/inscripciones/seleccion/datos','InscripcionesController@datos_usuario2')->name('datos_usuario2');
 
 
-//ve la observacion
-Route::get('administracion/inscripciones/seleccion/{user_id}/obsevacion', 'InscripcionesController@observacion' )->name('observacion'); 
+//para carga postulante y sus valores de revision,(Acepta o mno los datos)
+Route::post('administracion/inscripciones/seleccion/datos/carga', 'InscripcionesController@carga')->name('carga');
 
 
 //Calculo merito por ajax
-Route::post('/administracion/inscripciones/seleccion/usuario/datos/merito', 'InscripcionesController@calculo_merito')->name('calculo_merito');
+Route::post('/administracion/inscripciones/seleccion/datos/merito', 'InscripcionesController@calculo_merito')->name('calculo_merito');
 
-
+// Baja postulante desde el panel del inscripto
+Route::DELETE('/administracion/inscripciones/seleccion/datos/dar_baja','InscripcionesController@dar_baja')->name('dar_baja');
 
 
 //borrar datos de inscripcion (ptaje merito y estados)
-Route::get('/administracion/inscripciones/seleccion/usuario/datos_usuario/{datos_id}/{beca_id}/restablecer', 'InscripcionesController@restablecer')->name('restablecer');
-//ajax este tiene que quedar
-Route::post('/administracion/inscripciones/seleccion/usuario/datos_usuario/restablecer', 'InscripcionesController@restablecer_merito')->name('restablecer_merito');
+Route::post('/administracion/inscripciones/seleccion/datos/restablecer', 'InscripcionesController@restablecer_merito')->name('restablecer_merito');
 
-//ve la obs
+
+
+
+ 
+//panel de observacion:  ve la observacion
+Route::post('administracion/inscripciones/seleccion/modificar_datos', 'InscripcionesController@modificar_datos' )->name('modificar_datos'); 
+
+//panel de observacion: guarda los nuevos cambios
 Route::post('administracion/inscripciones/seleccion/guarda_observacion', 'InscripcionesController@guarda_observacion' )->name('guarda_observacion'); 
-
 
 
 
@@ -88,12 +95,8 @@ Route::post('administracion/inscripciones/seleccion/guarda_observacion', 'Inscri
 //Route::post('administracion/inscripciones/usuarios/datos_usuario', 'DatosPersonaController@revision')->name('rev');
 
 
-//para carga postulante y sus valores de revision,(Acepta o mno los datos)
-Route::post('administracion/inscripciones/seleccion/carga', 'InscripcionesController@carga')->name('carga');
 
 
-// Baja postulante desde el panel del inscripto
-Route::DELETE('/dar_baja','InscripcionesController@dar_baja')->name('dar_baja');
 
 
 

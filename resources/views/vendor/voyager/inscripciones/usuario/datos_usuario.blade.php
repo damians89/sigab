@@ -5,8 +5,8 @@
 @stop
 
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <style>
     #tablaCalculoAuxiliar{
       font-size: 14px;
@@ -367,10 +367,57 @@
 
     </tr>
 
+
+
+
+
     <th>Provincia</th>
-    
     <td width="40%">
-    <input readonly value="{{ $datos->provincia}}" type="text" class="form-control" name="provincia" id="idProvincia" required></td><td></td>
+      <input readonly value="{{$datos->provincia_nombre}}" type="text" class="form-control" name="provincia_nombre" id="provincia_nombre" required>
+    </td>
+
+    <td>
+      {!! Form::select('provincia_id', $provincia, null, ['id' => 'provincia','class'=>'form-control','readonly']) !!}
+
+    </td>
+    <td>
+        <a style="display: inline;" onclick="quitarReadOnly('provincia')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
+        <a style="display: inline;" onclick="ponerReadOnly('provincia')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
+            
+      </td>
+
+    </tr>
+
+
+    <th> Localidad</th>
+    <td width="40%">
+      <input readonly value="{{$datos->localidad_nombre}}" type="text" class="form-control" name="localidad_nombre" id="localidad_nombre" required> 
+    </td>
+    <td>
+      <select  class="form-control" name="localidad_id" id="localidad" placeholder="Seleccione una opción" readonly>
+      <option value="" selected>Seleccione una opción</option></select>
+    </td>
+      <td>
+        
+        <a style="display: inline;" onclick="quitarReadOnly('localidad')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
+        <a style="display: inline;" onclick="ponerReadOnly('localidad')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
+            
+      </td>
+
+
+    </tr>
+
+
+
+
+
+<!--viejo pronvicia    
+    <td width="40%">
+    <input readonly value=" $datos->provincia}}" type="text" class="form-control" name="provincia" id="idProvincia" required></td><td></td>
       
       <td>
         <a style="display: inline;" onclick="quitarReadOnly('idProvincia')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
@@ -381,7 +428,7 @@
       </td>
 
     </tr>
-
+-->
     <th>Código postal</th>
     
     <td width="40%">
@@ -460,7 +507,9 @@
 
 
     <select  readonly  class="form-control" name="disca_estudiante" id="idDiscaest" placeholder="Seleccione una opción" required>
+<!---
 camvbiar el si por 0 y 1
+-->
         <option value="1" {{ ($datos->disca_estudiante) == '1' ? 'selected' : '' }}>Si</option>
         <option value="0" {{ ($datos->disca_estudiante) == '0' ? 'selected' : '' }}>No</option>
         
@@ -742,17 +791,16 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-
+               <?php if ($datos->tiene_trabajo == 1): ?>
+          
           <tr>
             <th>Sueldo</th>
             <td width="40%"><input readonly value="{{$datos->sueldo}}" type="text" class="form-control" name="sueldo" id="idSueldo" required></td><td>
-               <?php if ($datos->disca_estudiante == 1): ?>
               <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox"> 
               Comprobante de ingresos
                <img src="{{ action('InscripcionesController@getFile',['filename' => $datos->comprobante_ingresos_1]) }}" alt="..." class="img-responsive lightbox hide">
               </a>
             </td>
-            <?php endif; ?>
             <td>
               <a style="display: inline;" onclick="quitarReadOnly('idSueldo')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
               <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
@@ -760,8 +808,7 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-
-          
+            <?php endif; ?>
 
           <tr>
             <th>Otra Beca</th>
@@ -846,9 +893,14 @@ camvbiar el si por 0 y 1
 
           <tr>
             <th>Otros Ingresos</th>
-            <td>
-              <input readonly value="{{ $datos->otros_ing }}" type="text-area" class="form-control" name="otros_ing" id="idOtrosing">
-            </td><td></td>
+                          <td>
+              <select readonly  class="form-control" name="otros_ing" id="idOtrosing" required>
+                    
+                    <option value="1" {{ ($datos->otros_ing) == '1' ? 'selected' : '' }}>Si</option>
+                    <option value="0" {{ ($datos->otros_ing) == '0' ? 'selected' : '' }}>No</option>
+                </select>
+            </td>
+            <td></td>
             <td>
               <a style="display: inline;" onclick="quitarReadOnly('idOtrosing')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
               <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
@@ -859,8 +911,8 @@ camvbiar el si por 0 y 1
 
 
 
-@if($datos->otros_ing==1)
-
+ <?php if ($datos->otros_ing == 1): ?>
+          
           <tr>
             <th>Otros ingresos cantidad</th>
             <td>
@@ -886,7 +938,8 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-@endif
+
+  <?php endif; ?>
 
 
         
@@ -965,7 +1018,8 @@ camvbiar el si por 0 y 1
             </td>
               
           </tr>
-
+          <?php if ($datos->tiene_alq == 1): ?>
+        
             <tr>
             <th>Monto</th>
             
@@ -973,14 +1027,12 @@ camvbiar el si por 0 y 1
               <input readonly value="{{ $datos->monto_alq }}" type="text-area" class="form-control" name="monto_alq" id="idMontoalq">            
             </td>
             <td>
-            <?php if ($datos->tiene_alq == 1): ?>
-        
+            
               <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox"> 
               Recibo Alquiler
                <img src="{{ action('InscripcionesController@getFile',['filename' =>$datos->recibo_alquiler]) }}" alt="..." class="img-responsive lightbox hide">
               </a>
             </td>
-              <?php endif; ?>
         
             <td>
               <a style="display: inline;" onclick="quitarReadOnly('idMontoalq')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
@@ -990,6 +1042,8 @@ camvbiar el si por 0 y 1
             </td>
               
           </tr>
+
+              <?php endif; ?>
     </table>
     </div>
   </td>
@@ -1346,21 +1400,20 @@ camvbiar el si por 0 y 1
             </td>
           </tr>
 
+            <?php if ($datos->alquila == 1): ?>
           <tr>
             <th>Precio</th>
             <td>
               <input readonly value="{{ $datos->precio_alquiler}}"  type="number" min="0" class="form-control" name="precio_alquiler" id="idReciboalqfam" required>
             </td>
             <td>
-            <?php if ($datos->alquila == 1): ?>
         
              <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox"> 
               Recibo Alquiler
                <img src="{{ action('InscripcionesController@getFile',['filename' => $datos->recibo_alquiler_familiar]) }}" alt="..." class="img-responsive lightbox hide">
               </a>
             </td>
-              <?php endif; ?>
-        
+              
             <td>
               <a style="display: inline;" onclick="quitarReadOnly('idReciboalqfam')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
               <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
@@ -1368,7 +1421,8 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-
+          <?php endif; ?>
+        
           <tr>
             <th>Prestada</th>
             <td>
@@ -1420,6 +1474,8 @@ camvbiar el si por 0 y 1
             </td>
           </tr>
 
+            <?php if ($datos->tiene_campo == 1): ?>
+
           <tr>
             <th>Hectáreas</th>
             <td>
@@ -1447,7 +1503,7 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-
+           <?php endif; ?>
           <tr>
             <th>Posee terreno</th>
             <td>
@@ -1464,7 +1520,7 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-
+          <?php if ($datos->tiene_terreno == 1): ?>
           <tr>
             <th>Cantidad</th>
             <td>
@@ -1478,7 +1534,7 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-
+          <?php endif; ?>
           <tr>
             <th>Automóvil</th>
             <td>
@@ -1495,7 +1551,8 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-
+          <?php if ($datos->tiene_auto == 1): ?>
+         
           <tr>
             <th>Cantidad</th>
             <td>
@@ -1509,7 +1566,7 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-
+          <?php endif; ?>
           <tr>
             <th>Motovehiculo</th>
             <td>
@@ -1526,7 +1583,8 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-
+          <?php if ($datos->tiene_moto == 1): ?>
+          
           <tr>
             <th>Cantidad</th>
             <td>
@@ -1540,7 +1598,7 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
-
+          <?php endif; ?>
           <tr>
             <th>Otros gastos</th>
             <td>
@@ -1559,6 +1617,7 @@ camvbiar el si por 0 y 1
             </td>
 
 
+          <?php if ($datos->otros_gastos == 1): ?>
 
           <tr>
             <th>Otros gastos descripción</th>
@@ -1596,6 +1655,8 @@ camvbiar el si por 0 y 1
               <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
             </td>
           </tr>
+
+          <?php endif; ?>
 
     </table>
   </td>
@@ -2077,15 +2138,6 @@ camvbiar el si por 0 y 1
         </div>        
     </div>
 
-   <?php
-    Session::put('beca', $datos->beca_id);
-Session::put('datos',$datos->id);
-Session::put('user',$datos->user_id);
-
-    ?>
-
-
-
     
     <div class="col-md-12">
  
@@ -2094,12 +2146,31 @@ Session::put('user',$datos->user_id);
 
 </div>
 
+        <?php
+
+Session::put('beca_id',$inscrip->beca_id);
+
+    ?>
 
 
 <br><br><br><br><br>
 
 <br><br><br><br><br>
-
+<script type="text/javascript" >
+           
+       
+$("#provincia").change(function (event) {
+             
+              $("#localidad").empty();
+              $("#localidad").append("<option value='' selected>Seleccione una localidad </option>");
+              $.get("localidad/"+event.target.value+"", function(response, state) {
+              for(i=0; i<response.length; i++){
+              $("#localidad").append("<option value='"+response[i].id+"'>"+response[i].localidad+" </option>");
+            }
+            });
+        });
+     
+</script>
 
 
 
@@ -2137,48 +2208,44 @@ $('#myModal').modal('show')
 </script>
 
 <script type="text/javascript">
-              function CalculaMerito()
-              {
-                var idUsuario = $(user_id).val();
-                var idDatos = $(datos_id).val();
-                var idBeca = $(beca_id).val();
-               
+  function CalculaMerito()
+  {
+    var idUsuario = $(user_id).val();
+    var idDatos = $(datos_id).val();
+    var idBeca = $(beca_id).val();
+   
 
-                $.ajax({
-                  type: "POST",
-                  url: '{{route("calculo_merito")}}',
-                  dataType: 'JSON',
-                  //contentType: 'application/x-www-form-urlencoded',
-                  data:{"datos_id":idDatos,"beca_id":idBeca,"user_id":idUsuario},
-                  success: function(data){
-                                   toastr.warning(data.message);
-                                    window.location.reload();
-                  }   
-                });
+    $.ajax({
+      type: "POST",
+      url: '{{route("calculo_merito")}}',
+      dataType: 'JSON',
+      data:{"datos_id":idDatos,"beca_id":idBeca,"user_id":idUsuario},
+      success: function(data){
+                       toastr.warning(data.message);
+                        window.location.reload();
+      }   
+    });
+  }
+</script>
+<script type="text/javascript">
+  function restablecer_merito()
+  {
+    var idUsuario = $(user_id).val();
+    var idDatos = $(datos_id).val();
+    var idBeca = $(beca_id).val();
+   
 
-
-              }
-            </script>
-            <script type="text/javascript">
-              function restablecer_merito()
-              {
-                var idUsuario = $(user_id).val();
-                var idDatos = $(datos_id).val();
-                var idBeca = $(beca_id).val();
-               
-
-                $.ajax({
-                  type: "POST",
-                  url: '{{route("restablecer_merito")}}',
-                  dataType: 'JSON',
-                  //contentType: 'application/x-www-form-urlencoded',
-                  data:{"datos_id":idDatos,"beca_id":idBeca,"user_id":idUsuario},
-                  success: function(data){
-                                    window.location.reload();
-                                   toastr.warning(data.message);
-                  }   
-                });
+    $.ajax({
+      type: "POST",
+      url: '{{route("restablecer_merito")}}',
+      dataType: 'JSON',
+      data:{"datos_id":idDatos,"beca_id":idBeca,"user_id":idUsuario},
+      success: function(data){
+                        window.location.reload();
+                       toastr.warning(data.message);
+      }   
+    });
 
 
-              }
-            </script>
+  }
+</script>

@@ -25,14 +25,26 @@ Méritos:
 <br><br>
 
 
- &rarr;	El postulado tiene de estado de su otorgamiento: <font color="red"><strong>{{$inscrip->otorgamiento}}</strong></font><br>
+ &rarr;	El postulado tiene de estado de su otorgamiento: <font color="red"><strong>
+ 	@if($inscrip->otorgamiento==0) Denegar (No) 
+ 	@else 
+ 		@if ($inscrip->otorgamiento==1) Otorgar (Si)
+		@else
+			@if($inscrip->otorgamiento==2) Pendiente (Sin Calcular Merito)
+			@else
+				@if ($inscrip->otorgamiento==3)Suspendida
+				@endif
+			@endif 
+		@endif 
+	@endif 
+	 </strong></font><br>
 Si desea puede cambiarla:
 
-<select name="otorgamiento" placeholder="seleccione una opcion" required>
-	<option value="Si" {{ ($inscrip->otorgamiento) == 'Si' ? 'selected' : '' }}>Otorgar (Si)</option>
-	<option value="No" {{ ($inscrip->otorgamiento) == 'No' ? 'selected' : '' }}>Denegar (No)</option>
-	<option value="Pendiente" {{ ($inscrip->otorgamiento) == 'Pendiente' ? 'selected' : '' }}>Pendiente (Sin Calcular merito)</option>
-	<option value="Suspendida" {{ ($inscrip->otorgamiento) == 'Suspendida' ? 'selected' : '' }}>Suspender (Suspendida)</option>
+<select name="otorgamiento" placeholder="seleccione una opcion" required id="otorgamiento">
+	<option value="0" {{ ($inscrip->otorgamiento)=='0' ? 'selected' : '' }}>Denegar (No)</option>
+	<option value="1" {{ ($inscrip->otorgamiento)=='1' ? 'selected' : '' }}>Otorgar (Si)</option>
+	<option value="2" {{ ($inscrip->otorgamiento)=='2' ? 'selected' : '' }}>Pendiente (Sin Calcular merito)</option>
+	<option value="3" {{ ($inscrip->otorgamiento)=='3' ? 'selected' : '' }}>Suspender (Suspendida)</option>
 </select>
 
 <br><br>

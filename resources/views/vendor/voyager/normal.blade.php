@@ -24,7 +24,6 @@
 </thead>
 <tbody>
 
-{{$inscrip->beca_nombre}}
 <tr align="center">
 	<td style="width: 180px">{{$inscrip->beca_nombre}}</td>
 	<td style="width: 180px">{{$inscrip->anio}}</td>
@@ -44,14 +43,14 @@
 			<h6>Por favor comuníquese con Secretaría de Bienestar Estudiantil</h6>
 			@else
 				@if($inscrip1->revision == 2)
-					@if($inscrip->otorgamiento=="Si")
+					@if($inscrip->otorgamiento==1)
 						<h5><font color="black">Fuiste beneficiado con la beca, visualiza las <a href="/administracion/cronogramas" color="black" style="">Fechas de cobro.</a></font></h3>
 					@else
-						@if($inscrip->otorgamiento=="Pendiente")
+						@if($inscrip->otorgamiento==2)
 							Sus datos ya fueron chequeados
 							<h6 >Espere el cierre de inscripción de la beca para visualizar si se le otorgó el beneficio</h6>
 						@else
-							@if($inscrip->otorgamiento=="No")
+							@if($inscrip->otorgamiento==0)
 								<h5><font color="black">El mérito obtenido no alcanzó para el otorgamiento del beneficio.</font></h3>
 							@else($inscrip->otorgamiento=="Suspendida")
 								<h5><font color="black">Tu beca fue suspendida.</font></h3>	
@@ -71,10 +70,8 @@
 	<form method="POST" action="{{ route('comprobante') }}">
 	 {{ csrf_field() }}
 	 <input type="hidden" name="user_id" value="{{$inscrip1->user_id}}" >
-	
-	<input type="hidden" name="id" value="{{$inscrip1->id}}" >
+	<input type="hidden" name="datos_id" value="{{$inscrip1->id}}" >
 	<input type="hidden" name="beca_id" value="{{$inscrip1->beca_id}}" >
-	
 	<button value="submit" type="submit" class="btn btn-sm btn-primary"><h6>Obtener comprobante</h6></button>
 	</form>
 	</td>

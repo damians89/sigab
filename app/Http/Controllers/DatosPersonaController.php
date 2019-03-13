@@ -141,7 +141,7 @@ class DatosPersonaController extends Controller
             $datos->estado_civil = $request->estcivil;
             $datos->cumple = $request->cumple;
             $datos->domicilio = $request->domi;
-            $datos->provincia = $request->provincia;
+            $datos->provincia_id = $request->provincia;
             $datos->localidad_id = $request->localidad;
             $datos->cp = $request->cp;
             $datos->km_procedencia=$request->kmprocedencia;

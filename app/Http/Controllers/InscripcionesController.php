@@ -10,6 +10,7 @@ use App\consideracione;
 use Auth;
 use PDF;
 use View;
+use App\Provincia;
 use Session;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -147,8 +148,8 @@ public function store(Request $request)
      * @return \Illuminate\Http\Response
      */
      public function show(Request $request, $id)
-    {
-        $aaa=session::get('beca');
+    {//estava
+        $aaa=session::get('beca_id');
         //dd($aaa);
 
         $slug = $this->getSlug($request);
@@ -191,20 +192,20 @@ public function store(Request $request)
 
         $view = 'voyager::bread.read';
 
-        $request->beca=$aaa;
+        $request->beca_id=$aaa;
         $inscrip = DB::table('inscripciones')
                 ->join('users','inscripciones.user_id','=','users.id')
                 ->join('datos_personas','datos_personas.id','inscripciones.datos_id')
                 ->join('becas','inscripciones.beca_id','becas.id')
                 ->join('carreras','inscripciones.carrera_id','carreras.id')
-                ->where('inscripciones.beca_id','=',$request->beca)->orderBy('inscripciones.merito','desc')
+                ->where('inscripciones.beca_id','=',$request->beca_id)->orderBy('inscripciones.merito','desc')
                 ->select('users.apellido as user_apellido','inscripciones.otorgamiento as otorgamiento','users.id as user_id','datos_personas.id as datos_id','becas.id as beca_id','users.name as user_nombre','users.dni as dni','carreras.sede_id as sede_nombre','inscripciones.merito as merito','inscripciones.observacion as observacion')
                 ->get();
 
 
-        $aux = DB::table('becas')->where('id','=',$request->beca)->select('nombre')->first(); //busco el nombre de la beca
+        $aux = DB::table('becas')->where('id','=',$request->beca_id)->select('nombre')->first(); //busco el nombre de la beca
    
-        $aux1 = DB::table('datos_personas')->where('beca_id',$request->beca)->get();
+        $aux1 = DB::table('datos_personas')->where('beca_id',$request->beca_id)->get();
 
         if (view()->exists("voyager::$slug.read")) {
             $view = "voyager::$slug.seleccion";
@@ -310,7 +311,11 @@ public function store(Request $request)
 }
     
     public function seleccion(Request $request)
-    {
+    {/*
+        if (Session::has('beca_id')){
+      $request->beca_id=Session::get('beca_id');
+        }else{
+            }*/
         if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){
             try{
 
@@ -321,10 +326,11 @@ public function store(Request $request)
                 ->join('becas','inscripciones.beca_id','becas.id')
                 ->join('carreras','inscripciones.carrera_id','carreras.id')
                 ->join('sedes','carreras.sede_id','sedes.id')
-                ->where('inscripciones.beca_id','=',$request->beca)->orderBy('inscripciones.merito','desc')
-                ->select('users.apellido as user_apellido','inscripciones.otorgamiento as otorgamiento','users.id as user_id','datos_personas.id as datos_id','becas.id as beca_id','users.name as user_nombre','users.dni as dni','sedes.nombre as sede_nombre','inscripciones.merito as merito','inscripciones.observacion as observacion')
+                ->where('inscripciones.beca_id','=',$request->beca_id)->orderBy('inscripciones.merito','desc')
+                ->select('users.apellido as user_apellido','inscripciones.otorgamiento as otorgamiento','users.id as user_id','datos_personas.id as datos_id','becas.id as beca_id','becas.nombre as beca_nombre','users.name as user_nombre','users.dni as dni','sedes.nombre as sede_nombre','inscripciones.merito as merito','inscripciones.observacion as observacion')
                 ->get();
-                return view('vendor.voyager.inscripciones.seleccion', ['inscrip'=>$inscrip]);
+//                $beca=DB::table('becas')->where('id',$request->beca_id)->first();
+                return view('vendor.voyager.inscripciones.seleccion', compact('inscrip'));
             }catch(Exception $e){
                 return redirect()->back()->with(['message'=>"Error al listar los inscriptos", 'alert-type'=>'warning']);
             }
@@ -335,67 +341,18 @@ public function store(Request $request)
     }
 
 
-    public function datos_usuario(Request $request,$beca_id,$id){
-          
-        $calculos=DB::table('calculos_aux')->leftjoin('becas','calculos_aux.anio','=','becas.anio')->where('becas.id',$beca_id)->select('calculos_aux.*')->first();
-       
-        if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){ 
-
-            
-
-        $datos = DB::table('datos_personas')->where('id','=',$id)->first();
-        //dd($datos);
-        $condicion = DB::table('condicion')->get();
-        $familiar=DB::table('familiars')->where('datos_id',$datos->id)->where('beca_id','=',$beca_id)->get();
-        $consideraciones=DB::table('consideraciones')->where('datos_id',$datos->id)->get();
-        
-
-
-        $inscrip=DB::table('inscripciones')->where('datos_id',$datos->id)->first();
-
-
-        return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos'));
-          }
-            else{
-        return view('errors.404');
-    
-    }
-
-    }
     public function datos_usuario2(Request $request){
         
             if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){
-                $calculos=DB::table('calculos_aux')->leftjoin('becas','calculos_aux.anio','=','becas.anio')->where('becas.id',$request->beca)->select('calculos_aux.*')->first();
-                /*$datos = DB::table('inscripciones')
-                    ->join('users','inscripciones.user_id','users.id')
-                    ->where('users.id',$request->idUsuario)
-                    ->join('datos_personas','inscripciones.datos_id','datos_personas.id')->where('datos_personas.id',$request->datos_p)
-                    ->join('becas','inscripciones.beca_id','becas.id')
-                    ->join('carreras','inscripciones.carrera_id','carreras.id')
-                    ->where('inscripciones.beca_id','=',$request->idBeca)
-                    ->where('inscripciones.datos_id','=',$request->datos_p)
-                    ->orderBy('inscripciones.merito','desc')
-                    ->select(
-                        'users.apellido as user_apellido',
-                        'users.name as user_name',
-                        'users.dni as user_dni',
-                        'users.email as user_email',
-                        'datos_personas.id as datos_id',
-                        'datos_personas.user_id as user_id',
-                        'datos_personas.carrera_id as carrera_cursa',
-                        'datos_personas.user_id as id',
-                        'datos_personas.imagen_dni_frente as imagen_dni_frente',
-                        'becas.id as beca_id',
-                        'users.name as user_nombre',
-                        'users.dni as dni',
-                        'carreras.sede_id as sede_nombre'
-                    )
-                    ->first();*/
+                $calculos=DB::table('calculos_aux')->leftjoin('becas','calculos_aux.anio','=','becas.anio')->where('becas.id',$request->beca_id)->select('calculos_aux.*')->first();
+              
 
         $datos = DB::table('datos_personas')
         ->where('datos_personas.id','=',$request->datos)
         ->join('carreras','datos_personas.carrera_id','carreras.id')
         ->join('users','datos_personas.user_id','users.id')
+        ->join('localidades','datos_personas.localidad_id','localidades.id')
+        ->join('provincias','datos_personas.provincia_id','provincias.id')
         ->where('users.id',$request->user)
         ->select('users.name as user_name',
             'users.id as user_id',
@@ -405,21 +362,24 @@ public function store(Request $request)
             'datos_personas.beca_id as beca_id',
             'carreras.nombre as carrera_cursa',
             'datos_personas.carrera_id as carrera_id',
+            'localidades.localidad as localidad_nombre',
+            'provincias.provincia as provincia_nombre',
             'datos_personas.*')
         ->first();
 
         $carreras=DB::table('carreras')->get();
 
-        
-        //dd($request->all());
-        //$user=DB::table('users')->where('id',$request->user)->select('users.name as user_name')->first();
-        //$datos=DB::table('datos_personas')->where('datos_personas.id','=',$request->datos)->first();
+    
         $inscrip=DB::table('inscripciones')->where('datos_id',$request->datos)->first();
-        $familiar=DB::table('familiars')->where('datos_id',$request->datos)->where('beca_id',$request->beca)->where('user_id',$request->user)->get();
+        $familiar=DB::table('familiars')->where('datos_id',$request->datos)->where('beca_id',$request->beca_id)->where('user_id',$request->user)->get();
         
-        $consideraciones=DB::table('consideraciones')->where('datos_id',$request->datos)->where('beca_id','=',$request->beca)->where('user_id',$request->user)->get();
+        $consideraciones=DB::table('consideraciones')->where('datos_id',$request->datos)->where('beca_id','=',$request->beca_id)->where('user_id',$request->user)->get();
         $condicion = DB::table('condicion')->get();
-return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos','carreras'));
+        //$provincia = Provincia::pluck('provincia', 'id');
+               $provincia = Provincia::pluck('provincia', 'id');
+        $provincia->all();
+
+return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos','condicion','familiar','consideraciones','inscrip','calculos','carreras','provincia'));
               }
             else{
                 return view('errors.404');
@@ -427,6 +387,16 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
 
             
         }
+
+     //prueba para que pueda ver las localidades desde el panel datos_usuario
+    public function getLocalidades(Request $request, $id)
+    {
+        if($request->ajax()){
+            $localidad = db::table('localidades')->where('id_privincia',$id)->get();
+
+            return response()->json($localidad);
+        }
+    }
        
     
 
@@ -449,8 +419,9 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
         ->join('datos_personas','inscripciones.datos_id','datos_personas.id')
         ->join('carreras','inscripciones.carrera_id','carreras.id')
         ->where('inscripciones.user_id', '=', $user->id)
-        ->select('becas.nombre as beca_nombre', 'becas.anio as anio','users.id as user_id','becas.id as beca_id')
+        ->select('becas.nombre as beca_nombre', 'becas.anio as anio','users.id as user_id','becas.id as beca_id','inscripciones.otorgamiento as otorgamiento')
           ->get();
+          //dd($datos_beca);
         return $datos_beca;
         }
 
@@ -460,7 +431,7 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
     public function revision($id){
         $user = Auth::user();
         $datos_personas = DB::table('datos_personas')->where('user_id', $id)->select('id','revision','beca_id','user_id')->get(); 
-      
+      //dd($datos_personas);
         return $datos_personas;
         }
 
@@ -468,14 +439,8 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
     public function carga(Request $request){
 
         try {
-
             $datos = DatosPersona::where('id',$request->id)->first();
-
-          /*  $fam = Familiar::where('datos_id',$request->id)->get();
-            $con = Consideracione::where('datos_id',$request->id)->get();
-           */
             if ($datos != null) {
-            
                 if ($request->revision==1) {
                     $ms="Se informara al usuario que sus datos estan incompletos o incosistentes";
                     $datos->revision = 1;
@@ -489,13 +454,7 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
                          $ms = "Usuario postulado para la beca";
                      }
 
-//      return redirect()->back()->with(['message'=>$ms, 'alert-type'=>'warning']);
-  
-//                     return $data
-    
-                     return redirect()->action('InscripcionesController@datos_usuario2',['beca'=>$datos->beca_id, 'user'=>$datos->user_id, 'datos'=>$datos->id]);
-
-//       return redirect('administracion/inscripciones/seleccion/usuario/datos')->with(['message'=>$ms, 'alert-type'=>'warning']);
+       return redirect('administracion/inscripciones/seleccion')->with(['message'=>$ms, 'alert-type'=>'warning']);
             }
         }
         catch (Exception $e) {
@@ -504,15 +463,17 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
 
     }
 
-
-    public function observacion (Request $request, $user_id){
+    public function modificar_datos (Request $request){
+        //dd($request->all());
         if( (Auth::user()->role_id == '1') or (Auth::user()->role_id == '3') or (Auth::user()->role_id == '4') ){
             $inscrip = DB::table('inscripciones')
             ->join('users','inscripciones.user_id','users.id')
             ->join('datos_personas','inscripciones.datos_id','datos_personas.id')
             ->join('carreras','inscripciones.carrera_id','carreras.id')
             ->join('becas','inscripciones.beca_id','becas.id')
-            ->where('inscripciones.user_id', $user_id)
+            ->where('inscripciones.user_id', $request->user)
+            ->where('inscripciones.datos_id', $request->datos)
+            ->where('inscripciones.beca_id', $request->beca_id)
             ->select('users.apellido as user_apellido','inscripciones.otorgamiento as otorgamiento','users.id as user_id','datos_personas.id as datos_id','becas.id as beca_id','users.name as user_nombre','users.dni as dni','carreras.sede_id as sede_nombre','inscripciones.merito as merito','inscripciones.observacion as observacion','inscripciones.id as id')
             ->first();
             return view('vendor.voyager.inscripciones.observacion',compact('inscrip'));
@@ -525,17 +486,19 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
 
 
     public function guarda_observacion (Request $request){
+        //dd($request->all());
         $aux_inscripto=DB::table('inscripciones')->where('id',$request->id)->first();
-                
-         Session::put('beca', $aux_inscripto->beca_id);
+           
+           //estava     
+         //Session::put('beca', $aux_inscripto->beca_id);
         if($request->obs_new == NULL & $request->meritos_new==NULL & $request->otorgamiento == NULL){
             return redirect()->back()->with(['message'=>"No escribiste ninguna modificacion!", 'alert-type'=>'error']);
             }
         else{
             if($request->btn=="s"){
-
+                DB::beginTransaction();
                 try {
-                    if($request->otorgamiento=="Suspendida"){
+                    if($request->otorgamiento==3){
                     $inscrip=DB::table('inscripciones')->where('id',$request->id)
                     ->update([
                         'observacion'=>$request->obs_new, 
@@ -550,12 +513,12 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
                         'otorgamiento'=>$request->otorgamiento
                         ]);
                     }
-
+                    DB::commit();
 
                  return redirect()->route('seleccion')->with(['message'=>"Se guardaron los cambios con exito", 'alert-type'=>'success']);
                 }
                 catch(Exception $e){
-                    echo $e->getMessage();
+                    DB::rollback();
                     return redirect('/administracion/inscripciones')->with('message','Error no se guardaron los cambios de la observacion');
                 }
             }else{
@@ -566,10 +529,11 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
 
 
     public function otorgar(Request $request){
-        
+        //dd(Session::get('beca_id'),$request->all());
+  
+            //Session::put('beca_id', $request->beca_id);//para que permita relogear
         DB::beginTransaction();
         try{
-            Session::put('beca', $request->beca_id);//para que permita relogear
             $datos_beca = DB::table('inscripciones')
             ->where('beca_id', '=', $request->beca_id)->orderBy('inscripciones.merito','desc')->get();
 
@@ -579,7 +543,7 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
 
             }
 
-
+//dd($cantidad,$request->cant_otor,$request->beca_id,$request->all());
             if ($request->cant_otor > $cantidad) { //Si puso mas becas que inscriptos
                 return redirect()->back()->with(['message'=>"Mucha cantidad de becas para pocos postulantes", 'alert-type'=>'warning']);
             }
@@ -627,18 +591,22 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
                             $datos_usuario=DB::table('inscripciones')
                             ->where('beca_id','=',$request->beca_id)
                             ->where('datos_id','=',$datos->datos_id)
-                            ->update(['otorgamiento'=>0]);
+                            ->update(['otorgamiento'=>0,'observacion'=>'Fuera del corte']);
                         }
                         $request->cant_otor=$request->cant_otor-1;
                     }
                 }
+                $beca=DB::table('becas')->where('id',$request->beca_id)->first();
+        
+
                 DB::commit();
-                return redirect()->back()->with(['message'=>$ms, 'alert-type'=>$alert]);
+                return redirect()->back()->with(['message'=>$ms, 'alert-type'=>$alert,'beca'=>$beca]);
            
         }//cierra el try
         catch (Exception $e){
             DB::rollback();
-            return redirect()->back()->with(['message'=>"Problema al realizar la accion", 'alert-type'=>'warning']);
+                $beca=DB::table('becas')->where('id',$request->beca_id)->first();
+            return redirect()->back()->with(['message'=>"Problema al realizar la accion", 'alert-type'=>'warning','beca'=>$beca]);
         }
     }
 
@@ -686,8 +654,8 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
         $datos=DB::table('datos_personas')->where('id',$user_id)->where('beca_id',$beca)->delete();
         $fam=DB::table('familiars')->where('datos_id',$user_id)->where('beca_id',$beca)->delete();
         $con=DB::table('consideraciones')->where('datos_id',$user_id)->where('beca_id',$beca)->delete();
-
-        Session::put('beca', $beca);    
+//estava
+        //Session::put('beca', $beca);    
 
        return redirect()->back()->with(['message'=>"Borrado con exito!", 'alert-type'=>'warning'])  ;
         }catch (Exception $e) {
@@ -698,15 +666,17 @@ return view('vendor.voyager.inscripciones.usuario.datos_usuario', compact('datos
 
     public function dar_baja(Request $request){
         //id de datos_persona
+        DB::beginTransaction();
         try{
         $inscrip=DB::table('inscripciones')->where('datos_id',$request->id)->where('beca_id',$request->beca_id)->delete();
         $datos=DB::table('datos_personas')->where('id',$request->id)->where('beca_id',$request->beca_id)->delete();
         $fam=DB::table('familiars')->where('datos_id',$request->id)->where('beca_id',$request->beca_id)->delete();
         $con=DB::table('consideraciones')->where('datos_id',$request->id)->where('beca_id',$request->beca_id)->delete();
 
-
-       return redirect('administracion/inscripciones')->with(['message'=>"Borrado con exito!", 'alert-type'=>'warning'])  ;
+        DB::commit();
+       return redirect('administracion/inscripciones/seleccion')->with(['message'=>"Borrado con exito!", 'alert-type'=>'warning'])  ;
         }catch (Exception $e) {
+            DB::rollback();
                 return redirect('administracion/inscripciones')->with('message','Error en la accion con el usuario');
             }
      }   
@@ -726,6 +696,8 @@ public function merito(Request $request, $datos_id,$beca_id){}
   //      $calculos_aux=DB::table('calculos_aux')->where('anio',$beca->anio)->first(); // Debe existir un calculo auxiliar que tenga el mismo año que la beca.
         $calculos_aux=DB::table('calculos_aux')->join('becas','calculos_aux.id','becas.id_calculos_auxiliares')->where('becas.id',$beca->id)->first();
 //dd($calculos_aux,$calculos_aux2);
+                DB::beginTransaction();
+
         try{
             /*
             /////////////////////////////////////////////////
@@ -985,11 +957,12 @@ public function merito(Request $request, $datos_id,$beca_id){}
               //return redirect('administracion/seleccion')->with(['message'=>"Merito calculado con exito!", 'alert-type'=>'warning']);
               $data=['message'=>"Merito calculado con exito!", 'alert-type'=>'warning'];
  //           return redirect()->back()->with(['message'=>"Merito calculado con exito!", 'alert-type'=>'warning']);
+              DB::commit();
               return $data;
     }
 
         catch (\Exception $e){
-
+            DB::rollback();
             abort(404);
 
         }
@@ -1010,9 +983,17 @@ public function merito(Request $request, $datos_id,$beca_id){}
     if (Auth::user()->id == $request->user_id){ 
     Carbon::SetLocale('es');
     $dt=Carbon::now();
-    $dt="Entre Rios ".$dt->format('d/m/Y - h:m:s');
+    $dt="Entre Rios ".$dt->format('d/m/Y - H:i')." hs";
 
-    $inscrip=DB::table('inscripciones')->join('datos_personas','inscripciones.datos_id','=','datos_personas.id')->where('inscripciones.beca_id','=',$request->beca_id)->where('inscripciones.datos_id',$request->id)->select('inscripciones.id','inscripciones.user_nombre','inscripciones.user_apellido','inscripciones.beca_nombre','inscripciones.created_at')->first();
+    $inscrip=DB::table('inscripciones')
+    ->join('datos_personas','inscripciones.datos_id','=','datos_personas.id')
+    ->where('inscripciones.beca_id','=',$request->beca_id)
+    ->where('inscripciones.user_id',$request->user_id)
+    ->where('inscripciones.datos_id',$request->datos_id)
+    ->join('users','datos_personas.user_id','users.id')
+    ->join('becas','inscripciones.beca_id','becas.id') 
+    ->select('inscripciones.id','users.name as user_nombre','users.apellido as user_apellido','becas.nombre as beca_nombre','inscripciones.created_at')
+    ->first();
 
 
     $pdf = PDF::loadView('vendor.voyager.inscripciones.Comprobante_inscripcion',['inscrip'=>$inscrip,'dt'=>$dt/*, 'user'=>$user*/]);
