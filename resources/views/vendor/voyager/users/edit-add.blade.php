@@ -25,7 +25,7 @@
             {{ csrf_field() }}
 
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-8 pull-left">
                     <div class="panel panel-bordered">
                     {{-- <div class="panel"> --}}
                         @if (count($errors) > 0)
@@ -42,24 +42,24 @@
                             <div class="form-group">
                                 <label for="name">{{ __('voyager::generic.name') }}</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('voyager::generic.name') }}"
-                                       value="@if(isset($dataTypeContent->name)){{ $dataTypeContent->name }}@endif">
+                                       value="@if(isset($dataTypeContent->name)){{ $dataTypeContent->name }}@endif" required">
                             </div>
                              <div class="form-group">
                                 <label for="apellido">Apellido</label>
                                 <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido"
-                                       value="@if(isset($dataTypeContent->apellido)){{ $dataTypeContent->apellido }}@endif">
+                                       value="@if(isset($dataTypeContent->apellido)){{ $dataTypeContent->apellido }}@endif" required>
                             </div>
                                     <div class="form-group">
                                 <label for="dni">DNI/Pasaporte</label>
                                 <input type="number" class="form-control" id="dni" name="dni" placeholder="Dni"
-                                       value="@if(isset($dataTypeContent->dni)){{ $dataTypeContent->dni }}@endif">
+                                       value="@if(isset($dataTypeContent->dni)){{ $dataTypeContent->dni }}@endif" required>
                             </div>
 
 
                             <div class="form-group">
                                 <label for="email">{{ __('voyager::generic.email') }}</label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="{{ __('voyager::generic.email') }}"
-                                       value="@if(isset($dataTypeContent->email)){{ $dataTypeContent->email }}@endif">
+                                       value="@if(isset($dataTypeContent->email)){{ $dataTypeContent->email }}@endif" required>
                             </div>
 
                             <div class="form-group">
@@ -68,12 +68,12 @@
                                     <br>
                                     <small>{{ __('voyager::profile.password_hint') }}</small>
                                 @endif
-                                <input type="password" class="form-control" id="password" name="password" value="" autocomplete="new-password">
+                                <input type="password" class="form-control" id="password" name="password" value="" autocomplete="new-password" required>
                             </div>
 
                             @can('editRoles', $dataTypeContent)
                                 <div class="form-group">
-                                    <label for="default_role">{{ __('voyager::profile.role_default') }}</label>
+                                    <label for="default_role">Rol a asignar</label>
                                     @php
                                         $dataTypeRows = $dataType->{(isset($dataTypeContent->id) ? 'editRows' : 'addRows' )};
 
@@ -103,6 +103,7 @@
                             }
 
                             @endphp
+                        </div>
                             
                     </div>
                 </div>
@@ -118,12 +119,13 @@
                             </div>
                         </div>
                     </div>
+                    <button type="submit" class="btn btn-primary save">
+                {{ __('voyager::generic.save') }}
+            </button>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary pull-right save">
-                {{ __('voyager::generic.save') }}
-            </button>
+            
         </form>
 
         <iframe id="form_target" name="form_target" style="display:none"></iframe>

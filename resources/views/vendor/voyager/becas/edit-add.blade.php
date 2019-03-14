@@ -70,19 +70,20 @@
 
 
                             <div class="form-group">
-                                <label for="periodo_hasta">Habilitación de beca</label>
+                                <label for="periodo_hasta">Estado de beca - Habilitación</label>
                                     <span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Debes poseer una sola beca habilitada en el sistema, para que se inscriban a la que tiene estado habilitado">
                                     </span>
 
     <br>
 
- <input type="radio" name="habilitada" onclick="verificar('@if (isset($dataTypeContent->id))@endif')" value="Si" @if(isset($dataTypeContent->habilitada)){{ ($dataTypeContent->habilitada==1 ? 'checked' : '')}} @endif/> <strong></strong> 
+ <input type="radio" name="habilitada" onclick="verificar('@if (isset($dataTypeContent->id))@endif')" value=1 @if(isset($dataTypeContent->habilitada)){{ ($dataTypeContent->habilitada==1 ? 'checked' : '')}} @endif/>  
+    <label for="option-habilitada-si" class="badge badge-danger badge-lg" style="color: white">Habilitar</label>
 
-    <label for="option-habilitada-si">Habilitar</label>
-   <br> 
 
-<input type="radio" name="habilitada" onclick="verificar_no('@if(isset($dataTypeContent->id ))@endif')" value="No" @if(isset($dataTypeContent->habilitada)) {{ ($dataTypeContent->habilitada==0 ? 'checked' : '')}} @endif/> <strong></strong>  
-    <label for="option-habilitada-no">No habilitada</label>
+   
+
+<input type="radio" name="habilitada" onclick="verificar_no('@if(isset($dataTypeContent->id ))@endif')" value=0 @if(isset($dataTypeContent->habilitada)) {{ ($dataTypeContent->habilitada==0 ? 'checked' : '')}} @endif/> 
+    <label for="option-habilitada-no" class="badge badge-default badge-lg" style="color: white">No habilitar</label>
                                 </div>
 
 
@@ -93,12 +94,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="calculo_id">Seleccione el cálculo auxiliar para el cómputo de la beca</label>
+                                <label for="calculo_id">Seleccione el cálculo auxiliar para el cómputo de la beca</label><br>
                                 @if(count($calculos)!=0)
-                                <select name="calculo_id" required>
+                                <select name="calculo_id" required class="form-control">
                                   <option value="">Seleccione una opción</option>
                                   @foreach($calculos as $uncalculo)
-                                  <option value="@if(isset($uncalculo->id)){{ $uncalculo->id }}@endif">Mínimo vital móvil: ${{$uncalculo->minimo_vital_movil}} - Precio colectivo urbano: ${{$uncalculo->precio_urbano}}</option>
+                                  <option value="{{$uncalculo->id}}" {{ ($dataTypeContent->id_calculos_auxiliares) == ($uncalculo->id) ? 'selected' : '' }}>
+                                    Mínimo vital móvil: ${{$uncalculo->minimo_vital_movil}} - Precio colectivo urbano: ${{$uncalculo->precio_urbano}} - Año: {{$uncalculo->anio}}
+                                  </option>
                                   @endforeach
                                 </select>
                                 @else
