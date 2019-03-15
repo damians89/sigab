@@ -232,7 +232,6 @@ class VoyagerBaseController extends Controller
         $val = $this->validateBread($request->all(), $dataType->editRows, $dataType->name, $id);
 
         if ($val->fails()) {
-        //dd($request->all());
             return response()->json(['errors' => $val->messages()]);
         }
 
@@ -241,10 +240,9 @@ class VoyagerBaseController extends Controller
 
             event(new BreadDataUpdated($dataType, $data));
 
-            return redirect()
-            ->back() //agregada
-               //opcion 1 ->route(Voyager::can('browse_' . $dataType->slug) ? "voyager.{$dataType->slug}.index" : "voyager.dashboard")
-               //opcion original ->route("voyager.{$dataType->slug}.index")
+            return redirect()->route(Voyager::can('browse_' . $dataType->slug) ? "voyager.{$dataType->slug}.index" : "voyager.dashboard")
+            //->back();
+                //->route("voyager.{$dataType->slug}.index")
                 ->with([
                     'message'    => __('voyager::generic.successfully_updated')." {$dataType->display_name_singular}",
                     'alert-type' => 'success',
@@ -308,7 +306,6 @@ class VoyagerBaseController extends Controller
     {
         $slug = $this->getSlug($request);
 
-       // dd($request);
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
         // Check permission

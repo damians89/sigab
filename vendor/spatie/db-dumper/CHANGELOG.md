@@ -2,6 +2,18 @@
 
 All notable changes to `db-dumper` will be documented in this file
 
+## 2.13.2 - 2019-03-03
+
+- fix process warnings
+
+## 2.13.1 - 2019-03-01
+
+- remove pipefail operator when compressing dump
+
+## 2.13.0 - 2019-03-01
+
+- add ability to specify all databases as MySQL option
+
 ## 2.12.0 - 2018-12-10
 
 - add `doNotCreateTables`
