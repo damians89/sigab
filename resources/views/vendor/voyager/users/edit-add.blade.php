@@ -42,7 +42,7 @@
                             <div class="form-group">
                                 <label for="name">{{ __('voyager::generic.name') }}</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('voyager::generic.name') }}"
-                                       value="@if(isset($dataTypeContent->name)){{ $dataTypeContent->name }}@endif">
+                                       value="@if(isset($dataTypeContent->name)){{ $dataTypeContent->name }}@endif" required>
                             </div>
 
                              <div class="form-group">
@@ -59,7 +59,7 @@
                             <div class="form-group">
                                 <label for="email">{{ __('voyager::generic.email') }}</label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="{{ __('voyager::generic.email') }}"
-                                       value="@if(isset($dataTypeContent->email)){{ $dataTypeContent->email }}@endif">
+                                       value="@if(isset($dataTypeContent->email)){{ $dataTypeContent->email }}@endif" required>
                             </div>
 
                             <div class="form-group">

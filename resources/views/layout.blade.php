@@ -96,7 +96,7 @@ if ((substr(Auth::user()->avatar, 0, 7) == 'http://') || (substr(Auth::user()->a
                                     </li>
                                   <li class="divider"></li>
                                 
-                                <li><a href="/administracion/profile">Editar perfil</a></li>
+                                <li><a href="/administracion/profile">Ver mi perfil</a></li>
                                 <li><a href="/administracion/">Administración de Beca</a></li>
                              
                                      <li class="divider"></li>

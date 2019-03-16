@@ -28,7 +28,7 @@
     <TR><TH class="col-md-4">Documento / CUIL</TH>
         <TD>{{ ucwords(Auth::user()->dni) }}</TD>
     </TR>
-    <TR><TH class="col-md-4">Direccion de correo electronico</TH>
+    <TR><TH class="col-md-4">Dirección de correo electrónico</TH>
         <TD>{{ ucwords(Auth::user()->email) }}</TD>
     </TR>
     <TR><TH class="col-md-4">Fecha de alta en SIGAB</TH>

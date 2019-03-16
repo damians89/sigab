@@ -46,7 +46,7 @@
                                     </li>
                                   <li class="divider"></li>
                                 
-                                <li><a href="/administracion/profile">Editar perfil</a></li>
+                                <li><a href="/administracion/profile">Ver mi perfil</a></li>
                                 <li><a href="/administracion/">Administración de Beca</a></li>
                              
                                      <li class="divider"></li>
