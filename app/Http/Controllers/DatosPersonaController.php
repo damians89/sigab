@@ -120,7 +120,7 @@ class DatosPersonaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(CrearDatosPersona $request)
-    {       
+    {       //dd($request->all());
         $beca_aux = DB::table('becas')->where('habilitada', 1)->first(); //Si tiene mas becas habilitada explota adrede y ademas comprobar que no se altero el hidden del form
 //dd($request->all());
         if ($beca_aux->id==$request->becaid){
@@ -232,7 +232,7 @@ $nombre='constancia_estudiante'.'-'.$request->dni.'-'.$random.'.'.$img->getClien
             $datos->monto_alq = $request->montoalq;
 
             $datos->usa_media_dist = $request->mediadist;
-            if($request->mediadist=="Si"){
+            if($request->mediadist==1){
                 $datos->cant_viaja_media = $request->cantviajamedia;
                 $datos->precio_pasaje = $request->preciopasaje;
                 $datos->cant_km = $request->cantkm;
@@ -257,7 +257,7 @@ $nombre='constancia_estudiante'.'-'.$request->dni.'-'.$random.'.'.$img->getClien
 
             $datos->larga_distancia =$request->largadist;
 
-            if($request->largadist=="Si"){
+            if($request->largadist==1){
                 $datos->cant_viaja_larga= $request->cantviajalarga;
 
                 if ( $request->hasFile('recibopasajlarga') ){
@@ -289,7 +289,7 @@ $nombre='recibo_larga_distancia'.'-'.$request->dni.'-'.$random.'.'.$img->getClie
             $datos->cant_moto = $request->motocant;
             
             $datos->otros_gastos=$request->otrosgastos;
-            if($request->otrosgastos=="Si"){
+            if($request->otrosgastos==1){
                 $datos->otros_gastos_descripcion=$request->otrosgastoscantdescr;
                 $datos->otros_gastos_cant = $request->otrosgastoscant;
                 
@@ -458,7 +458,7 @@ $nombre='comprobante_ingresos-1'.'-'.$request->dni.'-'.$random.'.'.$img->getClie
                 $con->incapacidad = $request->consideraciones[$k]['incapacidad'];
 
                 
-                if($request->consideraciones[$k]['incapacidad']=="Si"){   
+                if($request->consideraciones[$k]['incapacidad']==1){   
                 if ( is_file($request->consideraciones[$k]['imagen']) ){
                     $img = $request->consideraciones[$k]['imagen'];
                     $ext = $img->getClientOriginalExtension();
@@ -491,7 +491,7 @@ $nombre='comprobante_ingresos-1'.'-'.$request->dni.'-'.$random.'.'.$img->getClie
                 $fam->ocupacion = $request->familiar[$l]['ocupacionfam'];
                 $fam->tiene_trabajo =$request->familiar[$l]['trabaja'];
                 
-                if($request->familiar[$l]['trabaja']=="Si"){
+                if($request->familiar[$l]['trabaja']==1){
                     $fam->actividad_laboral = $request->familiar[$l]['actlab'];
                     $fam->ingresos = $request->familiar[$l]['ingresosfam'];
     

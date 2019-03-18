@@ -105,17 +105,21 @@
                                   @endforeach
                                 </select>
                                 @else
-                                <label class="label label-danger">Porfavor cree un calculo auxiliar</label>
+                                <label class="badge badge-info badge-lg" style="color: white;"><a href="/administracion/calculos-aux">
+                                  <font color="white">Porfavor cree un calculo auxiliar</font></a></label>
+                                  
                                 @endif
                             </div>
 
 
                             
 
-
+ @if(count($calculos)!=0)
+                               
             <button type="submit" class="btn btn-primary pull-right save" name="botonsito" id="botonsito">
                 {{ __('voyager::generic.save') }}
             </button>
+            @endif
                     </div>
                 </div>
 
@@ -165,7 +169,8 @@
                   var valor = '';
                 }else{
                 var valor = $("#"+estado).val();
-                } 
+                }
+
                 document.getElementById('botonsito').disabled=false;                    
               }
 

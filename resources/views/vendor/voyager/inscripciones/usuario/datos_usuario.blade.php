@@ -1780,9 +1780,10 @@ camvbiar el si por 0 y 1
             <td> 
               <select readonly class="form-control" name="actividad_laboral" id="idActividadLaboral{{$i}}" placeholder="Seleccione una opción" required>
                     
-                      <option value="activosfam0" {{ ($familiar[$i]->actividad_laboral) == 'activosfam0'  ? 'selected' : '' }}>Empleado Activo o Jubilado</option>
-                      <option value="monotrifam0" {{ ($familiar[$i]->actividad_laboral) == 'monotrifam0' ? 'selected' : '' }}>Autónomo o Monotributista</option>
-                      <option value="informalfam0" {{ ($familiar[$i]->actividad_laboral) == 'informalfam0' ? 'selected' : '' }}>Trabajador Informal</option>
+algomal quedo con la i
+                      <option value="activosfam{{$i}}" {{ ($familiar[$i]->actividad_laboral) == 'activosfam'.$i  ? 'selected' : '' }}>Empleado Activo o Jubilado</option>
+                      <option value="monotrifam{{$i}}" {{ ($familiar[$i]->actividad_laboral) == 'monotrifam'.$i ? 'selected' : '' }}>Autónomo o Monotributista</option>
+                      <option value="informalfam{{$i}}" {{ ($familiar[$i]->actividad_laboral) == 'informalfam'.$i ? 'selected' : '' }}>Trabajador Informal</option>
                 </select>
             </td>
             <td></td>

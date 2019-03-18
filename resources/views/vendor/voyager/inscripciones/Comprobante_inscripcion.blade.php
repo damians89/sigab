@@ -19,7 +19,7 @@
 <br><br>
 Orden de inscripción:<strong> {{$inscrip->id}}.</strong>
 <br><br>
-<strong>{{$inscrip->user_nombre}} {{$inscrip->user_apellido}} </strong> fue exitosamente inscrito en la beca: {{$inscrip->beca_nombre}} en la fecha <strong>{{ \Carbon\Carbon::parse($inscrip->created_at)->format('d/m/Y H:i:s')}}</strong>.
+<strong>{{$inscrip->user_nombre}} {{$inscrip->user_apellido}} </strong> fue exitosamente inscripto en la beca: {{$inscrip->beca_nombre}} en la fecha <strong>{{ \Carbon\Carbon::parse($inscrip->created_at)->format('d/m/Y H:i')}}</strong>.
  
   
 </div>
