@@ -42,10 +42,12 @@ class BackupController extends Controller
         }
         $ubicacion = "/Storage/App/SIGAB";
         // reverse the backups, so the newest one would be on top
+        
         $backups = array_reverse($backups);
         
 
-        $beca=Beca::all();
+        $beca=db::table('becas')->get();//Beca::all();
+       // dd($beca,$backups,$ubicacion);
         return view("backup.backups")->with(compact('backups','ubicacion','beca')); 
        
      
@@ -54,7 +56,6 @@ class BackupController extends Controller
     }
     public function create($id)
     {
-        $aux_nombre_beca=DB::table('becas')->where('id',$id)->select('nombre')->first();
         //dd($aux_nombre_beca);
         try {
 
@@ -84,6 +85,8 @@ class BackupController extends Controller
                 Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n" . $output);
                 return redirect()->back()->with(['message'=>"Backup creado con exito!", 'alert-type'=>'success']);
             }{
+                
+                $aux_nombre_beca=DB::table('becas')->where('id',$id)->select('nombre')->first();
           
                  $nombre=config()->set('backup.backup.destination.filename_prefix',"Solo archivos - ".$aux_nombre_beca->nombre." - ");
                 

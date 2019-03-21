@@ -30,7 +30,7 @@ return [
         'compass'                => 'Compás',
         'created_at'             => 'Creado en',
         'custom'                 => 'Personalizado',
-        'dashboard'              => 'Tablero',
+        'dashboard'              => 'Menú Principal',
         'database'               => 'Base de datos',
         'default'                => 'Defecto',
         'delete'                 => 'Borrar',

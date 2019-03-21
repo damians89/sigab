@@ -28,7 +28,9 @@
                             <td>{{ $unabeca->nombre }}</td>
                             <td>{{ $unabeca->anio }}</td>
                             <td >
+                                
 <a href="{{ url('/administracion/backup/create/'.$unabeca->id) }}" class="btn btn-primary"> Realizar copia de seguridad</a>
+                            
                             </td>
                         </tr>
                     @endforeach
@@ -36,32 +38,24 @@
                     </tbody>
 
     </table>
-    @else
-     <div class="well">
-                    <h4>No existe ninguna beca</h4>
-    </div>
-    @endif
-
-
-
-<div class="dropdown dropright" >           
-    <a href="#" class="dropdown-menu-right" data-toggle="dropdown" role="button" aria-expanded="false" ><button type="button" class="btn btn-primary active">Realizar copia de seguridad</button></a>
+        <div class="dropdown dropright" >
+        <a href="#" class="dropdown-menu-right" data-toggle="dropdown" role="button" aria-expanded="false" ><button type="button" class="btn btn-primary active">Realizar copia de seguridad</button></a>
         <ul class="dropdown-menu" role="menu" >
-
-<li>
-
-<a id="create-new-backup-button" href="{{ url('/administracion/backup/create/'.$unabeca->id="completo") }}" class="btn btn-primary"><i class="fa fa-plus"></i> Crear una nueva copia de seguridad completa</a>
-</li>
-<li>
-
-<a id="create-new-backup-button" href="{{ url('/administracion/backup/create/'.$unabeca->id="datos") }}" class="btn btn-primary" ><i class="fa fa-plus"></i> Crear un nueva copia de seguridad solo de la base de datos</a>
-</li> 
-
-</ul>
+            <li>
+                <a id="create-new-backup-button" href="{{ url('/administracion/backup/create/'.$unabeca->id="completo") }}" class="btn btn-primary"><i class="fa fa-plus"></i> Crear una nueva copia de seguridad completa</a>
+            </li>
+            <li>
+                <a id="create-new-backup-button" href="{{ url('/administracion/backup/create/'.$unabeca->id="datos") }}" class="btn btn-primary" ><i class="fa fa-plus"></i> Crear un nueva copia de seguridad solo de la base de datos</a>
+            </li>
+        </ul>
+    </div>
 </div>
 
-
+@else
+<div class="well">
+    <h4>No existe ninguna beca</h4>
 </div>
+@endif
 
 
 
