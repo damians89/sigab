@@ -1,7 +1,7 @@
-#SIGAB
+# SIGAB
 _Sistema Integral y administrativo de gestión de Becas_
 
-## Contribution ✒️
+## Autores ✒️
 * **Pressel Raul Sebastian** -
 * **Sacks Damian Agustin** -  
 
