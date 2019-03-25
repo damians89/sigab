@@ -312,7 +312,8 @@ $nombre='recibo_otros_gastos'.'-'.$request->dni.'-'.$random.'.'.$img->getClientO
               
 
             
-            if ( $request->hasFile('imagen_frente') ){                     // para saber si cargo alguna imagen
+          //  dd($request->file('imagen_frente'),$request->file('imagen_dorso'));                     // para saber si cargo alguna imagen
+            if ( $request->hasFile('imagen_frente') ){
                 $img = $request->file('imagen_frente');
 $nombre='imagen_frente'.'-'.$request->dni.'-'.$random.'.'.$img->getClientOriginalExtension();
                 $img->storeAs($ruta_datos,$nombre);
@@ -578,7 +579,7 @@ $nombre='comprobante_ingresos-1'.'-'.$request->dni.'-'.$random.'.'.$img->getClie
            
 
         catch (\Exception $e){
-           //DB::rollback();
+           DB::rollback();
            dd($e);
            return redirect('/administracion')->with(['message'=>"Algo salio mal, vuelve a completar el formulario",'alert-type'=>'danger']);
           

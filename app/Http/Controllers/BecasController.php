@@ -302,6 +302,7 @@ class BecasController extends VoyagerBaseController
      */
     public function update(Request $request, $id)
     {
+        //dd($request->all(),$id);
          $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -322,6 +323,17 @@ class BecasController extends VoyagerBaseController
         }
 
         if (!$request->ajax()) {
+            $beca=Beca::findOrFail($id);
+            $beca->nombre=$request->nombre;
+            $beca->descripcion=$request->descripcion;
+            $beca->periodo_desde=$request->periodo_desde;
+            $beca->periodo_hasta=$request->periodo_hasta;
+            $beca->habilitada=$request->habilitada;
+            $beca->monto=$request->monto;
+            $beca->anio=$request->anio;
+            $beca->id_calculos_auxiliares=$request->calculo_id;
+            $beca->saveorfail();
+
             $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
 
             event(new BreadDataUpdated($dataType, $data));

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-03-2019 a las 23:45:43
+-- Tiempo de generación: 25-03-2019 a las 03:28:37
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -43,6 +43,14 @@ CREATE TABLE `becas` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `becas`
+--
+
+INSERT INTO `becas` (`id`, `id_calculos_auxiliares`, `nombre`, `descripcion`, `periodo_desde`, `periodo_hasta`, `monto`, `habilitada`, `anio`, `created_at`, `updated_at`) VALUES
+(8, 2, 'Beca Estudiantil Prueba', 'Esta es una beca de prueba', '2019-11-08 00:00:00', '2019-02-14 00:00:00', 2000, 0, 2019, '2019-03-23 12:19:26', '2019-03-25 01:00:11'),
+(9, 1, 'Beca UADER 2018', 'Estudiantil Beca UADER Perteneciente al año 2018 - Secretaria de Bienestar Estudiantil', '2018-12-01 00:00:00', '2018-04-04 00:00:00', 2500, 1, 2018, '2019-03-23 12:21:46', '2019-03-25 01:06:41');
 
 -- --------------------------------------------------------
 
@@ -144,6 +152,15 @@ CREATE TABLE `consideraciones` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `consideraciones`
+--
+
+INSERT INTO `consideraciones` (`id`, `user_id`, `datos_id`, `beca_id`, `parentesco`, `enfermedad`, `incapacidad`, `cert_incapacidad`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 39, 4, 8, 'Yerno', 'ladri', 1, '8/33432123/imagen_discapacidad_familiar-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '2019-03-25 00:50:26', '2019-03-25 00:50:26', NULL),
+(2, 39, 4, 8, 'Primo', 'otro ladri', 1, '8/33432123/imagen_discapacidad_familiar-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '2019-03-25 00:50:26', '2019-03-25 00:50:26', NULL),
+(3, 39, 5, 9, 'Otro', 'sss', 0, NULL, '2019-03-25 02:20:16', '2019-03-25 02:20:16', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -152,7 +169,7 @@ CREATE TABLE `consideraciones` (
 
 CREATE TABLE `cronogramas` (
   `id` int(11) NOT NULL,
-  `beca_id` int(100) NOT NULL,
+  `beca_id` int(10) UNSIGNED NOT NULL,
   `fecha_1` date DEFAULT NULL,
   `fecha_2` date DEFAULT NULL,
   `fecha_3` date DEFAULT NULL,
@@ -165,6 +182,13 @@ CREATE TABLE `cronogramas` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `cronogramas`
+--
+
+INSERT INTO `cronogramas` (`id`, `beca_id`, `fecha_1`, `fecha_2`, `fecha_3`, `fecha_4`, `fecha_5`, `fecha_6`, `fecha_7`, `fecha_8`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(3, 8, '2019-03-14', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-25 00:37:53', '2019-03-25 00:37:53', NULL);
 
 -- --------------------------------------------------------
 
@@ -247,7 +271,7 @@ INSERT INTO `data_rows` (`id`, `data_type_id`, `field`, `type`, `display_name`, 
 (86, 10, 'fecha_7', 'date', 'Fecha 7', 1, 1, 1, 1, 1, 1, NULL, 9),
 (87, 10, 'fecha_8', 'date', 'Fecha 8', 1, 1, 1, 1, 1, 1, NULL, 10),
 (88, 11, 'id', 'number', 'Id', 1, 0, 0, 0, 0, 0, '{}', 1),
-(89, 11, 'beca_id', 'text', 'Beca Nombre', 1, 1, 1, 1, 1, 1, '{\"default\":\"Seleccione una beca\"}', 3),
+(89, 11, 'beca_id', 'text', 'Beca Nombre', 1, 1, 1, 1, 1, 1, '{\"default\":\"Seleccione una beca\",\"validation\":{\"rule\":\"required|unique:cronogramas,beca_id\",\"messages\":{\"unique\":\"La beca seleccionada ya posee cronograma asignado.\"}}}', 3),
 (90, 11, 'fecha_1', 'date', 'Fecha 1', 0, 1, 1, 1, 1, 1, '{\"default\":\"\"}', 4),
 (91, 11, 'fecha_2', 'date', 'Fecha 2', 0, 1, 1, 1, 1, 1, '{\"default\":\"\"}', 5),
 (92, 11, 'fecha_3', 'date', 'Fecha 3', 0, 1, 1, 1, 1, 1, '{\"default\":\"\"}', 6),
@@ -321,9 +345,9 @@ INSERT INTO `data_types` (`id`, `name`, `slug`, `display_name_singular`, `displa
 (5, 'menus', 'menus', 'Menu', 'Menus', 'voyager-list', 'TCG\\Voyager\\Models\\Menu', NULL, '', '', 1, 0, NULL, '2017-12-28 22:25:58', '2017-12-28 22:25:58'),
 (6, 'roles', 'roles', 'Role', 'Roles', 'voyager-lock', 'TCG\\Voyager\\Models\\Role', NULL, NULL, NULL, 1, 0, '{\"order_column\":null,\"order_display_column\":null}', '2017-12-28 22:25:58', '2018-12-19 21:40:30'),
 (7, 'inscripciones', 'inscripciones', 'Inscripcione', 'Inscripciones', NULL, 'App\\Inscripcione', NULL, 'InscripcionesController', 'Lista de los inscriptos a la Beca', 1, 0, NULL, '2018-04-05 22:41:47', '2018-04-05 22:42:22'),
-(8, 'becas', 'becas', 'Beca', 'Becas', NULL, 'App\\Beca', NULL, 'Voyager\\BecasController', 'Listado de Becas', 1, 0, '{\"order_column\":null,\"order_display_column\":null,\"order_direction\":\"desc\",\"default_search_key\":null}', '2018-07-17 03:23:49', '2019-03-14 00:24:58'),
+(8, 'becas', 'becas', 'Beca', 'Becas', NULL, 'App\\Beca', NULL, 'Voyager\\BecasController', 'Listado de Becas', 1, 0, '{\"order_column\":null,\"order_display_column\":null,\"order_direction\":\"desc\",\"default_search_key\":null}', '2018-07-17 03:23:49', '2019-03-23 23:46:42'),
 (10, 'fecha_cobro', 'fecha-cobro', 'Fecha Cobro', 'Fecha Cobros', NULL, NULL, NULL, NULL, NULL, 1, 0, NULL, '2018-07-19 19:45:26', '2018-07-19 19:45:26'),
-(11, 'cronogramas', 'cronogramas', 'Cronograma', 'Cronogramas', 'icon-user', 'App\\Cronograma', NULL, NULL, NULL, 1, 0, '{\"order_column\":null,\"order_display_column\":null}', '2018-07-19 19:52:26', '2018-12-13 22:20:30'),
+(11, 'cronogramas', 'cronogramas', 'Cronograma', 'Cronogramas', 'icon-user', 'App\\Cronograma', NULL, NULL, NULL, 1, 0, '{\"order_column\":null,\"order_display_column\":null,\"order_direction\":\"desc\",\"default_search_key\":null}', '2018-07-19 19:52:26', '2019-03-22 23:32:23'),
 (19, 'carreras', 'carreras', 'Carrera', 'Carreras', 'voyager-file-text', 'App\\Carrera', NULL, NULL, NULL, 1, 0, '{\"order_column\":null,\"order_display_column\":null,\"order_direction\":\"desc\",\"default_search_key\":null}', '2018-09-19 21:02:24', '2019-03-13 23:17:24'),
 (25, 'calculos_aux', 'calculos-aux', 'Cálculos Auxiliar', 'Cálculos Auxiliares', NULL, 'App\\calculos_aux', NULL, NULL, NULL, 1, 0, '{\"order_column\":null,\"order_display_column\":null,\"order_direction\":\"desc\",\"default_search_key\":null}', '2018-10-02 19:38:45', '2019-02-07 02:48:49');
 
@@ -408,7 +432,7 @@ CREATE TABLE `datos_personas` (
   `otros_gastos_cant` float DEFAULT NULL,
   `otros_gastos_recibo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `motivos` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `localidad_id` int(10) UNSIGNED NOT NULL,
+  `localidad_id` int(11) NOT NULL,
   `anio_cursado` int(11) NOT NULL,
   `tiene_progresar` tinyint(1) NOT NULL COMMENT '0 no, 1 si',
   `revision` int(2) DEFAULT '0' COMMENT '0 recien inscripto, 1 incompletos o inconsistentes,2 postulado',
@@ -417,6 +441,15 @@ CREATE TABLE `datos_personas` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `datos_personas`
+--
+
+INSERT INTO `datos_personas` (`id`, `beca_id`, `user_id`, `carrera_id`, `imagen_dni_frente`, `imagen_dni_dorso`, `cert_anses`, `cuil`, `estado_civil`, `cumple`, `domicilio`, `cp`, `km_procedencia`, `provincia_id`, `nacionalidad`, `cel`, `face`, `disca_estudiante`, `certificado_discapacidad`, `condicion_estudiante`, `constancia_estudiante`, `certificado_estudiante`, `anio_ingreso`, `cant_materia`, `promedio`, `tiene_trabajo`, `tipo_trabajo`, `comprobante_ingresos_1`, `comprobante_ingresos_2`, `comprobante_ingresos_3`, `sueldo`, `tiene_beca`, `tiene_pasantia`, `tiene_asig`, `otros_ing`, `otros_ing_cant`, `otros_ing_descr`, `domi_cursado`, `casa_fam`, `tiene_alq`, `recibo_alquiler`, `monto_alq`, `usa_urbano`, `cant_viajes`, `usa_media_dist`, `precio_pasaje`, `cant_km`, `cant_viaja_media`, `recibo_pasaje`, `larga_distancia`, `cant_viaja_larga`, `recibo_pasaje_larga`, `cant_km_larga`, `precio_pasaje_larga`, `es_propietario`, `alquila`, `recibo_alquiler_familiar`, `precio_alquiler`, `prestada`, `otros_vivienda`, `tiene_campo`, `cant_has`, `actividad`, `tiene_terreno`, `cant_terreno`, `tiene_auto`, `cant_auto`, `tiene_moto`, `cant_moto`, `otros_gastos`, `otros_gastos_descripcion`, `otros_gastos_cant`, `otros_gastos_recibo`, `motivos`, `localidad_id`, `anio_cursado`, `tiene_progresar`, `revision`, `band`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 8, 38, 3, '8/33222333/imagen_frente-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', '8/33222333/imagen_dorso-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', '8/33222333/certificado_anses-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 20326549872, 'casado', '2016-12-22', 'maipu556', 3100, 25, 22, 'argentino', 3436258369, 'damian.sacks', 1, '8/33222333/certificado_discapacidad-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 'Ingresante', '8/33222333/constancia_estudiante-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', '8/33222333/certificado_estudiante-0-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 2017, 0, 7, 1, 'activos', '8/33222333/comprobante_ingresos-1-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', '8/33222333/comprobante_ingresos-2-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', '8/33222333/comprobante_ingresos-3-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 23123, 1, 1, 1, 1, '111112', 'asdasd', 'ramirez 123', 1, 1, '8/33222333/recibo_alquiler-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 25812, 1, 1, 1, 25, 60, 6, '8/33222333/recibo_pasaje--33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 1, 12, '8/33222333/recibo_larga_distancia-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 80, 256321, 0, 1, '8/33222333/recibo_alquiler_familiar-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 12563, 1, 'ninguna', 1, 2, 'trigo', 1, 2, 1, 2, '1', 2, 1, 'asd', 3, '8/33222333/recibo_otros_gastos-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 'asdasdas', 2110, 2, 1, 0, 0, '2019-03-25 00:26:54', '2019-03-25 00:26:54', NULL),
+(4, 8, 39, 3, '8/33432123/imagen_frente-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/imagen_dorso-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/certificado_anses-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 20332589632, 'soltero', '2016-12-21', 'maipu556', 3100, 28, 10, 'argentino', 3433218369, NULL, 1, '8/33432123/certificado_discapacidad-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 'Renovante', '8/33432123/constancia_estudiante-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/certificado_estudiante-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 2014, 8, 0, 1, 'informal', '8/33432123/comprobante_ingresos-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', NULL, NULL, 20000, 1, 1, 1, 1, '30000', 'vvvvvvv', 'america 123', 1, 1, '8/33432123/recibo_alquiler-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 31000, 1, 14, 1, 60, 80, 6, '8/33432123/recibo_pasaje--33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 1, 14, '8/33432123/recibo_larga_distancia-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 100, 160, 1, 1, '8/33432123/recibo_alquiler_familiar-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 21111, 1, NULL, 1, 2, 'maiz', 1, 1, 1, 2, '1', 2, 1, 'vivir', 50000, '8/33432123/recibo_otros_gastos-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 1246, 3, 1, 0, 0, '2019-03-25 00:50:26', '2019-03-25 00:50:26', NULL),
+(5, 9, 39, 3, '9/33432123/imagen_frente-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', '9/33432123/imagen_dorso-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', '9/33432123/certificado_anses-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', 20332589632, 'casado', '2019-03-04', 'rivadavia 1222', 3100, 25, 9, 'argentino', 3435258741, 'ricardo212', 1, '9/33432123/certificado_discapacidad-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', 'Renovante', '9/33432123/constancia_estudiante-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.pdf', '9/33432123/certificado_estudiante-0-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.pdf', 2015, 3, 0, 0, NULL, NULL, NULL, NULL, NULL, 2, 2, 2, 0, NULL, NULL, 'carbo 11', 0, 0, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, 0, NULL, '0', NULL, 0, NULL, NULL, NULL, 'wwwwwwwwsss', 1166, 3, 2, 0, 0, '2019-03-25 02:20:16', '2019-03-25 02:20:16', NULL);
 
 -- --------------------------------------------------------
 
@@ -472,6 +505,15 @@ CREATE TABLE `familiars` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `familiars`
+--
+
+INSERT INTO `familiars` (`id`, `user_id`, `datos_id`, `beca_id`, `parentesco`, `apeynom`, `dni`, `imagen_dni_frente`, `imagen_dni_dorso`, `edad`, `ocupacion`, `tiene_trabajo`, `actividad_laboral`, `comprobante_ingresos_1`, `comprobante_ingresos_2`, `comprobante_ingresos_3`, `ingresos`, `anses`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 39, 4, 8, 'Hijo', 'ricardito junior', 50123654, '8/33432123/familiar-0/imagen_dni_familiar-frente-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/familiar-0/imagen_dni_familiar-dorso-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 8, 'plata', 1, 'informalfam0', '8/33432123/familiar-0/comprobante_ingresos_1-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', NULL, NULL, 800, '8/33432123/familiar-0/comprobante_anses-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.pdf', '2019-03-25 00:50:26', '2019-03-25 00:50:26', NULL),
+(2, 39, 4, 8, 'Nuera', 'culebra', 17526321, '8/33432123/familiar-1/imagen_dni_familiar-frente-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/familiar-1/imagen_dni_familiar-dorso-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 50, 'rascar', 1, 'activosfam1', '8/33432123/familiar-1/comprobante_ingresos_1-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/familiar-1/comprobante_ingresos_2-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/familiar-1/comprobante_ingresos_3-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 15000, '8/33432123/familiar-1/comprobante_anses-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '2019-03-25 00:50:26', '2019-03-25 00:50:26', NULL),
+(3, 39, 5, 9, 'Otro', 'otro ricardo', 25963258, '9/33432123/familiar-0/imagen_dni_familiar-frente-0-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', '9/33432123/familiar-0/imagen_dni_familiar-dorso-0-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', 23, 'asdddd', 0, NULL, NULL, NULL, NULL, NULL, '9/33432123/familiar-0/comprobante_anses-0-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.pdf', '2019-03-25 02:20:16', '2019-03-25 02:20:16', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -494,6 +536,15 @@ CREATE TABLE `inscripciones` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `inscripciones`
+--
+
+INSERT INTO `inscripciones` (`id`, `user_id`, `datos_id`, `beca_id`, `carrera_id`, `merito`, `pto_procedencia`, `pto_ingresos`, `pto_enfermedad`, `pto_academica`, `observacion`, `otorgamiento`, `created_at`, `updated_at`) VALUES
+(1, 38, 1, 8, 3, 0, 0, 0, 0, 0, 'Alta inicial', 2, '2019-03-25 00:26:55', '2019-03-25 00:26:55'),
+(2, 39, 4, 8, 3, 0, 0, 0, 0, 0, 'Alta inicial', 2, '2019-03-25 00:50:26', '2019-03-25 00:50:26'),
+(3, 39, 5, 9, 3, 0, 0, 0, 0, 0, 'Alta inicial', 2, '2019-03-25 02:20:16', '2019-03-25 02:20:16');
 
 -- --------------------------------------------------------
 
@@ -3457,9 +3508,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `role_id`, `name`, `apellido`, `dni`, `email`, `avatar`, `password`, `remember_token`, `settings`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Administrador', 'admins', 1234567, 'admin@admin.com', 'users/September2018/yXKktPmHdj0HUxLce1xA.jpeg', '$2y$10$6nsTxYjWZgY7fhrBfFz/kucxfnZLewAHC126Te88cz6MmwkhIdnae', 'QXcBoZTIuQOOdk8dHnl9CsNiwWaRA6821EdczI3WzLF35fYUUVOWotqKvYjB', NULL, '2017-10-16 08:55:45', '2019-03-16 21:30:03'),
+(1, 1, 'Administrador', 'admins', 1234567, 'admin@admin.com', 'users\\March2019\\Ozc8lmdzD2357OXdXAil.jpeg', '$2y$10$6nsTxYjWZgY7fhrBfFz/kucxfnZLewAHC126Te88cz6MmwkhIdnae', '8rXJEaZ08Du2dZ9XlmZcovQ1C2wq2ajynY2s1VrBatjwxvJ6Ybd3Gq3BcdAU', NULL, '2017-10-16 08:55:45', '2019-03-19 23:23:21'),
 (36, 3, 'damian', 'sacks', 1231321231, 'damian@damian.com', 'users/user-default.png', '$2y$10$tRUVvS2WMc40.UmB7I0uGekuhI0G98lmzJ2pOpAbx9tfTSmg6JBsi', 'JmmkE0vnmcEOt8dMz1khU17yx0hY6HBzzieVxmcjrm2LKnuNDaXdXrFBwQI2', NULL, '2018-12-15 14:11:52', '2018-12-19 21:30:16'),
-(37, 2, 'ssssAndre', 'Gimenez', 324568522, 'andres@andres.com', 'users/user-default.png', '$2y$10$wsIaxB8VZuiZ9tcAv7UCO.g93I0FLmFtitHZyhytlLLeWy9O18/6W', 'DCIYMHgimIBZqTw21PqTlSyHSoSlnlXRRdXxmYQ0bmwNbYnCDsCmInDIcLNB', NULL, '2019-02-11 23:12:21', '2019-03-15 00:49:04');
+(37, 2, 'Andre', 'Gimenez', 324568522, 'andres@andres.com', 'users/user-default.png', '$2y$10$wsIaxB8VZuiZ9tcAv7UCO.g93I0FLmFtitHZyhytlLLeWy9O18/6W', 'DCIYMHgimIBZqTw21PqTlSyHSoSlnlXRRdXxmYQ0bmwNbYnCDsCmInDIcLNB', NULL, '2019-02-11 23:12:21', '2019-03-22 23:20:14'),
+(38, 2, 'pepe', 'pepito', 33222333, 'pepe@homail.com', 'users/user-default.png', '$2y$10$c1mLJBKT5nJ.VdfIuKKeB.4XG0LT8g2YASbrHGDRWROdBHd1hoNWC', 'AxzJmQCkSISxx5qdKh0GJ6UjL5Sp79nmqzLcTwtNixnHJgcWUjopFo2CnqJS', NULL, '2019-03-24 23:27:55', '2019-03-24 23:27:55'),
+(39, 2, 'ricardo', 'rodriguez', 33432123, 'ricardo@ricardo.com', 'users/user-default.png', '$2y$10$u9SqE8M4RGPKCc.JN06eOO8UhQNOmTQdNdmfiMLH9Uo6NITqeNESW', NULL, NULL, '2019-03-25 00:39:26', '2019-03-25 00:39:26');
 
 -- --------------------------------------------------------
 
@@ -3482,7 +3535,8 @@ CREATE TABLE `user_roles` (
 ALTER TABLE `becas`
   ADD PRIMARY KEY (`id`),
   ADD KEY `nombre` (`nombre`),
-  ADD KEY `fk_calculos_auxiliares` (`id_calculos_auxiliares`);
+  ADD KEY `fk_calculos_auxiliares` (`id_calculos_auxiliares`),
+  ADD KEY `id` (`id`);
 
 --
 -- Indices de la tabla `calculos_aux`
@@ -3519,7 +3573,7 @@ ALTER TABLE `consideraciones`
 --
 ALTER TABLE `cronogramas`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `beca_id` (`beca_id`);
+  ADD KEY `beca_id` (`beca_id`);
 
 --
 -- Indices de la tabla `data_rows`
@@ -3544,7 +3598,9 @@ ALTER TABLE `datos_personas`
   ADD KEY `beca_id` (`beca_id`),
   ADD KEY `carrera_id` (`carrera_id`),
   ADD KEY `id` (`id`),
-  ADD KEY `datos_personas_user_id` (`user_id`);
+  ADD KEY `datos_personas_user_id` (`user_id`),
+  ADD KEY `provincia_id` (`provincia_id`),
+  ADD KEY `localidad_id` (`localidad_id`);
 
 --
 -- Indices de la tabla `facultades`
@@ -3692,7 +3748,7 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT de la tabla `becas`
 --
 ALTER TABLE `becas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `calculos_aux`
@@ -3716,13 +3772,13 @@ ALTER TABLE `condicion`
 -- AUTO_INCREMENT de la tabla `consideraciones`
 --
 ALTER TABLE `consideraciones`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `cronogramas`
 --
 ALTER TABLE `cronogramas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `data_rows`
@@ -3740,7 +3796,7 @@ ALTER TABLE `data_types`
 -- AUTO_INCREMENT de la tabla `datos_personas`
 --
 ALTER TABLE `datos_personas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `facultades`
@@ -3752,13 +3808,13 @@ ALTER TABLE `facultades`
 -- AUTO_INCREMENT de la tabla `familiars`
 --
 ALTER TABLE `familiars`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `inscripciones`
 --
 ALTER TABLE `inscripciones`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `localidades`
@@ -3853,7 +3909,8 @@ ALTER TABLE `becas`
 --
 ALTER TABLE `carreras`
   ADD CONSTRAINT `carreras_facultad_id` FOREIGN KEY (`facultad_id`) REFERENCES `facultades` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `carreras_sede_id` FOREIGN KEY (`sede_id`) REFERENCES `sedes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `carreras_sede_id` FOREIGN KEY (`sede_id`) REFERENCES `sedes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `carreras_universidad_id` FOREIGN KEY (`universidad_id`) REFERENCES `universidades` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `consideraciones`
@@ -3862,6 +3919,12 @@ ALTER TABLE `consideraciones`
   ADD CONSTRAINT `consideraciones_beca_id` FOREIGN KEY (`beca_id`) REFERENCES `becas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `consideraciones_datos_id` FOREIGN KEY (`datos_id`) REFERENCES `datos_personas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `consideraciones_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `cronogramas`
+--
+ALTER TABLE `cronogramas`
+  ADD CONSTRAINT `cronogramas_beca_id` FOREIGN KEY (`beca_id`) REFERENCES `becas` (`id`) ON DELETE NO ACTION;
 
 --
 -- Filtros para la tabla `data_rows`
@@ -3875,6 +3938,8 @@ ALTER TABLE `data_rows`
 ALTER TABLE `datos_personas`
   ADD CONSTRAINT `datos_personas_beca_id` FOREIGN KEY (`beca_id`) REFERENCES `becas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `datos_personas_carrera_id` FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `datos_personas_localidad_id` FOREIGN KEY (`localidad_id`) REFERENCES `localidades` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `datos_personas_provincia_id` FOREIGN KEY (`provincia_id`) REFERENCES `provincias` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `datos_personas_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -3893,6 +3958,12 @@ ALTER TABLE `inscripciones`
   ADD CONSTRAINT `inscripciones_carrera_id` FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `inscripciones_datos_id` FOREIGN KEY (`datos_id`) REFERENCES `datos_personas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `inscripciones_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `localidades`
+--
+ALTER TABLE `localidades`
+  ADD CONSTRAINT `localidades_provincia_id` FOREIGN KEY (`id_privincia`) REFERENCES `provincias` (`id`);
 
 --
 -- Filtros para la tabla `menu_items`
