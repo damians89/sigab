@@ -34,523 +34,432 @@
       margin-top: 1%;
       margin-bottom: 5%;
     }
-
-  </style>
+</style>
 
 <script type="text/javascript">
-              function conPonerReadOnly(campos,pos)
-              {
-                $("#"+campos+pos).attr("readonly", "readonly");
-                $("#"+campos+pos).addClass("readOnly");
-                var valor = $("#"+campos+pos).val();
-                var nombre = $("#"+campos+pos).attr('name');
-                var idCon = $("#consideracion"+pos).val();
-                var idUsuario = $(user_id).val();
-                var idDatos = $(datos_id).val();
-                var idBeca = $(beca_id).val();
-                var tabla = "consideraciones"
+  function conPonerReadOnly(campos,pos)
+  {
+    $("#"+campos+pos).attr("readonly", "readonly");
+    $("#"+campos+pos).addClass("readOnly");
+    var valor = $("#"+campos+pos).val();
+    var nombre = $("#"+campos+pos).attr('name');
+    var idCon = $("#consideracion"+pos).val();
+    var idUsuario = $(user_id).val();
+    var idDatos = $(datos_id).val();
+    var idBeca = $(beca_id).val();
+    var tabla = "consideraciones"
 
 
-                $.ajax({
-                  type: "POST",
-                  url: '/update',
-                  dataType: 'JSON',
-                  //contentType: 'application/x-www-form-urlencoded',
-                  data:{"idBeca":idBeca,"idDatos":idDatos,"idCon":idCon,"nombre":nombre,"valor":valor,"tabla":tabla,"idUsuario":idUsuario},
-                  success: function(data){
+    $.ajax({
+      type: "POST",
+      url: '/update',
+      dataType: 'JSON',
+      //contentType: 'application/x-www-form-urlencoded',
+      data:{"idBeca":idBeca,"idDatos":idDatos,"idCon":idCon,"nombre":nombre,"valor":valor,"tabla":tabla,"idUsuario":idUsuario},
+      success: function(data){
+        if(data.valor==0){
+          toastr.success(data.message);
+          window.location.reload();
+        }else{
+          toastr.warning(data.message);
+          window.location.reload();
+        }
+      }
+    });
+  }
 
-                                     if(data.valor==0){
-                  toastr.success(data.message);
-                window.location.reload();
-                 }else{
-                    
-                  toastr.warning(data.message);
-                                  window.location.reload();
-                 }
-
-                
-                  }   
-                });
-
-
-              }
-
-
-   function conQuitarReadOnly(campos,pos)
-    {
-        // Eliminamos el atributo de solo lectura
-        $("#"+campos+pos).removeAttr("readonly");
-        // Eliminamos la clase que hace que cambie el color
-        $("#"+campos+pos).removeClass("readOnly");
-
-    
-    }
- 
+  function conQuitarReadOnly(campos,pos)
+  {
+    // Eliminamos el atributo de solo lectura
+    $("#"+campos+pos).removeAttr("readonly");
+    // Eliminamos la clase que hace que cambie el color
+    $("#"+campos+pos).removeClass("readOnly");
+  }
 </script>
 
 
-
-
-
 <script type="text/javascript">
-              function famPonerReadOnly(campos,pos)
-              {
-                $("#"+campos+pos).attr("readonly", "readonly");
-                $("#"+campos+pos).addClass("readOnly");
-                var valor = $("#"+campos+pos).val();
-                var nombre = $("#"+campos+pos).attr('name');
-                var idFam = $("#familiar"+pos).val();
-                var idUsuario = $(user_id).val();
-                var idDatos = $(datos_id).val();
-                var idBeca = $(beca_id).val();
-                var tabla = "familiar"
+  function famPonerReadOnly(campos,pos)
+  {
+    $("#"+campos+pos).attr("readonly", "readonly");
+    $("#"+campos+pos).addClass("readOnly");
+    var valor = $("#"+campos+pos).val();
+    var nombre = $("#"+campos+pos).attr('name');
+    var idFam = $("#familiar"+pos).val();
+    var idUsuario = $(user_id).val();
+    var idDatos = $(datos_id).val();
+    var idBeca = $(beca_id).val();
+    var tabla = "familiar"
 
 
-                $.ajax({
-                  type: "POST",
-                  url: '/update',
-                  dataType: 'JSON',
-                  //contentType: 'application/x-www-form-urlencoded',
-                  data:{"idDatos":idDatos,"idBeca":idBeca,"idFam":idFam,"nombre":nombre,"valor":valor,"tabla":tabla,"idUsuario":idUsuario},
-                  success: function(data){
-                  if(data.valor==0){
-                  toastr.success(data.message);
-                window.location.reload();
-                 }else{
-                    
-                  toastr.warning(data.message);
-                                  window.location.reload();
-                 }
-          
+    $.ajax({
+      type: "POST",
+      url: '/update',
+      dataType: 'JSON',
+      //contentType: 'application/x-www-form-urlencoded',
+      data:{"idDatos":idDatos,"idBeca":idBeca,"idFam":idFam,"nombre":nombre,"valor":valor,"tabla":tabla,"idUsuario":idUsuario},
+      success: function(data){
+        if(data.valor==0){
+          toastr.success(data.message);
+          window.location.reload();
+        }
+        else
+        {
+          toastr.warning(data.message);
+          window.location.reload();
+        }
+      }
+    });
+  }
 
-                
-                  }   
-                });
-
-
-              }
-
-
-   function famQuitarReadOnly(campos,pos)
-    {
-        // Eliminamos el atributo de solo lectura
-        $("#"+campos+pos).removeAttr("readonly");
-        // Eliminamos la clase que hace que cambie el color
-        $("#"+campos+pos).removeClass("readOnly");
-
-    
-    }
- 
+  function famQuitarReadOnly(campos,pos)
+  {
+    // Eliminamos el atributo de solo lectura
+    $("#"+campos+pos).removeAttr("readonly");
+    // Eliminamos la clase que hace que cambie el color
+    $("#"+campos+pos).removeClass("readOnly");
+  }
 </script>
 
 
 <script>
-    function ponerReadOnly(id)
-    {
-        // Ponemos el atributo de solo lectura
-        $("#"+id).attr("readonly","readonly");
-        // Ponemos una clase para cambiar el color del texto y mostrar que
-        // esta deshabilitado
-        $("#"+id).addClass("readOnly");
-
-          var idBeca = $(beca_id).val();
-          var idUsuario = $(user_id).val();
-          var idDatos = $(datos_id).val();
-         var nombre = $("#"+id).attr('name');
-          var valor = $("#"+id).val();
-          var tabla = "datos_personas"
-
-
-       
-          $.ajax({
-            type: "POST",
-            url: '/update',
-            dataType: 'JSON',
-            //contentType: 'application/x-www-form-urlencoded',
-            data:{"idDatos":idDatos,"idBeca":idBeca,"idUsuario":idUsuario,"nombre":nombre,"valor":valor,"tabla":tabla},
-            success: function(data){
-                 if(data.valor==0){
-                  toastr.success(data.message);
-                window.location.reload();
-                 }else{
-                    
-                  toastr.warning(data.message);
-                                  window.location.reload();
-                 }
-             
-            }
-            });
-
-
-    }
-      
-     
-    function quitarReadOnly(id)
-    {
-        // Eliminamos el atributo de solo lectura
-        $("#"+id).removeAttr("readonly");
-        // Eliminamos la clase que hace que cambie el color
-        $("#"+id).removeClass("readOnly");
-
-    
-    }
- 
-    /**
-     * Mostramos en un alert si esta el atributo de solo lectura activado
-     */
-    function estado(id)
-    {
-        if($("#"+id).attr("readonly"))
-        {
-            alert("Tiene el atributo de solo lectura");
-        }else{
-            alert("NO Tiene el atributo de solo lectura");
+  function ponerReadOnly(id)
+  {
+    // Ponemos el atributo de solo lectura
+    $("#"+id).attr("readonly","readonly");
+    // Ponemos una clase para cambiar el color del texto y mostrar que
+    // esta deshabilitado
+    $("#"+id).addClass("readOnly");
+    var idBeca = $(beca_id).val();
+    var idUsuario = $(user_id).val();
+    var idDatos = $(datos_id).val();
+    var nombre = $("#"+id).attr('name');
+    var valor = $("#"+id).val();
+    var tabla = "datos_personas"
+    $.ajax({
+      type: "POST",
+      url: '/update',
+      dataType: 'JSON',
+      //contentType: 'application/x-www-form-urlencoded',
+      data:{"idDatos":idDatos,"idBeca":idBeca,"idUsuario":idUsuario,"nombre":nombre,"valor":valor,"tabla":tabla},
+      success: function(data){
+        if(data.valor==0){
+          toastr.success(data.message);
+          window.location.reload();
         }
+        else
+        {
+          toastr.warning(data.message);
+          window.location.reload();
+        }
+      }
+    });
+  }
+  function quitarReadOnly(id)
+  {
+    // Eliminamos el atributo de solo lectura
+    $("#"+id).removeAttr("readonly");
+    // Eliminamos la clase que hace que cambie el color
+    $("#"+id).removeClass("readOnly");
+  }
+
+  function estado(id)
+  {
+    if($("#"+id).attr("readonly"))
+    {
+      alert("Tiene el atributo de solo lectura");
     }
-    </script>
+    else
+    {
+      alert("NO Tiene el atributo de solo lectura");
+    }
+  }
+</script>
 
 @section('content')
 
 
-
-
- 
-
 <h1><p align="center">Panel administrativo de inscripciones</p></h1>
 <h3>Bienvenido {{Auth::user()->name}} </h3>
 
-
-
 <div class="form-group">
+  <input type="hidden" value="{{ $datos->user_id}}"  name="user_id" id="user_id" required>
+  <input type="hidden" value="{{ $datos->id}}"  name="datos_id" id="datos_id" required>
+  <input type="hidden" value="{{ $datos->beca_id}}"  name="beca_id" id="beca_id" required>
 
-<input type="hidden" value="{{ $datos->user_id}}"  name="user_id" id="user_id" required>
-<input type="hidden" value="{{ $datos->id}}"  name="datos_id" id="datos_id" required>
-<input type="hidden" value="{{ $datos->beca_id}}"  name="beca_id" id="beca_id" required>
-
-   @include('voyager::alerts')
-
-<div class="rwd">
-  <h2 align="center"><div class="p-3 mb-2 bg-primary text-white">Datos de {{$datos->user_name}} {{$datos->user_apellido}}</div></h2>
-   
+  @include('voyager::alerts')
+  <div class="rwd">
+    <h2 align="center">
+      <div class="p-3 mb-2 bg-primary text-white">Datos de {{$datos->user_name}} {{$datos->user_apellido}}
+      </div>
+    </h2>
     <table class="rwd_auto table table-responsive table-bordered" width="100%" cellpadding="5" cellspacing="5" border="0" >
-    <tr> 
-    <td width="50%">
-   <div  class="col-md-12 bg-info" style="border-style: solid; border-color: white; margin-top: 1px;"  type="button" data-toggle="collapse" data-target="#datospersonales" aria-expanded="false" aria-controls="datospersonales">
-           <div class="col-md-11">
-             <h4 align="left" class="">Datos Personales</h4>         
-          </div>
-         <div class="col-md-1 pull-right" style="margin-top: 1%;">
-              <span class="glyphicon glyphicon-plus">Ver</span>
-            </div>       
-         </div>
-   <div class="collapse" id="datospersonales">
-  
-  
-    <table border="1" >  
-      <tr><th class="bg-info">Datos<td class="bg-info">Información</td><td class="bg-info">Adjuntos</td><td class="bg-info" width="26%">Modificar</td></th></tr>
-      <tr>          
-      <th width="20%">Nombre</th>
-      <td>
-      <input readonly value="{{ $datos->user_name}}" type="text"  class="form-control" name="name" id="idNombre" required>
-      </td>
-      <td></td>
-      <td>
-      <a onclick="quitarReadOnly('idNombre')" title="Editar" class="btn btn-sm btn-primary pull-left" name="name" style="display: inline;">
-            <i class="voyager-edit"></i> <span class="hidden-xs hidden-sm"></span>
-        </a>
-         <a onclick="ponerReadOnly('idNombre')" title="Guardar" class="btn btn-sm btn btn-success pull-right " style="display: inline;">
-            <i class="voyager-check"></i> <span class="hidden-xs hidden-sm"></span>
-        </a>
-      </td> 
-      </tr>
-
-
-  <tr>
-      <th width="20%">Apellido</th> 
-      <td width="40%">
-        <input readonly value="{{$datos->user_apellido}}" type="text" class="form-control" name="apellido" id="idApellido" required></td><td></td>
-      <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idApellido')"  class="btn btn-sm btn-primary pull-left" name="apellido" title="Editar" value="Modificar">
-          <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
-        </a>
-        <a style="display: inline;" onclick="ponerReadOnly('idApellido')" class="btn btn-sm btn-success pull-right" title="Guardar" value="Guardar">
-          <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
-        </a>
-        
-      </td>
-      </tr>
-
       <tr>
-      <th>DNI/CUIT</th>
-      
-      <td width="40%">
-      <input readonly value="{{$datos->user_dni}}" type="text" class="form-control" name="dni" id="idDNI" required></td>
-      <td>
-      <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox"> 
-        Imagen del DNI frente
-            <img src="{{ action('InscripcionesController@getFile',['filename' => $datos->imagen_dni_frente]) }}" alt="Imagen Dni frente" class="img-responsive lightbox hide">
-        </a>
-        <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox"> 
-        Imagen del DNI Dorso
-            <img src="{{ action('InscripcionesController@getFile',['filename' => $datos->imagen_dni_dorso]) }}" alt="..." class="img-responsive lightbox hide">
-        </a>
-        </td>         
-    <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idDNI')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
-        </a>
-        <a style="display: inline;" onclick="ponerReadOnly('idDNI')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
-        </a>
-        
-      </td>
-      </tr>
-
-    <tr>
-    <th>Estado civil</th>   
-    
-    <td width="40%">
-    <select  readonly  class="form-control" name="estado_civil" id="idEstcivil" placeholder="Seleccione una opción" required>
-
-                  
-                  <option value="soltero" {{ ($datos->estado_civil) == 'soltero' ? 'selected' : '' }}>Soltero</option>
-                  <option value="casado" {{ ($datos->estado_civil) == 'casado' ? 'selected' : '' }}>Casado</option>
-                  <option value="divorciado" {{ ($datos->estado_civil) == 'divorciado' ? 'selected' : '' }}>Divorciado</option>
-                  <option value="viudo" {{ ($datos->estado_civil) == 'viudo' ? 'selected' : '' }}>Viudo</option>
-                </select>
+        <td width="50%">
+          <div  class="col-md-12 bg-info" style="border-style: solid; border-color: white; margin-top: 1px;"  type="button" data-toggle="collapse" data-target="#datospersonales" aria-expanded="false" aria-controls="datospersonales">
+            <div class="col-md-11">
+              <h4 align="left" class="">Datos Personales</h4>
+            </div>
+            <div class="col-md-1 pull-right" style="margin-top: 1%;">
+              <span class="glyphicon glyphicon-plus">Ver</span>
+            </div>
+          </div>
+          <div class="collapse" id="datospersonales">
+            <table border="1" >
+              <tr>
+                <th class="bg-info">Datos
+                  <td class="bg-info">Información
+                  </td>
+                  <td class="bg-info">Adjuntos
+                  </td>
+                  <td class="bg-info" width="26%">Modificar
+                  </td>
+                </th>
+              </tr>
+              <tr>
+                <th width="20%">Nombre</th>
+                <td>
+                  <input readonly value="{{ $datos->user_name}}" type="text"  class="form-control" name="name" id="idNombre" required>
                 </td>
-
-      <td>          
+                <td></td>
+                <td>
+                  <a onclick="quitarReadOnly('idNombre')" title="Editar" class="btn btn-sm btn-primary pull-left" name="name" style="display: inline;">
+                    <i class="voyager-edit"></i> <span class="hidden-xs hidden-sm"></span>
+                  </a>
+                  <a onclick="ponerReadOnly('idNombre')" title="Guardar" class="btn btn-sm btn btn-success pull-right " style="display: inline;">
+                    <i class="voyager-check"></i> <span class="hidden-xs hidden-sm"></span>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <th width="20%">Apellido</th>
+                <td width="40%">
+                  <input readonly value="{{$datos->user_apellido}}" type="text" class="form-control" name="apellido" id="idApellido" required>
+                </td>
+                <td></td>
+                <td>
+                  <a style="display: inline;" onclick="quitarReadOnly('idApellido')"  class="btn btn-sm btn-primary pull-left" name="apellido" title="Editar" value="Modificar">
+                    <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                  <a style="display: inline;" onclick="ponerReadOnly('idApellido')" class="btn btn-sm btn-success pull-right" title="Guardar" value="Guardar">
+                    <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <th>DNI/CUIT</th>
+                <td width="40%">
+                  <input readonly value="{{$datos->user_dni}}" type="text" class="form-control" name="dni" id="idDNI" required>
+                </td>
+                <td>
+                  <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox">Imagen del DNI frente
+                    <img src="{{ action('InscripcionesController@getFile',['filename' => $datos->imagen_dni_frente]) }}" alt="Imagen Dni frente" class="img-responsive lightbox hide">
+                  </a>
+                  <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox">Imagen del DNI Dorso
+                    <img src="{{ action('InscripcionesController@getFile',['filename' => $datos->imagen_dni_dorso]) }}" alt="..." class="img-responsive lightbox hide">
+                  </a>
+                </td>
+                <td>
+                  <a style="display: inline;" onclick="quitarReadOnly('idDNI')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                    <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                  <a style="display: inline;" onclick="ponerReadOnly('idDNI')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                    <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <th>Estado civil</th>
+                <td width="40%">
+                  <select  readonly  class="form-control" name="estado_civil" id="idEstcivil" placeholder="Seleccione una opción" required>
+                    <option value="soltero" {{ ($datos->estado_civil) == 'soltero' ? 'selected' : '' }}>Soltero</option>
+                    <option value="casado" {{ ($datos->estado_civil) == 'casado' ? 'selected' : '' }}>Casado</option>
+                    <option value="divorciado" {{ ($datos->estado_civil) == 'divorciado' ? 'selected' : '' }}>Divorciado</option>
+                    <option value="viudo" {{ ($datos->estado_civil) == 'viudo' ? 'selected' : '' }}>Viudo</option>
+                  </select>
+                </td>
+                <td>
+                </td>
+                <td>
+                  <a style="display: inline;" onclick="quitarReadOnly('idEstcivil')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                    <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                  <a style="display: inline;" onclick="ponerReadOnly('idEstcivil')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                    <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <th>Cumpleaños</th>
+                <td width="40%">
+                  <input readonly value="{{$datos->cumple}}" type="date" class="form-control" name="cumple" id="idCumple" required>
+                </td>
+                <td></td>
+                <td>
+                  <a style="display: inline;" onclick="quitarReadOnly('idCumple')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                    <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                  <a style="display: inline;" onclick="ponerReadOnly('idCumple')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                    <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <th>Domicilio</th>
+                <td width="40%">
+                  <input readonly value="{{ $datos->domicilio}}" type="text" class="form-control" name="domicilio" id="idDomi" required>
+                </td>
+                <td></td>
+                <td>
+                  <a style="display: inline;" onclick="quitarReadOnly('idDomi')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                    <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                  <a style="display: inline;" onclick="ponerReadOnly('idDomi')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                    <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                </td>
+              </tr>
+              <th>Provincia</th>
+              <td width="40%">
+                <input readonly value="{{$datos->provincia_nombre}}" type="text" class="form-control" name="provincia_nombre" id="provincia_nombre" required>
+              </td>
+              <td>
+                {!! Form::select('provincia_id', $provincia, null, ['id' => 'provincia','class'=>'form-control','readonly']) !!}
+              </td>
+              <td>
+                <a style="display: inline;" onclick="quitarReadOnly('provincia')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                  <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+                <a style="display: inline;" onclick="ponerReadOnly('provincia')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                  <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+              </td>
+            </tr>
+                <th> Localidad</th>
+                <td width="40%">
+                  <input readonly value="{{$datos->localidad_nombre}}" type="text" class="form-control" name="localidad_nombre" id="localidad_nombre" required> 
+                </td>
+                <td>
+                  <select  class="form-control" name="localidad_id" id="localidad" placeholder="Seleccione una opción" readonly>
+                    <option value="" selected>Seleccione una opción</option>
+                  </select>
+                </td>
+                <td>
+                  <a style="display: inline;" onclick="quitarReadOnly('localidad')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                    <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                  <a style="display: inline;" onclick="ponerReadOnly('localidad')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                    <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                  </a>
+                </td>
+              </tr>
+              <th>Código postal</th>
+              <td width="40%">
+                <input readonly value="{{ $datos->cp}}" type="text" class="form-control" name="cp" id="idCP" required>
+              </td>
+              <td></td>
+              <td>
+                <a style="display: inline;" onclick="quitarReadOnly('idCP')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                  <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+                <a style="display: inline;" onclick="ponerReadOnly('idCP')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                  <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+              </td>
+            </tr>
+            <th>Nacionalidad</th>
+            <td width="40%">
+              <input readonly value="{{ $datos->nacionalidad}}" type="text" class="form-control" name="nacionalidad" id="idNacionalidad" required>
+            </td><td></td>
+            <td>
+              <a style="display: inline;" onclick="quitarReadOnly('idNacionalidad')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+              </a>
+              <a style="display: inline;" onclick="ponerReadOnly('idNacionalidad')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
+              </td>
+            </tr>
+            <tr>
+              <th>Celular</th>
+              <td width="40%"><input readonly value="{{ $datos->cel}}" type="text" class="form-control" name="cel" id="idCel" required>
+              </td><td></td>
+              <td>
+                <a style="display: inline;" onclick="quitarReadOnly('idCel')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                  <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+                <a style="display: inline;" onclick="ponerReadOnly('idCel')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                  <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <th>Correo electrónico</th>
+              <td width="40%"><input readonly value="{{ $datos->user_email }}" type="text" class="form-control" name="email" id="idEmail" required>
+              </td><td></td>
+              <td>
+                <a style="display: inline;" onclick="quitarReadOnly('idEmail')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                  <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+                <a style="display: inline;" onclick="ponerReadOnly('idEmail')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                  <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <th>Facebook</th>
+              <td width="40%"><input readonly value="{{ $datos->face}}" type="text" class="form-control" name="face" id="idFace" required>
+              </td><td></td>
+              <td>
+                <a style="display: inline;" onclick="quitarReadOnly('idFace')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                  <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+                <a style="display: inline;" onclick="ponerReadOnly('idFace')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                  <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+              </td>
+            </tr>
+            <tr><th>Posee discapacidad</th>
+              <td width="40%">
+                <select  readonly  class="form-control" name="disca_estudiante" id="idDiscaest" placeholder="Seleccione una opción" required>
+                  <option value="1" {{ ($datos->disca_estudiante) == '1' ? 'selected' : '' }}>Si</option>
+                  <option value="0" {{ ($datos->disca_estudiante) == '0' ? 'selected' : '' }}>No</option>
+                </select>
+              </td>
+              <td>
+                <?php if ($datos->disca_estudiante == 1): ?>
+                <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox">Certificado de discapacidad 
+                  <img src="{{ action('InscripcionesController@getFile',['filename' => $datos->certificado_discapacidad]) }}" alt="..." class="img-responsive lightbox hide">
+                </a>
+              </td>
+              <?php endif; ?>
+              <td>
+                <a style="display: inline;" onclick="quitarReadOnly('idDiscaest')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                  <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+                <a style="display: inline;" onclick="ponerReadOnly('idDiscaest')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                  <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <th>Kilómetros procedencia</th>
+              <td width="40%"><input readonly value="{{ $datos->km_procedencia}}" type="numeric" class="form-control" name="km_procedencia" id="idKm" required>
+              </td><td></td>
+              <td>
+                <a style="display: inline;" onclick="quitarReadOnly('idKm')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
+                  <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+                <a style="display: inline;" onclick="ponerReadOnly('idKm')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
+                  <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
+                </a>
+              </td>
+            </tr>
+          </div>
+        </table>
       </td>
+      <td width="50%">
 
-      
-      <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idEstcivil')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
-        </a>
-        <a style="display: inline;" onclick="ponerReadOnly('idEstcivil')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-      </td>
-    </tr>
-
-    <tr>
-    <th>Cumpleaños</th>
-    
-    <td width="40%">
-    <input readonly value="{{$datos->cumple}}" type="date" class="form-control" name="cumple" id="idCumple" required></td>
-    <td></td>
-      
-      <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idCumple')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span>
-        </a>
-        <a style="display: inline;" onclick="ponerReadOnly('idCumple')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span>
-        </a>
-
-      </td>
-    </tr>
-    
-    <tr>
-    <th>Domicilio</th>
-    
-    <td width="40%">
-    <input readonly value="{{ $datos->domicilio}}" type="text" class="form-control" name="domicilio" id="idDomi" required></td><td></td>
-      
-      <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idDomi')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('idDomi')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-            
-      </td>
-
-    </tr>
-
-
-
-
-
-    <th>Provincia</th>
-    <td width="40%">
-      <input readonly value="{{$datos->provincia_nombre}}" type="text" class="form-control" name="provincia_nombre" id="provincia_nombre" required>
-    </td>
-
-    <td>
-      {!! Form::select('provincia_id', $provincia, null, ['id' => 'provincia','class'=>'form-control','readonly']) !!}
-
-    </td>
-    <td>
-        <a style="display: inline;" onclick="quitarReadOnly('provincia')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('provincia')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-            
-      </td>
-
-    </tr>
-
-
-    <th> Localidad</th>
-    <td width="40%">
-      <input readonly value="{{$datos->localidad_nombre}}" type="text" class="form-control" name="localidad_nombre" id="localidad_nombre" required> 
-    </td>
-    <td>
-      <select  class="form-control" name="localidad_id" id="localidad" placeholder="Seleccione una opción" readonly>
-      <option value="" selected>Seleccione una opción</option></select>
-    </td>
-      <td>
-        
-        <a style="display: inline;" onclick="quitarReadOnly('localidad')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('localidad')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-            
-      </td>
-
-
-    </tr>
-
-
-
-
-
-<!--viejo pronvicia    
-    <td width="40%">
-    <input readonly value=" $datos->provincia}}" type="text" class="form-control" name="provincia" id="idProvincia" required></td><td></td>
-      
-      <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idProvincia')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('idProvincia')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-            
-      </td>
-
-    </tr>
--->
-    <th>Código postal</th>
-    
-    <td width="40%">
-    <input readonly value="{{ $datos->cp}}" type="text" class="form-control" name="cp" id="idCP" required></td><td></td>
-      
-      <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idCP')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('idCP')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-            
-      </td>
-
-    </tr>
-
-    <th>Nacionalidad</th>
-    
-    <td width="40%">
-    <input readonly value="{{ $datos->nacionalidad}}" type="text" class="form-control" name="nacionalidad" id="idNacionalidad" required></td><td></td>
-      
-      <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idNacionalidad')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('idNacionalidad')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-            
-      </td>
-
-    </tr>
-
-    <tr>
-    <th>Celular</th>
-    
-    <td width="40%"><input readonly value="{{ $datos->cel}}" type="text" class="form-control" name="cel" id="idCel" required></td><td></td>
-      
-      <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idCel')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('idCel')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-        
-      </td>
-    </tr>
-
-    <tr>
-    <th>Correo electrónico</th>
-    
-    <td width="40%"><input readonly value="{{ $datos->user_email }}" type="text" class="form-control" name="email" id="idEmail" required></td><td></td>
-      
-      <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idEmail')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('idEmail')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-        
-      </td>
-    </tr>
-
-    <tr>
-      <th>Facebook</th>
-      
-      <td width="40%"><input readonly value="{{ $datos->face}}" type="text" class="form-control" name="face" id="idFace" required></td><td></td>
-      
-      <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idFace')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('idFace')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-            
-      </td>
-    </tr>
-
-    <tr><th>Posee discapacidad</th>
-      
-      <td width="40%">
-
-
-    <select  readonly  class="form-control" name="disca_estudiante" id="idDiscaest" placeholder="Seleccione una opción" required>
-<!---
-camvbiar el si por 0 y 1
--->
-        <option value="1" {{ ($datos->disca_estudiante) == '1' ? 'selected' : '' }}>Si</option>
-        <option value="0" {{ ($datos->disca_estudiante) == '0' ? 'selected' : '' }}>No</option>
-        
-      </select>
-      
-      
-      </td>
-      <td>
-      <?php if ($datos->disca_estudiante == 1): ?>
-      <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox">
-            Certificado de discapacidad 
-              <img src="{{ action('InscripcionesController@getFile',['filename' => $datos->certificado_discapacidad]) }}" alt="..." class="img-responsive lightbox hide">
-          </a></td>
-           <?php endif; ?>
-          <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idDiscaest')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('idDiscaest')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-            
-      </td>
-      </tr>
-<tr><th>Kilómetros procedencia</th>
-      
-      <td width="40%"><input readonly value="{{ $datos->km_procedencia}}" type="numeric" class="form-control" name="km_procedencia" id="idKm" required></td><td></td>
-      
-      <td>
-        <a style="display: inline;" onclick="quitarReadOnly('idKm')" class="btn btn-sm btn-primary pull-left" title="Editar" value="Modificar">
-        <i class="voyager-edit"></i><span class="hidden-xs hidden-sm"></span></a>
-        <a style="display: inline;" onclick="ponerReadOnly('idKm')" class="btn btn-sm btn btn-success pull-right" title="Guardar" value="Guardar">
-        <i class="voyager-check"></i><span class="hidden-xs hidden-sm"></span></a>
-            
-      </td></tr>
-
-</div>
-    </table>
-      </td>
-
-  <td width="50%">
-  
-   <div  class="col-md-12 bg-info" style="border-style: solid; border-color: white; margin-top: 1px;"  type="button" data-toggle="collapse" data-target="#datosacademicos" aria-expanded="false" aria-controls="datosacademicos">
+        <div  class="col-md-12 bg-info" style="border-style: solid; border-color: white; margin-top: 1px;"  type="button" data-toggle="collapse" data-target="#datosacademicos" aria-expanded="false" aria-controls="datosacademicos">
            <div class="col-md-11">
              <h4 align="left" class="">Datos Académicos</h4>         
           </div>
@@ -569,13 +478,19 @@ camvbiar el si por 0 y 1
         <td width="40%">
           
 
-          <select readonly class="form-control" name="condicion_estudiante" id="IdCond" placeholder="Seleccione una opción" required>
+          <select readonly class="form-control" name="condicion_estudiante_id" id="IdCond" placeholder="Seleccione una opción" required>
+            
             @foreach($condicion as $condiciones)
             <option 
-            value= {{$condiciones->nombre}} {{ ($datos->condicion_estudiante) == $condiciones->nombre ? 'selected' : '' }}>{{ $condiciones->nombre }}
+            value= {{$condiciones->id}} {{ ($datos->condicion_estudiante_id) == $condiciones->id ? 'selected' : '' }}>{{ $condiciones->nombre }}
             </option>
             @endforeach
             </select>
+
+
+
+
+
         </td>
 
 
@@ -2081,7 +1996,7 @@ algomal quedo con la i
 
                     </div>
                     <div class="col-sm-pull-8 pull-right" style="margin-right: 2%; margin-left: -1%;">
-                        <a id="restablecer_merito"  title="CalcularMerito" onclick="restablecer_merito()" value="Ver" class="btn btn-warning btn-sm" style="font-size: 13px">Restablecer evaluación de inscripción</a> 
+                        <a id="restablecer_merito"  title="Restablecer Merito" onclick="restablecer_merito()" value="Ver" class="btn btn-warning btn-sm" style="font-size: 13px">Restablecer evaluación de inscripción</a> 
 
                     </div>
                     

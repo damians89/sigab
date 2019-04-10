@@ -122,7 +122,6 @@ class DatosPersonaController extends Controller
     public function store(CrearDatosPersona $request)
     {       //dd($request->all());
         $beca_aux = DB::table('becas')->where('habilitada', 1)->first(); //Si tiene mas becas habilitada explota adrede y ademas comprobar que no se altero el hidden del form
-//dd($request->all());
         if ($beca_aux->id==$request->becaid){
             //Apertura de transaccion
             DB::beginTransaction();
@@ -131,7 +130,7 @@ class DatosPersonaController extends Controller
         $random = str_random(100);
 
          try{
-            Storage::makeDirectory($request->becaid."/".$request->dni); //creo el directorio con el dni, para guardar las imagenes
+            Storage::makeDirectory($request->becaid."/".$request->dni); //creo el directorio con el idbeca+dni, para guardar las imagenes
             $ruta_datos=$request->becaid."/".$request->dni;
     
             $datos = new DatosPersona;
@@ -149,52 +148,48 @@ class DatosPersonaController extends Controller
             $datos->cel = $request->cel;
             $datos->face = $request->face;
             $datos->disca_estudiante = $request->discaest;
-            $datos->condicion_estudiante = $request->cond;
-            if($request->cond=="Renovante" or $request->cond=="Nuevo" or $request->cond=="Ingresante"){
-
-                    if ($request->hasFile('constancia')){     
-                $img = $request->file('constancia');
-                $nombre='constancia_estudiante'.'-'.$request->dni.'-'.$random.'.'.$img->getClientOriginalExtension();
-                $img->storeAs($ruta_datos,$nombre);
-                $datos->constancia_estudiante = $ruta_datos.'/'.$nombre;
+            $datos->condicion_estudiante_id = $request->cond;
+            //  1 ingresante, 2 renovante, 3 nuevo, 4 condicional
+            if($request->cond==2 or $request->cond==3 or $request->cond==1){
+                if ($request->hasFile('constancia')){
+                    $img = $request->file('constancia');
+                    $nombre='constancia_estudiante'.'-'.$request->dni.'-'.$random.'.'.$img->getClientOriginalExtension();
+                    $img->storeAs($ruta_datos,$nombre);
+                    $datos->constancia_estudiante = $ruta_datos.'/'.$nombre;
                 }
                 else{
                 }
-            
-        
-            if ( $request->hasFile('certificado') ){     
-                $img = $request->file('certificado'); 
-                $f=0;
-                $rutas = [];
-                if(is_array($img)){ 
-                    foreach ($img as $contador=>$imagen) {
-                        $ext=$imagen->getClientOriginalExtension();
-    $nombre='certificado_estudiante-'.$f.'-'.$request->dni.'-'.$random.'.'.$ext;
-                        $rutas[]=$imagen->storeAs($ruta_datos,$nombre);
-                $datos->certificado_estudiante = collect($rutas)->implode(' - ');
-                        $f++;
+
+
+                if ( $request->hasFile('certificado') ){
+                    $img = $request->file('certificado'); 
+                    $f=0;
+                    $rutas = [];
+                    if(is_array($img)){
+                        foreach ($img as $contador=>$imagen) {
+                            $ext=$imagen->getClientOriginalExtension();
+                            $nombre='certificado_estudiante-'.$f.'-'.$request->dni.'-'.$random.'.'.$ext;
+                            $rutas[]=$imagen->storeAs($ruta_datos,$nombre);
+                            $datos->certificado_estudiante = collect($rutas)->implode(' - ');
+                            $f++;
+                        }
+                    }
+                    else
+                    {
+                        $nombre='certificado_estudiante'.'-'.$request->dni.'-'.$random.'.'.$img->getClientOriginalExtension();
+                        $img->storeAs($ruta_datos,$nombre);
+                        $datos->certificado_estudiante = $ruta_datos.'/'.$nombre;
                     }
                 }
-                else{
-$nombre='certificado_estudiante'.'-'.$request->dni.'-'.$random.'.'.$img->getClientOriginalExtension();
+            }elseif ($request->cond==4) {
+                if ($request->hasFile('constancia')){
+                    $img = $request->file('constancia');
+                    $nombre='constancia_estudiante'.'-'.$request->dni.'-'.$random.'.'.$img->getClientOriginalExtension();
                     $img->storeAs($ruta_datos,$nombre);
-                    $datos->certificado_estudiante = $ruta_datos.'/'.$nombre;
-                }
-            }
-
-
-
-            }elseif ($request->cond=="Condicional") {
-            
-                    if ($request->hasFile('constancia')){     
-                $img = $request->file('constancia');
-$nombre='constancia_estudiante'.'-'.$request->dni.'-'.$random.'.'.$img->getClientOriginalExtension();
-                $img->storeAs($ruta_datos,$nombre);
-                $datos->constancia_estudiante = $ruta_datos.'/'.$nombre;
+                    $datos->constancia_estudiante = $ruta_datos.'/'.$nombre;
                 }
                 else{
                 }
-
             } 
 
             //********************************************************///
@@ -203,17 +198,17 @@ $nombre='constancia_estudiante'.'-'.$request->dni.'-'.$random.'.'.$img->getClien
             $datos->anio_ingreso = $request->anioingreso;
             $datos->anio_cursado = $request->aniocursado;
             
-            if($request->cond=="Renovante" or $request->cond=="Nuevo"){
-            $datos->cant_materia = $request->cantmaterias;
-            $datos->promedio =0;
+            if($request->cond==2 or $request->cond==3){
+                $datos->cant_materia = $request->cantmaterias;
+                $datos->promedio =0;
             }
-            elseif($request->cond=="Ingresante"){
-            $datos->promedio = $request->promedio;
-            $datos->cant_materia=0;
+            elseif($request->cond==1){
+                $datos->promedio = $request->promedio;
+                $datos->cant_materia=0;
             }
-            elseif($request->cond=="Condicional"){
-            $datos->cant_materia=0;
-            $datos->promedio =0;
+            elseif($request->cond==4){
+                $datos->cant_materia=0;
+                $datos->promedio =0;
             }
             
             $datos->tiene_trabajo = $request->trabaja;
@@ -303,16 +298,10 @@ $nombre='recibo_otros_gastos'.'-'.$request->dni.'-'.$random.'.'.$img->getClientO
                 //return abort(404);
                 }
 
-            }    
-            
-
+            }
 
             $datos->motivos = $request->motivos;
 
-              
-
-            
-          //  dd($request->file('imagen_frente'),$request->file('imagen_dorso'));                     // para saber si cargo alguna imagen
             if ( $request->hasFile('imagen_frente') ){
                 $img = $request->file('imagen_frente');
 $nombre='imagen_frente'.'-'.$request->dni.'-'.$random.'.'.$img->getClientOriginalExtension();

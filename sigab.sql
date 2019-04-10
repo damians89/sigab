@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-03-2019 a las 03:28:37
+-- Tiempo de generación: 10-04-2019 a las 02:06:29
 -- Versión del servidor: 10.1.38-MariaDB
--- Versión de PHP: 7.3.3
+-- Versión de PHP: 7.2.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -30,6 +30,7 @@ USE `sigab`;
 -- Estructura de tabla para la tabla `becas`
 --
 
+DROP TABLE IF EXISTS `becas`;
 CREATE TABLE `becas` (
   `id` int(10) UNSIGNED NOT NULL,
   `id_calculos_auxiliares` int(11) NOT NULL,
@@ -44,20 +45,13 @@ CREATE TABLE `becas` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Volcado de datos para la tabla `becas`
---
-
-INSERT INTO `becas` (`id`, `id_calculos_auxiliares`, `nombre`, `descripcion`, `periodo_desde`, `periodo_hasta`, `monto`, `habilitada`, `anio`, `created_at`, `updated_at`) VALUES
-(8, 2, 'Beca Estudiantil Prueba', 'Esta es una beca de prueba', '2019-11-08 00:00:00', '2019-02-14 00:00:00', 2000, 0, 2019, '2019-03-23 12:19:26', '2019-03-25 01:00:11'),
-(9, 1, 'Beca UADER 2018', 'Estudiantil Beca UADER Perteneciente al año 2018 - Secretaria de Bienestar Estudiantil', '2018-12-01 00:00:00', '2018-04-04 00:00:00', 2500, 1, 2018, '2019-03-23 12:21:46', '2019-03-25 01:06:41');
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `calculos_aux`
 --
 
+DROP TABLE IF EXISTS `calculos_aux`;
 CREATE TABLE `calculos_aux` (
   `id` int(11) NOT NULL,
   `minimo_vital_movil` float NOT NULL,
@@ -67,21 +61,13 @@ CREATE TABLE `calculos_aux` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Volcado de datos para la tabla `calculos_aux`
---
-
-INSERT INTO `calculos_aux` (`id`, `minimo_vital_movil`, `precio_urbano`, `anio`, `created_at`, `updated_at`) VALUES
-(1, 15005, 5, 2018, NULL, '2018-12-25 22:45:17'),
-(2, 11300, 4.45, 2019, '2018-12-12 23:58:47', '2018-12-12 23:58:47'),
-(3, 22000, 6.75, 2002, '2018-12-29 20:48:40', '2018-12-29 20:54:56');
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `carreras`
 --
 
+DROP TABLE IF EXISTS `carreras`;
 CREATE TABLE `carreras` (
   `id` int(10) UNSIGNED NOT NULL,
   `facultad_id` int(10) UNSIGNED NOT NULL,
@@ -117,6 +103,7 @@ INSERT INTO `carreras` (`id`, `facultad_id`, `sede_id`, `universidad_id`, `nombr
 -- Estructura de tabla para la tabla `condicion`
 --
 
+DROP TABLE IF EXISTS `condicion`;
 CREATE TABLE `condicion` (
   `id` int(1) NOT NULL,
   `nombre` varchar(50) CHARACTER SET latin1 NOT NULL DEFAULT '0'
@@ -138,6 +125,7 @@ INSERT INTO `condicion` (`id`, `nombre`) VALUES
 -- Estructura de tabla para la tabla `consideraciones`
 --
 
+DROP TABLE IF EXISTS `consideraciones`;
 CREATE TABLE `consideraciones` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL,
@@ -152,21 +140,13 @@ CREATE TABLE `consideraciones` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Volcado de datos para la tabla `consideraciones`
---
-
-INSERT INTO `consideraciones` (`id`, `user_id`, `datos_id`, `beca_id`, `parentesco`, `enfermedad`, `incapacidad`, `cert_incapacidad`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 39, 4, 8, 'Yerno', 'ladri', 1, '8/33432123/imagen_discapacidad_familiar-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '2019-03-25 00:50:26', '2019-03-25 00:50:26', NULL),
-(2, 39, 4, 8, 'Primo', 'otro ladri', 1, '8/33432123/imagen_discapacidad_familiar-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '2019-03-25 00:50:26', '2019-03-25 00:50:26', NULL),
-(3, 39, 5, 9, 'Otro', 'sss', 0, NULL, '2019-03-25 02:20:16', '2019-03-25 02:20:16', NULL);
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `cronogramas`
 --
 
+DROP TABLE IF EXISTS `cronogramas`;
 CREATE TABLE `cronogramas` (
   `id` int(11) NOT NULL,
   `beca_id` int(10) UNSIGNED NOT NULL,
@@ -183,19 +163,13 @@ CREATE TABLE `cronogramas` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Volcado de datos para la tabla `cronogramas`
---
-
-INSERT INTO `cronogramas` (`id`, `beca_id`, `fecha_1`, `fecha_2`, `fecha_3`, `fecha_4`, `fecha_5`, `fecha_6`, `fecha_7`, `fecha_8`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(3, 8, '2019-03-14', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-25 00:37:53', '2019-03-25 00:37:53', NULL);
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `data_rows`
 --
 
+DROP TABLE IF EXISTS `data_rows`;
 CREATE TABLE `data_rows` (
   `id` int(10) UNSIGNED NOT NULL,
   `data_type_id` int(10) UNSIGNED NOT NULL,
@@ -318,6 +292,7 @@ INSERT INTO `data_rows` (`id`, `data_type_id`, `field`, `type`, `display_name`, 
 -- Estructura de tabla para la tabla `data_types`
 --
 
+DROP TABLE IF EXISTS `data_types`;
 CREATE TABLE `data_types` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -357,11 +332,15 @@ INSERT INTO `data_types` (`id`, `name`, `slug`, `display_name_singular`, `displa
 -- Estructura de tabla para la tabla `datos_personas`
 --
 
+DROP TABLE IF EXISTS `datos_personas`;
 CREATE TABLE `datos_personas` (
   `id` int(10) UNSIGNED NOT NULL,
   `beca_id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `carrera_id` int(10) UNSIGNED NOT NULL,
+  `provincia_id` int(10) NOT NULL,
+  `localidad_id` int(11) NOT NULL,
+  `condicion_estudiante_id` int(10) NOT NULL COMMENT '1 ingresante, 2 renovante, 3 nuevo, 4 condicional',
   `imagen_dni_frente` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `imagen_dni_dorso` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `cert_anses` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -371,13 +350,11 @@ CREATE TABLE `datos_personas` (
   `domicilio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `cp` int(11) NOT NULL,
   `km_procedencia` float NOT NULL,
-  `provincia_id` int(10) NOT NULL,
   `nacionalidad` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `cel` int(13) UNSIGNED NOT NULL,
   `face` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `disca_estudiante` tinyint(1) NOT NULL COMMENT '0 no, 1 si',
   `certificado_discapacidad` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `condicion_estudiante` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `constancia_estudiante` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `certificado_estudiante` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `anio_ingreso` int(11) NOT NULL,
@@ -432,7 +409,6 @@ CREATE TABLE `datos_personas` (
   `otros_gastos_cant` float DEFAULT NULL,
   `otros_gastos_recibo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `motivos` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `localidad_id` int(11) NOT NULL,
   `anio_cursado` int(11) NOT NULL,
   `tiene_progresar` tinyint(1) NOT NULL COMMENT '0 no, 1 si',
   `revision` int(2) DEFAULT '0' COMMENT '0 recien inscripto, 1 incompletos o inconsistentes,2 postulado',
@@ -442,21 +418,13 @@ CREATE TABLE `datos_personas` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Volcado de datos para la tabla `datos_personas`
---
-
-INSERT INTO `datos_personas` (`id`, `beca_id`, `user_id`, `carrera_id`, `imagen_dni_frente`, `imagen_dni_dorso`, `cert_anses`, `cuil`, `estado_civil`, `cumple`, `domicilio`, `cp`, `km_procedencia`, `provincia_id`, `nacionalidad`, `cel`, `face`, `disca_estudiante`, `certificado_discapacidad`, `condicion_estudiante`, `constancia_estudiante`, `certificado_estudiante`, `anio_ingreso`, `cant_materia`, `promedio`, `tiene_trabajo`, `tipo_trabajo`, `comprobante_ingresos_1`, `comprobante_ingresos_2`, `comprobante_ingresos_3`, `sueldo`, `tiene_beca`, `tiene_pasantia`, `tiene_asig`, `otros_ing`, `otros_ing_cant`, `otros_ing_descr`, `domi_cursado`, `casa_fam`, `tiene_alq`, `recibo_alquiler`, `monto_alq`, `usa_urbano`, `cant_viajes`, `usa_media_dist`, `precio_pasaje`, `cant_km`, `cant_viaja_media`, `recibo_pasaje`, `larga_distancia`, `cant_viaja_larga`, `recibo_pasaje_larga`, `cant_km_larga`, `precio_pasaje_larga`, `es_propietario`, `alquila`, `recibo_alquiler_familiar`, `precio_alquiler`, `prestada`, `otros_vivienda`, `tiene_campo`, `cant_has`, `actividad`, `tiene_terreno`, `cant_terreno`, `tiene_auto`, `cant_auto`, `tiene_moto`, `cant_moto`, `otros_gastos`, `otros_gastos_descripcion`, `otros_gastos_cant`, `otros_gastos_recibo`, `motivos`, `localidad_id`, `anio_cursado`, `tiene_progresar`, `revision`, `band`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 8, 38, 3, '8/33222333/imagen_frente-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', '8/33222333/imagen_dorso-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', '8/33222333/certificado_anses-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 20326549872, 'casado', '2016-12-22', 'maipu556', 3100, 25, 22, 'argentino', 3436258369, 'damian.sacks', 1, '8/33222333/certificado_discapacidad-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 'Ingresante', '8/33222333/constancia_estudiante-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', '8/33222333/certificado_estudiante-0-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 2017, 0, 7, 1, 'activos', '8/33222333/comprobante_ingresos-1-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', '8/33222333/comprobante_ingresos-2-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', '8/33222333/comprobante_ingresos-3-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 23123, 1, 1, 1, 1, '111112', 'asdasd', 'ramirez 123', 1, 1, '8/33222333/recibo_alquiler-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 25812, 1, 1, 1, 25, 60, 6, '8/33222333/recibo_pasaje--33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 1, 12, '8/33222333/recibo_larga_distancia-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 80, 256321, 0, 1, '8/33222333/recibo_alquiler_familiar-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 12563, 1, 'ninguna', 1, 2, 'trigo', 1, 2, 1, 2, '1', 2, 1, 'asd', 3, '8/33222333/recibo_otros_gastos-33222333-dcNARpQfMavNsSZCJBP4T8JFLnzSTyTyGn7Q1kl6kqGTtkh1C1SktWac0NdwyRSXFyPpJtaA617HxEnSGLOs8tZ3SeXtbL9KFTG1.jpg', 'asdasdas', 2110, 2, 1, 0, 0, '2019-03-25 00:26:54', '2019-03-25 00:26:54', NULL),
-(4, 8, 39, 3, '8/33432123/imagen_frente-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/imagen_dorso-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/certificado_anses-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 20332589632, 'soltero', '2016-12-21', 'maipu556', 3100, 28, 10, 'argentino', 3433218369, NULL, 1, '8/33432123/certificado_discapacidad-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 'Renovante', '8/33432123/constancia_estudiante-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/certificado_estudiante-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 2014, 8, 0, 1, 'informal', '8/33432123/comprobante_ingresos-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', NULL, NULL, 20000, 1, 1, 1, 1, '30000', 'vvvvvvv', 'america 123', 1, 1, '8/33432123/recibo_alquiler-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 31000, 1, 14, 1, 60, 80, 6, '8/33432123/recibo_pasaje--33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 1, 14, '8/33432123/recibo_larga_distancia-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 100, 160, 1, 1, '8/33432123/recibo_alquiler_familiar-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 21111, 1, NULL, 1, 2, 'maiz', 1, 1, 1, 2, '1', 2, 1, 'vivir', 50000, '8/33432123/recibo_otros_gastos-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 1246, 3, 1, 0, 0, '2019-03-25 00:50:26', '2019-03-25 00:50:26', NULL),
-(5, 9, 39, 3, '9/33432123/imagen_frente-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', '9/33432123/imagen_dorso-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', '9/33432123/certificado_anses-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', 20332589632, 'casado', '2019-03-04', 'rivadavia 1222', 3100, 25, 9, 'argentino', 3435258741, 'ricardo212', 1, '9/33432123/certificado_discapacidad-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', 'Renovante', '9/33432123/constancia_estudiante-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.pdf', '9/33432123/certificado_estudiante-0-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.pdf', 2015, 3, 0, 0, NULL, NULL, NULL, NULL, NULL, 2, 2, 2, 0, NULL, NULL, 'carbo 11', 0, 0, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, 0, NULL, '0', NULL, 0, NULL, NULL, NULL, 'wwwwwwwwsss', 1166, 3, 2, 0, 0, '2019-03-25 02:20:16', '2019-03-25 02:20:16', NULL);
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `facultades`
 --
 
+DROP TABLE IF EXISTS `facultades`;
 CREATE TABLE `facultades` (
   `id` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -481,6 +449,7 @@ INSERT INTO `facultades` (`id`, `nombre`, `acronimo`, `direccion`, `telefono`, `
 -- Estructura de tabla para la tabla `familiars`
 --
 
+DROP TABLE IF EXISTS `familiars`;
 CREATE TABLE `familiars` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
@@ -505,21 +474,13 @@ CREATE TABLE `familiars` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Volcado de datos para la tabla `familiars`
---
-
-INSERT INTO `familiars` (`id`, `user_id`, `datos_id`, `beca_id`, `parentesco`, `apeynom`, `dni`, `imagen_dni_frente`, `imagen_dni_dorso`, `edad`, `ocupacion`, `tiene_trabajo`, `actividad_laboral`, `comprobante_ingresos_1`, `comprobante_ingresos_2`, `comprobante_ingresos_3`, `ingresos`, `anses`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 39, 4, 8, 'Hijo', 'ricardito junior', 50123654, '8/33432123/familiar-0/imagen_dni_familiar-frente-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/familiar-0/imagen_dni_familiar-dorso-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 8, 'plata', 1, 'informalfam0', '8/33432123/familiar-0/comprobante_ingresos_1-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', NULL, NULL, 800, '8/33432123/familiar-0/comprobante_anses-0-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.pdf', '2019-03-25 00:50:26', '2019-03-25 00:50:26', NULL),
-(2, 39, 4, 8, 'Nuera', 'culebra', 17526321, '8/33432123/familiar-1/imagen_dni_familiar-frente-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/familiar-1/imagen_dni_familiar-dorso-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 50, 'rascar', 1, 'activosfam1', '8/33432123/familiar-1/comprobante_ingresos_1-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/familiar-1/comprobante_ingresos_2-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '8/33432123/familiar-1/comprobante_ingresos_3-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', 15000, '8/33432123/familiar-1/comprobante_anses-1-33432123-DIvKQdJkEX10oe1U5Tw4psdTRa5ndMlASp5D3ikPz8o206IhdHOfqATzu4jPkUJVMPJVu9iQlTo0kNmnIERD35kGNpc8pniQDpKo.jpg', '2019-03-25 00:50:26', '2019-03-25 00:50:26', NULL),
-(3, 39, 5, 9, 'Otro', 'otro ricardo', 25963258, '9/33432123/familiar-0/imagen_dni_familiar-frente-0-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', '9/33432123/familiar-0/imagen_dni_familiar-dorso-0-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.jpg', 23, 'asdddd', 0, NULL, NULL, NULL, NULL, NULL, '9/33432123/familiar-0/comprobante_anses-0-33432123-Zceoonle8QUs9daK9n8CL3TFqFUm7YSYSrE9PrfX8w0dCNeUZ7HkjLDCUDVJ59OVfrlYq0NgGa50bnuBY8Egw7EkTeokJMYQxFQd.pdf', '2019-03-25 02:20:16', '2019-03-25 02:20:16', NULL);
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `inscripciones`
 --
 
+DROP TABLE IF EXISTS `inscripciones`;
 CREATE TABLE `inscripciones` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
@@ -537,21 +498,13 @@ CREATE TABLE `inscripciones` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Volcado de datos para la tabla `inscripciones`
---
-
-INSERT INTO `inscripciones` (`id`, `user_id`, `datos_id`, `beca_id`, `carrera_id`, `merito`, `pto_procedencia`, `pto_ingresos`, `pto_enfermedad`, `pto_academica`, `observacion`, `otorgamiento`, `created_at`, `updated_at`) VALUES
-(1, 38, 1, 8, 3, 0, 0, 0, 0, 0, 'Alta inicial', 2, '2019-03-25 00:26:55', '2019-03-25 00:26:55'),
-(2, 39, 4, 8, 3, 0, 0, 0, 0, 0, 'Alta inicial', 2, '2019-03-25 00:50:26', '2019-03-25 00:50:26'),
-(3, 39, 5, 9, 3, 0, 0, 0, 0, 0, 'Alta inicial', 2, '2019-03-25 02:20:16', '2019-03-25 02:20:16');
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `localidades`
 --
 
+DROP TABLE IF EXISTS `localidades`;
 CREATE TABLE `localidades` (
   `id` int(11) NOT NULL,
   `id_privincia` int(11) NOT NULL,
@@ -2953,6 +2906,7 @@ INSERT INTO `localidades` (`id`, `id_privincia`, `localidad`) VALUES
 -- Estructura de tabla para la tabla `menus`
 --
 
+DROP TABLE IF EXISTS `menus`;
 CREATE TABLE `menus` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -2973,6 +2927,7 @@ INSERT INTO `menus` (`id`, `name`, `created_at`, `updated_at`) VALUES
 -- Estructura de tabla para la tabla `menu_items`
 --
 
+DROP TABLE IF EXISTS `menu_items`;
 CREATE TABLE `menu_items` (
   `id` int(10) UNSIGNED NOT NULL,
   `menu_id` int(10) UNSIGNED DEFAULT NULL,
@@ -3015,6 +2970,7 @@ INSERT INTO `menu_items` (`id`, `menu_id`, `title`, `url`, `target`, `icon_class
 -- Estructura de tabla para la tabla `migrations`
 --
 
+DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -3062,6 +3018,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- Estructura de tabla para la tabla `password_resets`
 --
 
+DROP TABLE IF EXISTS `password_resets`;
 CREATE TABLE `password_resets` (
   `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -3082,6 +3039,7 @@ INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
 -- Estructura de tabla para la tabla `permissions`
 --
 
+DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions` (
   `id` int(10) UNSIGNED NOT NULL,
   `key` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -3159,6 +3117,7 @@ INSERT INTO `permissions` (`id`, `key`, `table_name`, `created_at`, `updated_at`
 -- Estructura de tabla para la tabla `permission_groups`
 --
 
+DROP TABLE IF EXISTS `permission_groups`;
 CREATE TABLE `permission_groups` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
@@ -3170,6 +3129,7 @@ CREATE TABLE `permission_groups` (
 -- Estructura de tabla para la tabla `permission_role`
 --
 
+DROP TABLE IF EXISTS `permission_role`;
 CREATE TABLE `permission_role` (
   `permission_id` int(10) UNSIGNED NOT NULL,
   `role_id` int(10) UNSIGNED NOT NULL
@@ -3292,6 +3252,7 @@ INSERT INTO `permission_role` (`permission_id`, `role_id`) VALUES
 -- Estructura de tabla para la tabla `provincias`
 --
 
+DROP TABLE IF EXISTS `provincias`;
 CREATE TABLE `provincias` (
   `id` int(10) NOT NULL,
   `provincia` varchar(255) CHARACTER SET latin1 NOT NULL
@@ -3334,6 +3295,7 @@ INSERT INTO `provincias` (`id`, `provincia`) VALUES
 -- Estructura de tabla para la tabla `roles`
 --
 
+DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -3357,6 +3319,7 @@ INSERT INTO `roles` (`id`, `name`, `display_name`, `created_at`, `updated_at`) V
 -- Estructura de tabla para la tabla `sedes`
 --
 
+DROP TABLE IF EXISTS `sedes`;
 CREATE TABLE `sedes` (
   `id` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -3380,6 +3343,7 @@ INSERT INTO `sedes` (`id`, `nombre`, `direccion`, `telefono`, `created_at`, `upd
 -- Estructura de tabla para la tabla `settings`
 --
 
+DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
   `id` int(10) UNSIGNED NOT NULL,
   `key` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -3398,11 +3362,10 @@ CREATE TABLE `settings` (
 INSERT INTO `settings` (`id`, `key`, `display_name`, `value`, `details`, `type`, `order`, `group`) VALUES
 (1, 'site.title', 'Site Title', 'SIGAB', '', 'text', 1, 'Site'),
 (2, 'site.description', 'Site Description', 'Sistema integral de gestion de becas de FCyT - Uader', '', 'text', 2, 'Site'),
-(3, 'site.logo', 'Site Logo', 'settings/October2017/debian-rayo-grises-sapphiregd.jpg', '', 'image', 3, 'Site'),
 (5, 'admin.bg_image', 'Admin Background Image', '', '', 'image', 5, 'Admin'),
 (6, 'admin.title', 'Admin Title', 'SIGAB', '', 'text', 1, 'Admin'),
 (7, 'admin.description', 'Admin Description', 'Bienvenidos al panel de Administracion para la beca FCyT', '', 'text', 2, 'Admin'),
-(8, 'admin.loader', 'Admin Loader', 'settings/August2018/DetEiGZZQc9kU40T1ukJ.png', '', 'image', 3, 'Admin'),
+(8, 'admin.loader', 'Admin Loader', '', '', 'image', 3, 'Admin'),
 (9, 'admin.icon_image', 'Admin Icon Image', 'settings/August2018/dQIWgKU7BDF8ZsbEWYBt.png', '', 'image', 4, 'Admin');
 
 -- --------------------------------------------------------
@@ -3411,6 +3374,7 @@ INSERT INTO `settings` (`id`, `key`, `display_name`, `value`, `details`, `type`,
 -- Estructura de tabla para la tabla `translations`
 --
 
+DROP TABLE IF EXISTS `translations`;
 CREATE TABLE `translations` (
   `id` int(10) UNSIGNED NOT NULL,
   `table_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -3464,6 +3428,7 @@ INSERT INTO `translations` (`id`, `table_name`, `column_name`, `foreign_key`, `l
 -- Estructura de tabla para la tabla `universidades`
 --
 
+DROP TABLE IF EXISTS `universidades`;
 CREATE TABLE `universidades` (
   `id` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -3488,6 +3453,7 @@ INSERT INTO `universidades` (`id`, `nombre`, `acronimo`, `direccion`, `telefono`
 -- Estructura de tabla para la tabla `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
   `role_id` int(10) UNSIGNED NOT NULL DEFAULT '2' COMMENT 'id 2: rol normal',
@@ -3508,11 +3474,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `role_id`, `name`, `apellido`, `dni`, `email`, `avatar`, `password`, `remember_token`, `settings`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Administrador', 'admins', 1234567, 'admin@admin.com', 'users\\March2019\\Ozc8lmdzD2357OXdXAil.jpeg', '$2y$10$6nsTxYjWZgY7fhrBfFz/kucxfnZLewAHC126Te88cz6MmwkhIdnae', '8rXJEaZ08Du2dZ9XlmZcovQ1C2wq2ajynY2s1VrBatjwxvJ6Ybd3Gq3BcdAU', NULL, '2017-10-16 08:55:45', '2019-03-19 23:23:21'),
-(36, 3, 'damian', 'sacks', 1231321231, 'damian@damian.com', 'users/user-default.png', '$2y$10$tRUVvS2WMc40.UmB7I0uGekuhI0G98lmzJ2pOpAbx9tfTSmg6JBsi', 'JmmkE0vnmcEOt8dMz1khU17yx0hY6HBzzieVxmcjrm2LKnuNDaXdXrFBwQI2', NULL, '2018-12-15 14:11:52', '2018-12-19 21:30:16'),
-(37, 2, 'Andre', 'Gimenez', 324568522, 'andres@andres.com', 'users/user-default.png', '$2y$10$wsIaxB8VZuiZ9tcAv7UCO.g93I0FLmFtitHZyhytlLLeWy9O18/6W', 'DCIYMHgimIBZqTw21PqTlSyHSoSlnlXRRdXxmYQ0bmwNbYnCDsCmInDIcLNB', NULL, '2019-02-11 23:12:21', '2019-03-22 23:20:14'),
-(38, 2, 'pepe', 'pepito', 33222333, 'pepe@homail.com', 'users/user-default.png', '$2y$10$c1mLJBKT5nJ.VdfIuKKeB.4XG0LT8g2YASbrHGDRWROdBHd1hoNWC', 'AxzJmQCkSISxx5qdKh0GJ6UjL5Sp79nmqzLcTwtNixnHJgcWUjopFo2CnqJS', NULL, '2019-03-24 23:27:55', '2019-03-24 23:27:55'),
-(39, 2, 'ricardo', 'rodriguez', 33432123, 'ricardo@ricardo.com', 'users/user-default.png', '$2y$10$u9SqE8M4RGPKCc.JN06eOO8UhQNOmTQdNdmfiMLH9Uo6NITqeNESW', NULL, NULL, '2019-03-25 00:39:26', '2019-03-25 00:39:26');
+(1, 1, 'Administrador', 'admin', 1234567, 'admin@admin.com', 'users\\March2019\\Ozc8lmdzD2357OXdXAil.jpeg', '$2y$10$6nsTxYjWZgY7fhrBfFz/kucxfnZLewAHC126Te88cz6MmwkhIdnae', 'vhpM1kAzI0CeGkGADuiHwKa9sRi3X0ED6YhDKylRMdlVMFVNNxWOjuohrn5v', NULL, '2017-10-16 08:55:45', '2019-04-10 00:04:19'),
+(36, 3, 'damian', 'sacks', 1231321231, 'damian@damian.com', 'users/user-default.png', '$2y$10$tRUVvS2WMc40.UmB7I0uGekuhI0G98lmzJ2pOpAbx9tfTSmg6JBsi', 'JmmkE0vnmcEOt8dMz1khU17yx0hY6HBzzieVxmcjrm2LKnuNDaXdXrFBwQI2', NULL, '2018-12-15 14:11:52', '2018-12-19 21:30:16');
 
 -- --------------------------------------------------------
 
@@ -3520,6 +3483,7 @@ INSERT INTO `users` (`id`, `role_id`, `name`, `apellido`, `dni`, `email`, `avata
 -- Estructura de tabla para la tabla `user_roles`
 --
 
+DROP TABLE IF EXISTS `user_roles`;
 CREATE TABLE `user_roles` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `role_id` int(10) UNSIGNED NOT NULL
@@ -3600,7 +3564,8 @@ ALTER TABLE `datos_personas`
   ADD KEY `id` (`id`),
   ADD KEY `datos_personas_user_id` (`user_id`),
   ADD KEY `provincia_id` (`provincia_id`),
-  ADD KEY `localidad_id` (`localidad_id`);
+  ADD KEY `localidad_id` (`localidad_id`),
+  ADD KEY `datos_personas_condicion_estudiante_id` (`condicion_estudiante_id`);
 
 --
 -- Indices de la tabla `facultades`
@@ -3748,13 +3713,13 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT de la tabla `becas`
 --
 ALTER TABLE `becas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `calculos_aux`
 --
 ALTER TABLE `calculos_aux`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `carreras`
@@ -3772,13 +3737,13 @@ ALTER TABLE `condicion`
 -- AUTO_INCREMENT de la tabla `consideraciones`
 --
 ALTER TABLE `consideraciones`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `cronogramas`
 --
 ALTER TABLE `cronogramas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `data_rows`
@@ -3796,7 +3761,7 @@ ALTER TABLE `data_types`
 -- AUTO_INCREMENT de la tabla `datos_personas`
 --
 ALTER TABLE `datos_personas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `facultades`
@@ -3808,13 +3773,13 @@ ALTER TABLE `facultades`
 -- AUTO_INCREMENT de la tabla `familiars`
 --
 ALTER TABLE `familiars`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `inscripciones`
 --
 ALTER TABLE `inscripciones`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `localidades`
@@ -3892,7 +3857,7 @@ ALTER TABLE `universidades`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- Restricciones para tablas volcadas
@@ -3908,9 +3873,9 @@ ALTER TABLE `becas`
 -- Filtros para la tabla `carreras`
 --
 ALTER TABLE `carreras`
-  ADD CONSTRAINT `carreras_facultad_id` FOREIGN KEY (`facultad_id`) REFERENCES `facultades` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `carreras_sede_id` FOREIGN KEY (`sede_id`) REFERENCES `sedes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `carreras_universidad_id` FOREIGN KEY (`universidad_id`) REFERENCES `universidades` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `carreras_facultad_id` FOREIGN KEY (`facultad_id`) REFERENCES `facultades` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `carreras_sede_id` FOREIGN KEY (`sede_id`) REFERENCES `sedes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `carreras_universidad_id` FOREIGN KEY (`universidad_id`) REFERENCES `universidades` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `consideraciones`
@@ -3924,7 +3889,7 @@ ALTER TABLE `consideraciones`
 -- Filtros para la tabla `cronogramas`
 --
 ALTER TABLE `cronogramas`
-  ADD CONSTRAINT `cronogramas_beca_id` FOREIGN KEY (`beca_id`) REFERENCES `becas` (`id`) ON DELETE NO ACTION;
+  ADD CONSTRAINT `cronogramas_beca_id` FOREIGN KEY (`beca_id`) REFERENCES `becas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `data_rows`
@@ -3937,9 +3902,10 @@ ALTER TABLE `data_rows`
 --
 ALTER TABLE `datos_personas`
   ADD CONSTRAINT `datos_personas_beca_id` FOREIGN KEY (`beca_id`) REFERENCES `becas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `datos_personas_carrera_id` FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `datos_personas_localidad_id` FOREIGN KEY (`localidad_id`) REFERENCES `localidades` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `datos_personas_provincia_id` FOREIGN KEY (`provincia_id`) REFERENCES `provincias` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `datos_personas_carrera_id` FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `datos_personas_condicion_estudiante_id` FOREIGN KEY (`condicion_estudiante_id`) REFERENCES `condicion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `datos_personas_localidad_id` FOREIGN KEY (`localidad_id`) REFERENCES `localidades` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `datos_personas_provincia_id` FOREIGN KEY (`provincia_id`) REFERENCES `provincias` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `datos_personas_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -3955,7 +3921,7 @@ ALTER TABLE `familiars`
 --
 ALTER TABLE `inscripciones`
   ADD CONSTRAINT `inscripciones_becas_id` FOREIGN KEY (`beca_id`) REFERENCES `becas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `inscripciones_carrera_id` FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `inscripciones_carrera_id` FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `inscripciones_datos_id` FOREIGN KEY (`datos_id`) REFERENCES `datos_personas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `inscripciones_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 

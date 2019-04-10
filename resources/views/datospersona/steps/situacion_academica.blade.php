@@ -17,7 +17,7 @@
                 <select class="form-control" name="cond" id="cond" placeholder="Seleccione una opción" required>
                   <option value="">Seleccione una opción</option>
                   @foreach($condicion as $condiciones)
-                    <option value= {{$condiciones->nombre}}><p>{{ $condiciones->nombre }}</p></option>
+                    <option value= {{$condiciones->id}}><p>{{ $condiciones->nombre }}</p></option>
                   @endforeach
                 </select> 
                 <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
@@ -172,7 +172,7 @@ if (selected === "") {
   $('#divcantmat').html("");
   $('#divpromedio').html("");  
 }
-else if(selected === "Ingresante") {
+else if(selected === "1") {
 
   $('#nueren1').html(""); 
   $('#nueren2').html(""); 
@@ -234,7 +234,7 @@ $('#divpromedio').html("<label for='validate-number'>Promedio general:</label>  
 
 
 }
-else if((selected === "Renovante") || (selected === "Nuevo")  ) {
+else if((selected === "2") || (selected === "3")  ) {
 
 
 $('#ing1').html(""); 
@@ -300,7 +300,7 @@ $(document).ready(function() {
   
  
 }
-else if(selected === "Condicional") {
+else if(selected === "4") {
 
   $('#ing1').html(""); 
   $('#ing2').html(""); 
