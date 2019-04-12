@@ -347,7 +347,7 @@ public function store(Request $request)
         ->join('carreras','datos_personas.carrera_id','carreras.id')
         ->join('users','datos_personas.user_id','users.id')
         ->join('localidades','datos_personas.localidad_id','localidades.id')
-        ->join('provincias','datos_personas.provincia_id','provincias.id')
+        ->join('provincias','localidades.id_privincia','provincias.id')
         ->where('users.id',$request->user)
         ->select('users.name as user_name',
             'users.id as user_id',
