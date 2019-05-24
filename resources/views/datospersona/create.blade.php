@@ -16,6 +16,8 @@
 
 
 <br><br><br>
+<!--Validacion tipo de archivo-->
+@include('datospersona.js.validacion-file')
 
 @include('footer')
 @endsection

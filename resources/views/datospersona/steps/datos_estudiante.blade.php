@@ -49,7 +49,7 @@
         <div class="form-group">
           <label for="validate-number" class="label label-info">  Solo frente</label>
           <div class="input-group">
-            <input  type="file" id="imagen_frente" name="imagen_frente" class="form-control" accept=".jpg, .jpeg, .png" required>
+            <input  type="file" id="imagen_frente" name="imagen_frente" class="form-control" accept=".jpg, .jpeg, .png"  required>
             <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
           </div>
         </div>
@@ -460,33 +460,6 @@ $("#provincia").change(function (event) {
         });
      
 </script>
-
-<script type="text/javascript">
-  $(document).on("click", "input[type='file']", function(evt) {
-          let idd = this.id;     
-          document.getElementById(idd).onchange = function () {
-           var reader = new FileReader();
-            reader.onload = function (e) {
-                var fileInput = document.getElementById(idd);
-            var filePath = fileInput.value;
-            console.log(filePath);
-            var allowedExtensions = /(.jpg|.jpeg|.png|.bmp)$/i;
-            if(allowedExtensions.exec(filePath)){
-                document.getElementById("list-" + idd).src = e.target.result;    
-                document.getElementById("list-" + idd+ "-1").style.display = "inline";
-            }
-            else{
-                document.getElementById("list-" + idd).src = e.target.result;    
-                document.getElementById("list-" + idd+ "-1").style.display = "none";
-            }
-            
-          }; 
-          reader.readAsDataURL(this.files[0]); 
-        }; 
-    
-      });        
-</script>
-
 
 
   
