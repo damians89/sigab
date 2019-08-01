@@ -1,15 +1,19 @@
+@extends('layout')
+
+@section('contenido')
 <div id='error-page'>
+  <br><br><br><br>
   <div id='error-inner'>
-    <h1>       Oops, algo inesperado ocurrió!
+    <h1>       Oops, Algún inesperado ocurrió!
  </h1>
-  <div class="pesan-eror">=(</div>
-    <p class="balik-home"><a href="{{url('/')}}">Volver al home!</a></p><br/>
+  <div class="pesan-eror">=( </div>
+    <p class="balik-home"><a href="{{url('/')}}">Volver al inicio</a></p><br/>
   </div>
     </div>
+    <br><br><br>
 
 <style type="text/css">
 #error-page {
-background-color:#53C1C0;;
 position:fixed !important;
 position:absolute;
 text-align:center;
@@ -17,13 +21,12 @@ top:0;
 right:0;
 bottom:0;
 left:0;
-z-index:99999;
 }
 #error-inner {
 margin: auto;
 }
 #error-inner h1 {
-text-transform:uppercase;color:white;margin-top:20px;font-size:20px;
+text-transform:uppercase;color:black;margin-top:20px;font-size:20px;
 }
 .pesan-eror{
 width:200px;
@@ -43,37 +46,37 @@ border-top-right-radius:95px;
 border-bottom-right-radius:14px;
 position:relative;
   animation-name: floating;
-	-webkit-animation-name: floating;
+  -webkit-animation-name: floating;
 
-	animation-duration: 1.5s;	
-	-webkit-animation-duration: 1.5s;
+  animation-duration: 1.5s; 
+  -webkit-animation-duration: 1.5s;
 
-	animation-iteration-count: infinite;
-	-webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
 }
 
 @keyframes floating {
-	0% {
-		transform: translateY(0%);	
-	}
-	50% {
-		transform: translateY(8%);	
-	}	
-	100% {
-		transform: translateY(0%);
-	}			
+  0% {
+    transform: translateY(0%);  
+  }
+  50% {
+    transform: translateY(8%);  
+  } 
+  100% {
+    transform: translateY(0%);
+  }     
 }
 
 @-webkit-keyframes floating {
-	0% {
-		-webkit-transform: translateY(0%);	
-	}
-	50% {
-		-webkit-transform: translateY(8%);	
-	}	
-	100% {
-		-webkit-transform: translateY(0%);
-	}			
+  0% {
+    -webkit-transform: translateY(0%);  
+  }
+  50% {
+    -webkit-transform: translateY(8%);  
+  } 
+  100% {
+    -webkit-transform: translateY(0%);
+  }     
 }
 .pesan-eror::after {
 content:" ";
@@ -131,5 +134,18 @@ left:40%;
   -moz-transition: all 1s ease-in-out;
   transition: all 1s ease-in-out;
 }
-.balik-home a{color:white;text-decoration:none}
+.balik-home a{color:black;text-decoration:none}
 </style>
+
+<br><br>
+<br><br>
+<br><br>
+
+<br><br>
+<br><br>
+<br><br>
+
+<br><br>
+<br><br>
+@include('footer')
+    @stop

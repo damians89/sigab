@@ -1,0 +1,29 @@
+Archivo para configuracion .env
+Para iniciar sistema desde consola: php artisan serve
+Para iniciar sistema desde Apache configurar que "apunte" a Sigab/public/index.php
+Nombre de la BD:sigab
+
+Usuarios creados:
+
+*Administrador (Full privilegios):
+email:admin@admin.com
+contraseña:password
+
+*Administrativo (Menos privilegios): 
+email:administrativo@administrativo.com
+contraseña:administrativo123
+
+*Usuario (Normal-Estudiante) ya inscripto a la beca de prueba:
+email:usuario@prueba.com
+contraseña:usuario123
+
+*Usuario (Normal-Estudiante) sin inscribirse a la beca solo registrado:
+email:pepe@hotmail.com
+contraseña:pepe123
+
+
+*******************
+Al ingresar al panel, se le solicita por primera y unica vez el enlace Simbolico de almacenamiento a la carpeta public.
+El cual al aceptar la creacion del enlace lo realiza el sistema automaticamente
+********************
+

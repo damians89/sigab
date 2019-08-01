@@ -1,4 +1,10 @@
+@extends('layout')
+
+@section('contenido')
+
 <div id='error-page'>
+
+  <br><br><br><br>
   <div id='error-inner'>
     <h1>       Oops, Mantenimiento regrese luego!
  </h1>
@@ -7,9 +13,10 @@
   </div>
     </div>
 
+    <br><br><br>
 <style type="text/css">
 #error-page {
-background-color:#53C1C0;;
+
 position:fixed !important;
 position:absolute;
 text-align:center;
@@ -17,13 +24,12 @@ top:0;
 right:0;
 bottom:0;
 left:0;
-z-index:99999;
 }
 #error-inner {
 margin: auto;
 }
 #error-inner h1 {
-text-transform:uppercase;color:white;margin-top:20px;font-size:20px;
+text-transform:uppercase;color:black;margin-top:20px;font-size:20px;
 }
 .pesan-eror{
 width:200px;
@@ -131,5 +137,18 @@ left:40%;
   -moz-transition: all 1s ease-in-out;
   transition: all 1s ease-in-out;
 }
-.balik-home a{color:white;text-decoration:none}
+.balik-home a{color:black;text-decoration:none}
 </style>
+
+<br><br>
+<br><br>
+<br><br>
+
+<br><br>
+<br><br>
+<br><br>
+
+<br><br>
+<br><br>
+@include('footer')
+    @stop

@@ -55,11 +55,11 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         $exception =  FlattenException::create($e);
-        dd($e);
+        //dd($e);
         
         $statusCode = $exception->getStatusCode($exception);
 
-        if ($statusCode === 404 or $statusCode === 500 or $statusCode === 401 or $statusCode === 403 or $statusCode === 503) {
+        if ($statusCode === 404 or $statusCode === 500 or $statusCode === 401 or $statusCode === 403 or $statusCode === 503 or $statusCode === 422) {
             return response()->view('errors.' . $statusCode, [], $statusCode);
         }
         return parent::render($request, $exception);

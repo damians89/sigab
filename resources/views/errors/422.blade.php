@@ -4,7 +4,7 @@
 <div id='error-page'>
   <br><br><br><br>
   <div id='error-inner'>
-    <h1>       Oops, Algún problema interno ocurrió!
+    <h1>       Oops, Algún problema con credenciales!
  </h1>
   <div class="pesan-eror">=( </div>
     <p class="balik-home"><a href="{{url('/')}}">Volver al inicio</a></p><br/>
@@ -46,37 +46,37 @@ border-top-right-radius:95px;
 border-bottom-right-radius:14px;
 position:relative;
   animation-name: floating;
-	-webkit-animation-name: floating;
+  -webkit-animation-name: floating;
 
-	animation-duration: 1.5s;	
-	-webkit-animation-duration: 1.5s;
+  animation-duration: 1.5s; 
+  -webkit-animation-duration: 1.5s;
 
-	animation-iteration-count: infinite;
-	-webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
 }
 
 @keyframes floating {
-	0% {
-		transform: translateY(0%);	
-	}
-	50% {
-		transform: translateY(8%);	
-	}	
-	100% {
-		transform: translateY(0%);
-	}			
+  0% {
+    transform: translateY(0%);  
+  }
+  50% {
+    transform: translateY(8%);  
+  } 
+  100% {
+    transform: translateY(0%);
+  }     
 }
 
 @-webkit-keyframes floating {
-	0% {
-		-webkit-transform: translateY(0%);	
-	}
-	50% {
-		-webkit-transform: translateY(8%);	
-	}	
-	100% {
-		-webkit-transform: translateY(0%);
-	}			
+  0% {
+    -webkit-transform: translateY(0%);  
+  }
+  50% {
+    -webkit-transform: translateY(8%);  
+  } 
+  100% {
+    -webkit-transform: translateY(0%);
+  }     
 }
 .pesan-eror::after {
 content:" ";
